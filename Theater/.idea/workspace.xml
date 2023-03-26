@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6d6b24a3-c366-44a6-ba33-02cc70231bf9" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2N3Xv3Vl5ei7M9XLraWpkAAe5Tw" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/maran/OneDrive/Desktop/FMI/AN 2/SEMESTRUL 2/PROGRAMARE AVANSATA OBIECT/Theater&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6d6b24a3-c366-44a6-ba33-02cc70231bf9" name="Changes" comment="" />
+      <created>1678893966888</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1678893966888</updated>
+      <workItem from="1678893968031" duration="939000" />
+      <workItem from="1679055212860" duration="10900000" />
+      <workItem from="1679078754354" duration="329000" />
+      <workItem from="1679079099406" duration="150000" />
+      <workItem from="1679079261070" duration="8352000" />
+      <workItem from="1679087706121" duration="4878000" />
+      <workItem from="1679127298505" duration="22458000" />
+      <workItem from="1679160863427" duration="3024000" />
+      <workItem from="1679182875373" duration="4277000" />
+      <workItem from="1679214137246" duration="960000" />
+      <workItem from="1679237329965" duration="20041000" />
+      <workItem from="1679301444369" duration="5822000" />
+      <workItem from="1679321086931" duration="2734000" />
+      <workItem from="1679323865629" duration="540000" />
+      <workItem from="1679333286683" duration="2755000" />
+      <workItem from="1679394626281" duration="14102000" />
+      <workItem from="1679417325652" duration="22836000" />
+      <workItem from="1679480198796" duration="9557000" />
+      <workItem from="1679494437185" duration="2759000" />
+      <workItem from="1679497761560" duration="2909000" />
+      <workItem from="1679506872755" duration="1654000" />
+      <workItem from="1679564009607" duration="17167000" />
+      <workItem from="1679582036086" duration="105000" />
+      <workItem from="1679589246391" duration="3008000" />
+      <workItem from="1679648321474" duration="20000" />
+      <workItem from="1679648790354" duration="1570000" />
+      <workItem from="1679849542519" duration="4116000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.util.ConcurrentModificationException" package="java.util" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
