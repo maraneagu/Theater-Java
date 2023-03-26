@@ -36,7 +36,7 @@ public class Musical extends Spectacle {
 
         while (true)
         {
-            System.out.println("The duration of the musical! The format: 0h:mm!");
+            System.out.println("The duration of the musical! It should be between 1 hour and 4 hours with the format: 0h:mm!");
             System.out.print("Enter the duration of the musical: ");
             String duration = in.nextLine();
 

@@ -30,7 +30,7 @@ public class Opera extends Spectacle {
 
         while (true)
         {
-            System.out.println("The duration of the opera! The format: 0h:mm!");
+            System.out.println("The duration of the opera! It should be between 1 hour and 4 hours with the format: 0h:mm!");
             System.out.print("Enter the duration of the opera: ");
             String duration = in.nextLine();
 
