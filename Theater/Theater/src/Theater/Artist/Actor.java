@@ -13,7 +13,7 @@ public class Actor extends Artist {
         Scanner in = new Scanner(System.in);
 
         System.out.print("Enter the name of the actor: ");
-        this.name = in.nextLine();
+        this.name = in.nextLine().trim();
 
         System.out.println();
     }

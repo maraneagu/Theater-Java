@@ -39,7 +39,7 @@ public class ActorService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the play where you want to add a new actor: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= playId)
                     break;
@@ -103,7 +103,7 @@ public class ActorService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the play where you want to remove an actor: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= playId)
                     break;
@@ -135,7 +135,7 @@ public class ActorService {
                                 Scanner in = new Scanner(System.in);
 
                                 System.out.print("Enter the number of the actor you want to remove: ");
-                                actorId = Integer.parseInt(in.nextLine());
+                                actorId = Integer.parseInt(in.nextLine().trim());
 
                                 if (actorId >= 1 && actorId <= sActors.size())
                                     break;
@@ -176,7 +176,7 @@ public class ActorService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the play where you want to list the actors: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= playId)
                     break;

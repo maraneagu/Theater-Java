@@ -15,7 +15,7 @@ public class Category {
         Scanner in = new Scanner(System.in);
 
         System.out.print("Enter the name of the category: ");
-        this.name = in.nextLine();
+        this.name = in.nextLine().trim();
     }
     @Override
     public String toString(){

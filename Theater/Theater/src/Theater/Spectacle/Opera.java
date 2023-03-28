@@ -24,7 +24,7 @@ public class Opera extends Spectacle {
         Scanner in = new Scanner(System.in);
 
         System.out.print("Enter the name of the opera: ");
-        this.name = in.nextLine();
+        this.name = in.nextLine().trim();
 
         this.director.toRead();
 
@@ -32,7 +32,7 @@ public class Opera extends Spectacle {
         {
             System.out.println("The duration of the opera! It should be between 1 hour and 4 hours with the format: 0h:mm!");
             System.out.print("Enter the duration of the opera: ");
-            String duration = in.nextLine();
+            String duration = in.nextLine().trim();
 
             String[] splitTime = duration.split(":");
             int hour = Integer.parseInt(splitTime[0]);

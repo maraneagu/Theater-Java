@@ -51,7 +51,7 @@ public class TicketShopService {
             {
                 System.out.print("Enter the number of the event " +
                         "that you want to buy a ticket for: ");
-                eventId = Integer.parseInt(in.nextLine());
+                eventId = Integer.parseInt(in.nextLine().trim());
 
                 if (eventId >= 1 && eventId <= events.size())
                     break;
@@ -66,7 +66,7 @@ public class TicketShopService {
             {
                 System.out.print("Enter the row where " +
                         "you want sit: ");
-                rowId = Integer.parseInt(in.nextLine());
+                rowId = Integer.parseInt(in.nextLine().trim());
 
                 if (rowId >= 1 && rowId <= events.get(eventId - 1).getSeats().size() && availableRow(events.get(eventId - 1), rowId - 1))
                     break;
@@ -77,7 +77,7 @@ public class TicketShopService {
             {
                 System.out.print("Enter the seat where " +
                         "you want sit: ");
-                seatId = Integer.parseInt(in.nextLine());
+                seatId = Integer.parseInt(in.nextLine().trim());
 
                 if (seatId >= 1 && seatId <= events.get(eventId - 1).getSeats().get(rowId - 1).size() && events.get(eventId - 1).getSeats().get(rowId - 1).get(seatId - 1))
                     break;
@@ -121,7 +121,7 @@ public class TicketShopService {
             {
                 System.out.print("Enter the number of the event " +
                         "that you want to cancel your ticket for: ");
-                eventId = Integer.parseInt(in.nextLine());
+                eventId = Integer.parseInt(in.nextLine().trim());
 
                 if (eventId >= 1 && eventId <= numberOfTicketsBought)
                     break;
@@ -169,7 +169,7 @@ public class TicketShopService {
             {
                 System.out.print("Enter the number of the event " +
                         "that you want to list the tickets for: ");
-                eventId = Integer.parseInt(in.nextLine());
+                eventId = Integer.parseInt(in.nextLine().trim());
 
                 if (eventId >= 1 && eventId <= events.size())
                     break;

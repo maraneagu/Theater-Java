@@ -194,7 +194,7 @@ public class DancerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the musical or ballets where you want to list the dancers: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= playId)
                     break;

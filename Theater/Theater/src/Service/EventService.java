@@ -36,7 +36,7 @@ public class EventService {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the spectacle " +
                         "that you want to add to the event: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= spectacles.size())
                     break;
@@ -53,7 +53,7 @@ public class EventService {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the stage " +
                         "where the event will take place: ");
-                stageId = Integer.parseInt(in.nextLine());
+                stageId = Integer.parseInt(in.nextLine().trim());
 
                 if (stageId >= 1 && stageId <= stages.size())
                     break;
@@ -88,7 +88,7 @@ public class EventService {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the event " +
                         "that you want to remove: ");
-                eventId = Integer.parseInt(in.nextLine());
+                eventId = Integer.parseInt(in.nextLine().trim());
 
                 if (eventId >= 1 && eventId <= events.size())
                     break;
@@ -154,7 +154,7 @@ public class EventService {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the event " +
                         "for which you want to list the information: ");
-                eventId = Integer.parseInt(in.nextLine());
+                eventId = Integer.parseInt(in.nextLine().trim());
 
                 if (eventId >= 1 && eventId <= events.size())
                     break;
@@ -176,6 +176,8 @@ public class EventService {
             System.out.println("There are no events as of yet.");
         else
         {
+            Scanner in = new Scanner(System.in);
+
             int i, eventId;
             for (i = 0; i < events.size(); i++)
                 System.out.println(i + 1 + ". " + '"' + events.get(i).getSpectacle().getName() + '"');
@@ -183,10 +185,9 @@ public class EventService {
 
             while (true)
             {
-                Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the event " +
                         "where you want to change the information: ");
-                eventId = Integer.parseInt(in.nextLine());
+                eventId = Integer.parseInt(in.nextLine().trim());
 
                 if (eventId >= 1 && eventId <= events.size())
                     break;
@@ -200,7 +201,6 @@ public class EventService {
             System.out.println("4. The price of the event.");
 
             String choiceOfInformation;
-            Scanner in = new Scanner(System.in);
 
             while (true)
             {
@@ -222,7 +222,7 @@ public class EventService {
                     {
                         System.out.print("Enter the number of the new stage " +
                                 "where the event will take place: ");
-                        stageId = Integer.parseInt(in.nextLine());
+                        stageId = Integer.parseInt(in.nextLine().trim());
 
                         if (stageId >= 1 && stageId <= stages.size())
                             break;
@@ -237,7 +237,7 @@ public class EventService {
                 {
                     System.out.println("\nThe date of the event! The format: dd/mm/yyyyy!");
                     System.out.print("Enter the new date of the event: ");
-                    String date = in.nextLine();
+                    String date = in.nextLine().trim();
 
                     events.get(eventId - 1).setDate(date);
                     System.out.println("\n\uF0B2 A new date was set for the event!\n");
@@ -249,7 +249,7 @@ public class EventService {
                     {
                         System.out.println("\nThe time of the event! It should be between 11 AM and 11 PM, with the format: hh:mm!");
                         System.out.print("Enter the time of the event: ");
-                        String time = in.nextLine();
+                        String time = in.nextLine().trim();
 
                         String[] splitTime = time.split(":");
                         int hour = Integer.parseInt(splitTime[0]);
@@ -269,7 +269,7 @@ public class EventService {
                 else if (choiceOfInformation.equals("4")) {
                     System.out.println("\nThe price of the event! It should have two digits, with the format: number:dd!");
                     System.out.print("Enter the price of the event: ");
-                    double price = Double.parseDouble(in.nextLine());
+                    double price = Double.parseDouble(in.nextLine().trim());
 
                     events.get(eventId - 1).setPrice(price);
                     System.out.println("\n\uF0B2 A new price was set for the event!\n");

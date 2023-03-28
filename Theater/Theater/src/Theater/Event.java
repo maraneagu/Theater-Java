@@ -36,13 +36,13 @@ public class Event implements Comparable<Event>{
 
         System.out.println("The date of the event! The format: dd.mm.yyyyy!");
         System.out.print("Enter the date of the event: ");
-        this.date = in.nextLine();
+        this.date = in.nextLine().trim();
 
         while (true)
         {
             System.out.println("The time of the event! It should be between 11 AM and 11 PM, with the format: hh:mm!");
             System.out.print("Enter the time of the event: ");
-            String time = in.nextLine();
+            String time = in.nextLine().trim();
 
             String[] splitTime = time.split(":");
             int hour = Integer.parseInt(splitTime[0]);
@@ -58,7 +58,7 @@ public class Event implements Comparable<Event>{
 
         System.out.println("The price of the event! It should have two digits, with the format: number:dd!");
         System.out.print("Enter the price of the event: ");
-        this.price = Double.parseDouble(in.nextLine());
+        this.price = Double.parseDouble(in.nextLine().trim());
 
         System.out.println();
     }

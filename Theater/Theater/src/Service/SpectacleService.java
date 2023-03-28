@@ -33,8 +33,7 @@ public class SpectacleService {
         {
             System.out.print("Type of spectacle: ");
 
-            choiceOfSpectacles = in.nextInt();
-            in.nextLine();
+            choiceOfSpectacles = Integer.parseInt(in.nextLine().trim());
 
             if (choiceOfSpectacles == 1) {
                 spectacle = new Play();
@@ -71,7 +70,7 @@ public class SpectacleService {
             {
                 System.out.print("Enter the number of the category " +
                         "for your spectacle: ");
-                categoryId = Integer.parseInt(in.nextLine());
+                categoryId = Integer.parseInt(in.nextLine().trim());
 
                 if (categoryId >= 1 && categoryId <= categories.size())
                     break;
@@ -120,7 +119,7 @@ public class SpectacleService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the spectacle you want to remove: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= spectacles.size())
                     break;
@@ -167,8 +166,7 @@ public class SpectacleService {
         while (true) {
             System.out.print("Type of spectacles: ");
 
-            choiceOfSpectacles = in.nextInt();
-            in.nextLine();
+            choiceOfSpectacles = Integer.parseInt(in.nextLine().trim());
 
             if (choiceOfSpectacles == 1)
             {
@@ -268,7 +266,7 @@ public class SpectacleService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the spectacle you want to list the information for: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= spectacles.size())
                     break;
@@ -296,7 +294,7 @@ public class SpectacleService {
             Scanner in = new Scanner(System.in);
 
             System.out.print("Enter the number of the category by which you want to list the spectacles: ");
-            categoryId = Integer.parseInt(in.nextLine());
+            categoryId = Integer.parseInt(in.nextLine().trim());
 
             if (categoryId >= 1 && categoryId <= categories.size())
                 break;

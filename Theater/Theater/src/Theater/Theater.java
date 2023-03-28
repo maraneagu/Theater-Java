@@ -33,7 +33,7 @@ public class Theater {
 
         while (true) {
             this.listGeneralTheaterActions();
-            String choiceOfAction = in.nextLine();
+            String choiceOfAction = in.nextLine().trim();
 
             if (choiceOfAction.equals("1")) {
                 System.out.println("\uF046 The action you chose: visit the theater. \n");
@@ -44,13 +44,13 @@ public class Theater {
                 this.ticketShopActions();
             }
             else {
-                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB \n");
+                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB");
                 this.generalTheaterActions();
                 break;
             }
 
             System.out.println("Do you want to visit another part of the theater? " + "yes / no");
-            String choiceToContinue = in.nextLine();
+            String choiceToContinue = in.nextLine().trim();
 
             if (!choiceToContinue.equalsIgnoreCase("yes")) {
                 System.out.println("\uF0AB Thank you for paying us a visit! " +
@@ -118,7 +118,7 @@ public class Theater {
 
         while (true) {
             this.listTheaterActions();
-            String choiceOfAction = in.nextLine();
+            String choiceOfAction = in.nextLine().trim();
 
             if (choiceOfAction.equals("1")) {
                 System.out.println("\uF046 The action you chose: add a spectacle to the theater's spectacles list. \n");
@@ -220,7 +220,7 @@ public class Theater {
 
             System.out.println("Do you want to make another action to the theater? " +
                     "yes / no");
-            String choiceToContinue = in.nextLine();
+            String choiceToContinue = in.nextLine().trim();
 
             if (!choiceToContinue.equalsIgnoreCase("yes")) {
                 System.out.println("\uF0AB Thank you for paying the theater a visit! " +
@@ -247,7 +247,7 @@ public class Theater {
 
         while (true) {
             this.listTicketShopActions();
-            String choiceOfAction = in.nextLine();
+            String choiceOfAction = in.nextLine().trim();
 
             TicketShopService ticketShopService = TicketShopService.getInstance();
 
@@ -264,14 +264,14 @@ public class Theater {
                 ticketShopService.listTickets();
             }
             else {
-                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB \n");
+                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB\n");
                 this.ticketShopActions();
                 break;
             }
 
             System.out.println("Do you want to make another action to the theater's ticket shop? " +
                     "yes / no");
-            String choiceToContinue = in.nextLine();
+            String choiceToContinue = in.nextLine().trim();
 
             if (!choiceToContinue.equalsIgnoreCase("yes")) {
                 System.out.println("\uF0AB Thank you for paying the ticket shop a visit! " +

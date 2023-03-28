@@ -43,7 +43,7 @@ public class SingerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the opera or the musical where you want to add a new singer: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= playId)
                     break;
@@ -120,7 +120,7 @@ public class SingerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the opera or musical where you want to remove an actor: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= playId)
                     break;
@@ -156,7 +156,7 @@ public class SingerService {
                                 Scanner in = new Scanner(System.in);
 
                                 System.out.print("Enter the number of the singer you want to remove: ");
-                                singerId = Integer.parseInt(in.nextLine());
+                                singerId = Integer.parseInt(in.nextLine().trim());
 
                                 if (singerId >= 1 && singerId <= sSingers.size())
                                     break;
@@ -198,7 +198,7 @@ public class SingerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the opera or musical where you want to list the singers: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = Integer.parseInt(in.nextLine().trim());
 
                 if (spectacleId >= 1 && spectacleId <= playId)
                     break;

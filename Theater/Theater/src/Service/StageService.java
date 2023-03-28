@@ -36,7 +36,7 @@ public class StageService {
             Scanner in = new Scanner(System.in);
             System.out.print("Enter the number of the stage " +
                     "for which you want to list the information: ");
-            stageId = Integer.parseInt(in.nextLine());
+            stageId = Integer.parseInt(in.nextLine().trim());
 
             if (stageId >= 1 && stageId <= stages.size())
                 break;
