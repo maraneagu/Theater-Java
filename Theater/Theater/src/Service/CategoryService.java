@@ -3,6 +3,7 @@ package Service;
 import Theater.Category;
 
 import java.util.List;
+import java.util.Map;
 
 public class CategoryService {
     private final TheaterService theaterService;
@@ -14,15 +15,10 @@ public class CategoryService {
     public void listCategories() {
         System.out.println("\uF0B2 The theater's categories \uF0B2");
 
-        List<Category> categories = theaterService.getCategories();
+        Map<Integer, Category> categories = theaterService.getCategories();
 
-        if (categories.size() == 0)
-            System.out.println("There are no categories as of yet." + '\n');
-        else
-        {
-            for (Category category : categories)
-                System.out.println(category);
-            System.out.println();
-        }
+        for (Map.Entry<Integer, Category> category : categories.entrySet())
+            System.out.println(category.getValue());
+        System.out.println();
     }
 }

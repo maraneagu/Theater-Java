@@ -26,4 +26,7 @@ abstract public class Spectacle {
     public Director getDirector() {
         return director;
     }
+    public String getDuration() {
+        return duration;
+    }
 }

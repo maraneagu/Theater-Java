@@ -3,7 +3,9 @@ package Theater.Spectacle;
 import Service.PrintService;
 import Theater.Artist.Dancer;
 import Theater.Director;
+import Exception.TheaterException;
 
+import java.text.*;
 import java.util.*;
 
 public class Ballet extends Spectacle {
@@ -28,21 +30,33 @@ public class Ballet extends Spectacle {
 
         this.director.toRead();
 
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
         while (true)
         {
-            System.out.println("The duration of the ballet! It should be between 1 hour and 4 hours with the format: 0h:mm!");
-            System.out.print("Enter the duration of the ballet: ");
-            String duration = in.nextLine().trim();
+            System.out.println("\nThe duration of the play! It should be between 1 hour and 4 hours with the format: hh:mm!");
+            System.out.print("Enter the duration of the play: ");
+            this.duration = in.nextLine().trim();
 
-            String[] splitTime = duration.split(":");
-            int hour = Integer.parseInt(splitTime[0]);
-            int minutes = Integer.parseInt(splitTime[1]);
+            try
+            {
+                timeFormat.parse(duration);
 
-            if (hour > 4 || minutes > 59)
-                System.out.println("\uF0FB The duration you introduced is not valid! Please try again! \uF0FB\n");
-            else {
-                this.duration = duration;
+                String[] splitTime = duration.split(":");
+                int hour = Integer.parseInt(splitTime[0]);
+                int minutes = Integer.parseInt(splitTime[1]);
+
+                if (hour > 4 || minutes > 59)
+                    throw new TheaterException("\uF0FB The duration you introduced is not valid! Please try again! \uF0FB");
                 break;
+            }
+            catch(ParseException parseException)
+            {
+                System.out.println("\uF0FB The duration format you introduced is not valid! Please try again! \uF0FB");
+            }
+            catch(TheaterException durationException)
+            {
+                System.out.println(durationException.getMessage());
             }
         }
 
@@ -54,7 +68,7 @@ public class Ballet extends Spectacle {
         outputToString = "\uF0B2 Ballet \uF0B2" + '\n' +
                 "The name of the ballet: " + '"' + name + '"' + '\n' +
                 "The director of the ballet: " + director.getName() + '\n' +
-                "The duration of the ballet: " + duration + '\n' +
+                "The duration of the ballet: " + duration + " hours\n" +
                 "The ballet dancers: ";
 
         if (dancers.size() == 0)

@@ -1,25 +1,30 @@
 package Theater;
 
+import Service.EventService;
 import Theater.Spectacle.Spectacle;
+import Service.TheaterService;
+import Exception.TheaterException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.*;
 
 public class Event implements Comparable<Event>{
     private int id;
     private Spectacle spectacle;
-    private String time;
+    private String beginTime;
+    private String endTime;
     private String date;
     private Stage stage;
     private List<List<Boolean>> seats;
     private double price;
+    private TheaterService theaterService;
 
     public Event() {
         this.stage = new Stage();
         this.seats = new ArrayList<>();
+        theaterService = TheaterService.getInstance();
     }
-    public Event(Spectacle spectacle, Stage stage) {
+    public Event(Spectacle spectacle, Stage stage, String date, String beginTime, String endTime) {
         this.spectacle = spectacle;
         this.stage = stage;
         this.seats = new ArrayList<>();
@@ -29,45 +34,17 @@ public class Event implements Comparable<Event>{
             for (int j = 0; j < stage.getNumberOfSeatsPerRow(); j++)
                 seats.get(i).add(true);
         }
+        this.date = date;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
     }
 
-    public void toRead() {
-        Scanner in = new Scanner(System.in);
-
-        System.out.println("The date of the event! The format: dd.mm.yyyyy!");
-        System.out.print("Enter the date of the event: ");
-        this.date = in.nextLine().trim();
-
-        while (true)
-        {
-            System.out.println("The time of the event! It should be between 11 AM and 11 PM, with the format: hh:mm!");
-            System.out.print("Enter the time of the event: ");
-            String time = in.nextLine().trim();
-
-            String[] splitTime = time.split(":");
-            int hour = Integer.parseInt(splitTime[0]);
-            int minutes = Integer.parseInt(splitTime[1]);
-
-            if (hour < 11 || hour > 22 || minutes > 59)
-                System.out.println("\uF0FB The time you introduced is not valid! Please try again! \uF0FB\n");
-            else {
-                this.time = time;
-                break;
-            }
-        }
-
-        System.out.println("The price of the event! It should have two digits, with the format: number:dd!");
-        System.out.print("Enter the price of the event: ");
-        this.price = Double.parseDouble(in.nextLine().trim());
-
-        System.out.println();
-    }
     @Override
     public String toString(){
         return "\uF0B2 Event \uF0B2" + '\n' +
                 "The name of the spectacle: " + '"' + spectacle.getName() + '"' + '\n' +
                 "The date of the event: " + date + '\n' +
-                "The time the event starts: " + time + '\n' +
+                "The time the event starts: " + beginTime + '\n' + " to " + endTime + '\n' +
                 "The stage the spectacle is performed at: " + stage.getName() + '\n' +
                 "The price of the event: " + price + " lei";
     }
@@ -100,7 +77,7 @@ public class Event implements Comparable<Event>{
         if (comparator == 1) return 1;
         else if (comparator == 0)
         {
-            try { comparator = compareTime(time, event.time); }
+            try { comparator = compareTime(beginTime, event.beginTime); }
             catch(ParseException parseException) { throw new RuntimeException(parseException); }
 
             if (comparator == 1) return 1;
@@ -116,11 +93,17 @@ public class Event implements Comparable<Event>{
     public void setSpectacle(Spectacle spectacle) {
         this.spectacle = spectacle;
     }
-    public String getTime() {
-        return time;
+    public String getBeginTime() {
+        return beginTime;
     }
-    public void setTime(String time) {
-        this.time = time;
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+    public String getEndTime() {
+        return endTime;
+    }
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
     public String getDate() {
         return date;
@@ -136,12 +119,6 @@ public class Event implements Comparable<Event>{
     }
     public List<List<Boolean>> getSeats() {
         return seats;
-    }
-    public void setSeats(List<List<Boolean>> seats) {
-        this.seats = seats;
-    }
-    public double getPrice() {
-        return price;
     }
     public void setPrice(double price) {
         this.price = price;

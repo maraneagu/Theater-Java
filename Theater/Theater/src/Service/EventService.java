@@ -3,8 +3,11 @@ package Service;
 import Theater.Event;
 import Theater.Spectacle.Spectacle;
 import Theater.Stage;
-import Service.TicketShopService;
+import Exception.TheaterException;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class EventService {
@@ -14,26 +17,168 @@ public class EventService {
         theaterService = TheaterService.getInstance();
     }
 
+    public Event readEvent(Spectacle spectacle)
+    {
+        Scanner in = new Scanner(System.in);
+
+        int stageId;
+        Map<Integer, Stage> stages = theaterService.getStages();
+
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int currentMonth = calendar.get(Calendar.MONTH) + 1;
+        int currentYear = calendar.get(Calendar.YEAR);
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String date, beginTime, endTime;
+
+        List<Event> events = theaterService.getEvents();
+        List<Event> dateStageEvents = new ArrayList<>();
+
+        System.out.println("\n\uF0B2 The theater's stages \uF0B2");
+        for (Map.Entry<Integer, Stage> stage : stages.entrySet())
+            System.out.println(stage.getKey() + ". " + stage.getValue().getName());
+        System.out.println();
+
+        while (true)
+        {
+            System.out.print("Enter the number of the stage " +
+                    "where the event will take place: ");
+            stageId = Integer.parseInt(in.nextLine().trim());
+
+            if (stageId >= 1 && stageId <= stages.size())
+                break;
+            System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+        }
+
+        while (true)
+        {
+            System.out.println("\nThe date of the event! The format: dd.mm.yyyyy!");
+            System.out.print("Enter the date of the event: ");
+            date = in.nextLine().trim();
+
+            try
+            {
+                dateFormat.parse(date);
+
+                String[] splitDate = date.split("\\.");
+                int day = Integer.parseInt(splitDate[0]);
+                int month = Integer.parseInt(splitDate[1]);
+                int year = Integer.parseInt(splitDate[2]);
+
+                if (year < currentYear)
+                    throw new TheaterException("\uF0FB You can not add an event in the past! Please try again! \uF0FB");
+                else if (year == currentYear)
+                {
+                    if (month < currentMonth)
+                        throw new TheaterException("\uF0FB You can not add an event in the past! Please try again! \uF0FB");
+                    else if (month == currentMonth)
+                        if (day < currentDay)
+                            throw new TheaterException("\uF0FB You can not add an event in the past! Please try again! \uF0FB");
+                }
+                break;
+            }
+            catch (ParseException parseException)
+            {
+                System.out.println("\uF0FB The date format you introduced is not valid! Please try again! \uF0FB");
+            }
+            catch (TheaterException dateException)
+            {
+                System.out.println(dateException.getMessage());
+            }
+        }
+
+        System.out.println("\n\uF0B2 The events performed at " + stages.get(stageId).getName() + " on " + date + " \uF0B2");
+
+        Collections.sort(events);
+        Collections.reverse(events);
+
+        for (Event e : events) {
+            if (e.getStage().equals(stages.get(stageId)) && e.getDate().equals(date)) {
+                dateStageEvents.add(e);
+                System.out.println("\uF09F " + '"' + e.getSpectacle().getName() + '"' + " from " + e.getBeginTime() + " to " +
+                        toTime(e.getBeginTime(), e.getSpectacle().getDuration()));
+            }
+        }
+        if (dateStageEvents.isEmpty()) System.out.println("There are not events as of yet.");
+        System.out.println();
+
+        while (true) {
+            System.out.println("The time of the event! It should be between 11 O'Clock and 23 O'Clock, with the format: hh:mm!");
+            System.out.print("Enter the time of the event: ");
+            beginTime = in.nextLine().trim();
+
+            try {
+                timeFormat.parse(beginTime);
+
+                String[] splitTime = beginTime.split(":");
+                int hour = Integer.parseInt(splitTime[0]);
+                int minutes = Integer.parseInt(splitTime[1]);
+
+                if (hour < 11 || hour > 22 || minutes > 59)
+                    throw new TheaterException("\uF0FB The time you introduced is not valid! Please try again! \uF0FB\n");
+
+                endTime = toTime(beginTime, spectacle.getDuration());
+                if (!checkTime(beginTime, endTime, dateStageEvents))
+                {
+                    String choiceToContinue;
+
+                    System.out.println("\nThe event would end at " + endTime + ", thus we are not able to find an appropriate time frame for the event!");
+                    System.out.println("Do you want to try entering another time frame? yes / no");
+                    choiceToContinue = in.nextLine().trim();
+
+                    if (!choiceToContinue.equalsIgnoreCase("yes"))
+                    {
+                        System.out.println("Do you want to change the stage or the date the event is performed at? yes / no");
+                        choiceToContinue = in.nextLine().trim();
+                        if (choiceToContinue.equalsIgnoreCase("yes"))
+                        {
+                            readEvent(spectacle);
+                            return null;
+                        }
+                        return null;
+                    }
+                    else throw new TheaterException("");
+                }
+                break;
+            }
+            catch (ParseException parseException)
+            {
+                System.out.println("\uF0FB The time format you introduced is not valid! Please try again! \uF0FB\n");
+            }
+            catch (TheaterException timeException)
+            {
+                System.out.println(timeException.getMessage());
+            }
+        }
+
+        System.out.println("\nThe price of the event! It should have two digits, with the format: number.dd!");
+        System.out.print("Enter the price of the event: ");
+        Double price = Double.parseDouble(in.nextLine().trim());
+
+        Event event = new Event(spectacle, stages.get(stageId), date, beginTime, endTime);
+        return event;
+    }
+
     public void addEvent() {
         System.out.println("\uF0B2 The theater's spectacles \uF0B2");
 
-        List<Spectacle> spectacles = theaterService.getSpectacles();
+        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
-        if (spectacles.size() == 0)
+        if (spectacles.isEmpty())
             System.out.println("There are no spectacles as of yet.");
-        else
-        {
-            List<Stage> stages = theaterService.getStages();
+        else {
+            Scanner in = new Scanner(System.in);
             List<Event> events = theaterService.getEvents();
 
-            int i, spectacleId, stageId;
-            for (i = 0; i < spectacles.size(); i++)
-                System.out.println(i + 1 + ". " + '"' + spectacles.get(i).getName() + '"');
+            int spectacleId;
+            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+                System.out.println(spectacle.getKey() + ". " + '"' + spectacle.getValue().getName() + '"');
             System.out.println();
 
-            while (true)
-            {
-                Scanner in = new Scanner(System.in);
+            while (true) {
                 System.out.print("Enter the number of the spectacle " +
                         "that you want to add to the event: ");
                 spectacleId = Integer.parseInt(in.nextLine().trim());
@@ -43,28 +188,11 @@ public class EventService {
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
-            System.out.println("\n\uF0B2 The theater's stages \uF0B2");
-            for (i = 0; i < stages.size(); i++)
-                System.out.println(i + 1 + ". " + stages.get(i).getName());
-            System.out.println();
-
-            while (true)
-            {
-                Scanner in = new Scanner(System.in);
-                System.out.print("Enter the number of the stage " +
-                        "where the event will take place: ");
-                stageId = Integer.parseInt(in.nextLine().trim());
-
-                if (stageId >= 1 && stageId <= stages.size())
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
-            }
-
-            Event event = new Event(spectacles.get(spectacleId - 1), stages.get(stageId - 1));
-            event.toRead();
+            Event event = new Event();
+            event = readEvent(spectacles.get(spectacleId));
             events.add(event);
 
-            System.out.println("\uF0B2 A new event was added to theater's events list! \n");
+            System.out.println("\n\uF0B2 A new event was added to theater's events list! \n");
         }
     }
 
@@ -73,18 +201,18 @@ public class EventService {
 
         List<Event> events = theaterService.getEvents();
 
-        if (events.size() == 0)
-            System.out.println("There are no events as of yet.");
-        else
-        {
-            int i, eventId;
-            for (i = 0; i < events.size(); i++)
-                System.out.println(i + 1 + ". " + '"' + events.get(i).getSpectacle().getName() +
-                        '"' + " performed at the " + events.get(i).getStage().getName());
+        if (events.isEmpty())
+            System.out.println("There are no events as of yet.\n");
+        else {
+            int i = 0, eventId;
+            for (Event event : events) {
+                i++;
+                System.out.println(i + ". " + '"' + event.getSpectacle().getName() +
+                        '"' + " performed at the " + event.getStage().getName());
+            }
             System.out.println();
 
-            while (true)
-            {
+            while (true) {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the event " +
                         "that you want to remove: ");
@@ -99,7 +227,7 @@ public class EventService {
             ticketShopService.removeTicketByEvent(events.get(eventId - 1));
 
             System.out.println("\uF0B2 The event " + '"' + events.get(eventId - 1).getSpectacle().getName() +
-                    '"' + " that starts at " + events.get(eventId - 1).getTime() +
+                    '"' + " that starts at " + events.get(eventId - 1).getBeginTime() +
                     " performed at the " + events.get(eventId - 1).getStage().getName() + "" +
                     " was removed from the theater's events list! \n");
             events.remove(eventId - 1);
@@ -122,15 +250,14 @@ public class EventService {
 
         List<Event> events = theaterService.getEvents();
 
-        if (events.size() == 0)
+        if (events.isEmpty())
             System.out.println("\nThere are no events as of yet.\n");
-        else
-        {
+        else {
             Collections.sort(events);
             for (Event event : events)
                 System.out.println("\uF09F " + '"' + event.getSpectacle().getName() +
-                            '"' + " that starts at " + event.getTime() +
-                            " performed at the " + event.getStage().getName() + " stage on " + event.getDate());
+                        '"' + " that starts at " + event.getBeginTime() + "on " + event.getDate() +
+                        " performed at the " + event.getStage().getName() + " stage");
             System.out.println();
         }
     }
@@ -140,17 +267,15 @@ public class EventService {
 
         List<Event> events = theaterService.getEvents();
 
-        if (events.size() == 0)
-            System.out.println("There are no events as of yet.");
-        else
-        {
+        if (events.isEmpty())
+            System.out.println("There are no events as of yet.\n");
+        else {
             int i, eventId;
             for (i = 0; i < events.size(); i++)
                 System.out.println(i + 1 + ". " + '"' + events.get(i).getSpectacle().getName() + '"');
             System.out.println();
 
-            while (true)
-            {
+            while (true) {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the event " +
                         "for which you want to list the information: ");
@@ -167,117 +292,36 @@ public class EventService {
         }
     }
 
-    public void changeEventDetails() {
-        System.out.println("\uF0B2 The theater's events \uF0B2");
+    public String toTime(String fromTime, String duration) {
+        String[] date = fromTime.split(":");
+        int fromHour = Integer.parseInt(date[0]);
+        int fromMinutes = Integer.parseInt(date[1]);
 
-        List<Event> events = theaterService.getEvents();
+        date = duration.split(":");
+        int durationHour = Integer.parseInt(date[0]);
+        int durationMinutes = Integer.parseInt(date[1]);
 
-        if (events.size() == 0)
-            System.out.println("There are no events as of yet.");
-        else
-        {
-            Scanner in = new Scanner(System.in);
+        int toMinutes = (fromMinutes + durationMinutes) % 60;
+        int toHour = fromHour + durationHour + (fromMinutes + durationMinutes) / 60;
 
-            int i, eventId;
-            for (i = 0; i < events.size(); i++)
-                System.out.println(i + 1 + ". " + '"' + events.get(i).getSpectacle().getName() + '"');
-            System.out.println();
+        return toHour + ":" + toMinutes;
+    }
 
-            while (true)
-            {
-                System.out.print("Enter the number of the event " +
-                        "where you want to change the information: ");
-                eventId = Integer.parseInt(in.nextLine().trim());
+    public boolean checkTime(String beginTime, String endTime, List<Event> events) {
+        if (events.isEmpty())
+            return true;
 
-                if (eventId >= 1 && eventId <= events.size())
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
-            }
+        if (endTime.compareTo(events.get(0).getBeginTime()) <= 0)
+            return true;
 
-            System.out.println("\nWhich information do you want to change?");
-            System.out.println("1. The stage the spectacle is performed at.");
-            System.out.println("2. The date of the event.");
-            System.out.println("3. The time the spectacle will begin.");
-            System.out.println("4. The price of the event.");
+        for (int i = 0; i < events.size() - 1; i++)
+            if (beginTime.compareTo(events.get(i).getEndTime()) >= 0)
+                if (endTime.compareTo(events.get(i + 1).getBeginTime()) <= 0)
+                    return true;
 
-            String choiceOfInformation;
+        if (beginTime.compareTo(events.get(events.size() - 1).getEndTime()) >= 0)
+            return true;
 
-            while (true)
-            {
-                System.out.print("The information: ");
-
-                choiceOfInformation = in.nextLine();
-                if (choiceOfInformation.equals("1"))
-                {
-                    List<Stage> stages = theaterService.getStages();
-                    int stageId;
-
-                    System.out.println("\n\uF0B2 The theater's stages \uF0B2");
-                    for (i = 0; i < stages.size(); i++)
-                        if (stages.get(i) != events.get(eventId - 1).getStage())
-                            System.out.println(i + 1 + ". " + stages.get(i).getName());
-                    System.out.println();
-
-                    while (true)
-                    {
-                        System.out.print("Enter the number of the new stage " +
-                                "where the event will take place: ");
-                        stageId = Integer.parseInt(in.nextLine().trim());
-
-                        if (stageId >= 1 && stageId <= stages.size())
-                            break;
-                        System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
-                    }
-
-                    events.get(eventId - 1).setStage(stages.get(stageId - 1));
-                    System.out.println("\n\uF0B2 A new stage was set for the event!\n");
-                    break;
-                }
-                else if (choiceOfInformation.equals("2"))
-                {
-                    System.out.println("\nThe date of the event! The format: dd/mm/yyyyy!");
-                    System.out.print("Enter the new date of the event: ");
-                    String date = in.nextLine().trim();
-
-                    events.get(eventId - 1).setDate(date);
-                    System.out.println("\n\uF0B2 A new date was set for the event!\n");
-                    break;
-                }
-                else if (choiceOfInformation.equals("3"))
-                {
-                    while (true)
-                    {
-                        System.out.println("\nThe time of the event! It should be between 11 AM and 11 PM, with the format: hh:mm!");
-                        System.out.print("Enter the time of the event: ");
-                        String time = in.nextLine().trim();
-
-                        String[] splitTime = time.split(":");
-                        int hour = Integer.parseInt(splitTime[0]);
-                        int minutes = Integer.parseInt(splitTime[1]);
-
-                        if (hour < 11 || hour > 22 || minutes > 59)
-                            System.out.println("\uF0FB The time you introduced is not valid! Please try again! \uF0FB\n");
-                        else
-                        {
-                            events.get(eventId - 1).setTime(time);
-                            System.out.println("\n\uF0B2 A new time was set for the event!\n");
-                            break;
-                        }
-                    }
-                    break;
-                }
-                else if (choiceOfInformation.equals("4")) {
-                    System.out.println("\nThe price of the event! It should have two digits, with the format: number:dd!");
-                    System.out.print("Enter the price of the event: ");
-                    double price = Double.parseDouble(in.nextLine().trim());
-
-                    events.get(eventId - 1).setPrice(price);
-                    System.out.println("\n\uF0B2 A new price was set for the event!\n");
-                    break;
-                }
-
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
-            }
-        }
+        return false;
     }
 }

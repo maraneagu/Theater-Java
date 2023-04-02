@@ -4,7 +4,9 @@ import Service.PrintService;
 import Theater.Artist.Actor;
 import Theater.Category;
 import Theater.Director;
+import Exception.TheaterException;
 
+import java.text.*;
 import java.util.*;
 
 public class Play extends Spectacle {
@@ -32,21 +34,33 @@ public class Play extends Spectacle {
 
         this.director.toRead();
 
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
         while (true)
         {
-            System.out.println("The duration of the play! It should be between 1 hour and 4 hours with the format: 0h:mm!");
+            System.out.println("\nThe duration of the play! It should be between 1 hour and 4 hours with the format: hh:mm!");
             System.out.print("Enter the duration of the play: ");
-            String duration = in.nextLine().trim();
+            this.duration = in.nextLine().trim();
 
-            String[] splitTime = duration.split(":");
-            int hour = Integer.parseInt(splitTime[0]);
-            int minutes = Integer.parseInt(splitTime[1]);
+            try
+            {
+                timeFormat.parse(duration);
 
-            if (hour > 4 || minutes > 59)
-                System.out.println("\uF0FB The duration you introduced is not valid! Please try again! \uF0FB\n");
-            else {
-                this.duration = duration;
+                String[] splitTime = duration.split(":");
+                int hour = Integer.parseInt(splitTime[0]);
+                int minutes = Integer.parseInt(splitTime[1]);
+
+                if (hour > 4 || minutes > 59)
+                    throw new TheaterException("\uF0FB The duration you introduced is not valid! Please try again! \uF0FB");
                 break;
+            }
+            catch(ParseException parseException)
+            {
+                System.out.println("\uF0FB The duration format you introduced is not valid! Please try again! \uF0FB");
+            }
+            catch(TheaterException durationException)
+            {
+                System.out.println(durationException.getMessage());
             }
         }
 
@@ -59,7 +73,7 @@ public class Play extends Spectacle {
                 "The name of the play: " + '"' + name + '"' + '\n' +
                 "The category of the play: " + category.getName() + '\n' +
                 "The director of the play: " + director.getName() + '\n' +
-                "The duration of the play: " + duration + '\n' +
+                "The duration of the play: " + duration + " hours\n" +
                 "The play actors: ";
 
         if (actors.size() == 0)

@@ -1,7 +1,7 @@
 package Service;
 
 import Theater.Director;
-import java.util.List;
+import java.util.Map;
 
 public class DirectorService {
     private final TheaterService theaterService;
@@ -13,14 +13,14 @@ public class DirectorService {
     public void listDirectors() {
         System.out.println("\uF0B2 The theater's directors \uF0B2");
 
-        List<Director> directors = theaterService.getDirectors();
+        Map<Integer, Director> directors = theaterService.getDirectors();
 
-        if (directors.size() == 0)
+        if (directors.isEmpty())
             System.out.println("There are no directors as of yet." + '\n');
         else
         {
-            for (Director director : directors)
-                System.out.println(director);
+            for (Map.Entry<Integer, Director> director : directors.entrySet())
+                System.out.println(director.getValue());
             System.out.println();
         }
     }

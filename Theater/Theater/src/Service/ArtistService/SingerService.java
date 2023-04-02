@@ -1,12 +1,14 @@
 package Service.ArtistService;
 
 import Service.TheaterService;
+import Theater.Artist.Actor;
 import Theater.Artist.Singer;
 import Theater.Spectacle.Musical;
 import Theater.Spectacle.Opera;
 import Theater.Spectacle.Spectacle;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class SingerService {
@@ -19,15 +21,15 @@ public class SingerService {
     public void addSinger() {
         System.out.println("\uF0B2 The theater's operas & musicals \uF0B2");
 
-        int i, spectacleId, playId = 0;
-        List<Spectacle> spectacles = theaterService.getSpectacles();
+        int spectacleId, playId = 0;
+        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (i = 0; i < spectacles.size(); i++)
+        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
         {
-            if (spectacles.get(i) instanceof Opera || spectacles.get(i) instanceof Musical)
+            if (spectacle.getValue() instanceof Opera || spectacle.getValue() instanceof Musical)
             {
                 playId++;
-                System.out.println(playId + ". " + '"' + spectacles.get(i).getName() + '"');
+                System.out.println(playId + ". " + '"' + spectacle.getValue().getName() + '"');
             }
         }
 
@@ -35,7 +37,7 @@ public class SingerService {
             System.out.println("There are no operas or musicals as of yet." + '\n');
         else
         {
-            List<Singer> singers = theaterService.getSingers();
+            Map<Integer, Singer> singers = theaterService.getSingers();
 
             System.out.println();
             while (true)
@@ -54,8 +56,8 @@ public class SingerService {
             singer.toRead();
 
             playId = 0;
-            for (i = 0; i < spectacles.size(); i++)
-                if (spectacles.get(i) instanceof Opera || spectacles.get(i) instanceof Musical)
+            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+                if (spectacle.getValue() instanceof Opera || spectacle.getValue() instanceof Musical)
                 {
                     playId++;
                     if (playId == spectacleId)
@@ -63,29 +65,31 @@ public class SingerService {
                         boolean noDuplicate;
                         List<Singer> sSingers;
 
-                        if (spectacles.get(i) instanceof Opera)
+                        if (spectacle.getValue() instanceof Opera)
                         {
-                            noDuplicate = add(singer, ((Opera) spectacles.get(i)).getSingers());
-                            sSingers = ((Opera) spectacles.get(i)).getSingers();
+                            noDuplicate = add(singer, ((Opera) spectacle.getValue()).getSingers());
+                            sSingers = ((Opera) spectacle.getValue()).getSingers();
                         }
                         else
                         {
-                            noDuplicate = add(singer, ((Musical) spectacles.get(i)).getSingers());
-                            sSingers = ((Musical) spectacles.get(i)).getSingers();
+                            noDuplicate = add(singer, ((Musical) spectacle.getValue()).getSingers());
+                            sSingers = ((Musical) spectacle.getValue()).getSingers();
                         }
 
                         if (noDuplicate)
                         {
                             sSingers.add(singer);
+                            singer.getSpectacles().add(spectacle.getValue());
                             System.out.println("\uF0B2 A new singer was added to " + '"' +
-                                    spectacles.get(i).getName() + '"' + "'s singers list!");
+                                    spectacle.getValue().getName() + '"' + "'s singers list!");
                         }
                         else System.out.println("\uF04A The singer you entered already exists in " + '"' +
-                                spectacles.get(i).getName() + '"' + "'s singers list!");
+                                spectacle.getValue().getName() + '"' + "'s singers list!");
 
                         if (add(singer, singers))
                         {
-                            singers.add(singer);
+                            theaterService.setSingerId(theaterService.getSingerId() + 1);
+                            singers.put(theaterService.getSingerId(), singer);
                             System.out.println("\uF0B2 A new singer was added to theater's singers list!");
                         }
                         else System.out.println("\uF04A The singer you entered already exists in theater's singers list!");
@@ -100,14 +104,14 @@ public class SingerService {
     public void removeSinger() {
         System.out.println("\uF0B2 The theater's operas & musicals \uF0B2");
 
-        int i, spectacleId, playId = 0;
-        List<Spectacle> spectacles = theaterService.getSpectacles();
+        int spectacleId, playId = 0;
+        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (i = 0; i < spectacles.size(); i++)
-            if (spectacles.get(i) instanceof Opera || spectacles.get(i) instanceof Musical)
+        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+            if (spectacle.getValue() instanceof Opera || spectacle.getValue() instanceof Musical)
             {
                 playId++;
-                System.out.println(playId + ". " + '"' + spectacles.get(i).getName() + '"');
+                System.out.println(playId + ". " + '"' + spectacle.getValue().getName() + '"');
             }
 
         if (playId == 0)
@@ -128,8 +132,8 @@ public class SingerService {
             }
 
             playId = 0;
-            for (i = 0; i < spectacles.size(); i++)
-                if (spectacles.get(i) instanceof Opera || spectacles.get(i) instanceof Musical)
+            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+                if (spectacle.getValue() instanceof Opera || spectacle.getValue() instanceof Musical)
                 {
                     playId++;
                     if (playId == spectacleId)
@@ -137,14 +141,14 @@ public class SingerService {
                         int j, singerId;
 
                         List<Singer> sSingers;
-                        if (spectacles.get(i) instanceof Opera)
-                            sSingers = ((Opera) spectacles.get(i)).getSingers();
-                        else sSingers = ((Musical) spectacles.get(i)).getSingers();
+                        if (spectacle.getValue() instanceof Opera)
+                            sSingers = ((Opera) spectacle.getValue()).getSingers();
+                        else sSingers = ((Musical) spectacle.getValue()).getSingers();
 
-                        System.out.println("\n\uF0B2 The " + '"' + spectacles.get(i).getName() + '"' +
+                        System.out.println("\n\uF0B2 The " + '"' + spectacle.getValue().getName() + '"' +
                                 "'s singers list \uF0B2");
 
-                        if (sSingers.size() == 0) System.out.println("There are no singers as of yet.\n");
+                        if (sSingers.isEmpty()) System.out.println("There are no singers as of yet.\n");
                         else
                         {
                             for (j = 0; j < sSingers.size(); j++)
@@ -155,7 +159,7 @@ public class SingerService {
                             {
                                 Scanner in = new Scanner(System.in);
 
-                                System.out.print("Enter the number of the singer you want to remove: ");
+                                System.out.print("Enter the number of the singer that you want to remove: ");
                                 singerId = Integer.parseInt(in.nextLine().trim());
 
                                 if (singerId >= 1 && singerId <= sSingers.size())
@@ -163,10 +167,11 @@ public class SingerService {
                                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
                             }
 
-                            System.out.println("\uF0B2 The singer " + '"' + sSingers.get(singerId - 1).getName() + '"' +
-                                    " was removed from " + '"' + spectacles.get(i).getName() + '"'
+                            System.out.println("\n\uF04A The singer " + sSingers.get(singerId - 1).getName() +
+                                    " was removed from " + '"' + spectacle.getValue().getName() + '"'
                                     + "'s singers list! \n");
 
+                            sSingers.get(singerId - 1).getSpectacles().remove(spectacle.getValue());
                             sSingers.remove(singerId - 1);
                             break;
                         }
@@ -179,13 +184,13 @@ public class SingerService {
         System.out.println("\uF0B2 The theater's operas & musicals \uF0B2");
 
         int i, spectacleId, playId = 0;
-        List<Spectacle> spectacles = theaterService.getSpectacles();
+        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (i = 0; i < spectacles.size(); i++)
-            if (spectacles.get(i) instanceof Opera || spectacles.get(i) instanceof Musical)
+        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+            if (spectacle.getValue() instanceof Opera || spectacle.getValue() instanceof Musical)
             {
                 playId++;
-                System.out.println(playId + ". " + '"' + spectacles.get(i).getName() + '"');
+                System.out.println(playId + ". " + '"' + spectacle.getValue().getName() + '"');
             }
 
         if (playId == 0)
@@ -206,20 +211,21 @@ public class SingerService {
             }
 
             playId = 0;
-            for (i = 0; i < spectacles.size(); i++)
-                if (spectacles.get(i) instanceof Opera || spectacles.get(i) instanceof Musical) {
+            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+                if (spectacle.getValue() instanceof Opera || spectacle.getValue() instanceof Musical)
+                {
                     playId++;
                     if (playId == spectacleId)
                     {
                         List<Singer> sSingers;
-                        if (spectacles.get(i) instanceof Opera)
-                            sSingers = ((Opera) spectacles.get(i)).getSingers();
-                        else sSingers = ((Musical) spectacles.get(i)).getSingers();
+                        if (spectacle.getValue() instanceof Opera)
+                            sSingers = ((Opera) spectacle.getValue()).getSingers();
+                        else sSingers = ((Musical) spectacle.getValue()).getSingers();
 
-                        System.out.println("\n\uF0B2 The " + '"' + spectacles.get(i).getName() + '"' +
+                        System.out.println("\n\uF0B2 The " + '"' + spectacle.getValue().getName() + '"' +
                                 "'s singers list \uF0B2");
 
-                        if (sSingers.size() == 0) System.out.println("There are no singers as of yet. \n");
+                        if (sSingers.isEmpty()) System.out.println("There are no singers as of yet. \n");
                         else
                         {
                             for (Singer singer : sSingers)
@@ -230,9 +236,55 @@ public class SingerService {
                 }
         }
     }
+
+    public void searchSinger() {
+        System.out.println("\uF0B2 The theater's singers \uF0B2");
+
+        Map<Integer, Singer> singers = theaterService.getSingers();
+
+        if (singers.isEmpty())
+            System.out.println("There are no singers as of yet.\n");
+        else
+        {
+            for (Map.Entry<Integer, Singer> singer : singers.entrySet())
+                System.out.println(singer.getKey() + ". " + singer.getValue().getName());
+            System.out.println();
+
+            int singerId;
+            while (true)
+            {
+                Scanner in = new Scanner(System.in);
+
+                System.out.print("Enter the number of the singer that you want to search the spectacles for: ");
+                singerId = Integer.parseInt(in.nextLine().trim());
+
+                if (singerId >= 1 && singerId <= singers.size())
+                    break;
+                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+            }
+
+            System.out.println("\n\uF0B2 " + singers.get(singerId).getName() + "'s spectacles \uF0B2");
+
+            if (singers.get(singerId).getSpectacles().isEmpty())
+                System.out.println("The singer has not starred in any spectacles from the theater's spectacles as of yet.\n");
+            else
+            {
+                for (Spectacle spectacle : singers.get(singerId).getSpectacles())
+                    System.out.println("\uF09F " + spectacle.getName() + " by " + spectacle.getDirector().getName());
+                System.out.println();
+            }
+        }
+    }
+
     public boolean add(Singer singer, List<Singer> singers) {
         for (Singer s : singers)
             if (s.getName().equalsIgnoreCase(singer.getName()))
+                return false;
+        return true;
+    }
+    public boolean add(Singer singer, Map<Integer, Singer> singers) {
+        for (Map.Entry<Integer, Singer> s : singers.entrySet())
+            if (s.getValue().getName().equalsIgnoreCase(singer.getName()))
                 return false;
         return true;
     }

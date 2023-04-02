@@ -11,12 +11,6 @@ public class Category {
         this.name = name;
     }
 
-    public void toRead() {
-        Scanner in = new Scanner(System.in);
-
-        System.out.print("Enter the name of the category: ");
-        this.name = in.nextLine().trim();
-    }
     @Override
     public String toString(){
         return "\uF09F " + name;

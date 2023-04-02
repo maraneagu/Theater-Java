@@ -5,6 +5,7 @@ import Theater.Artist.Actor;
 import Theater.Spectacle.Play;
 import Theater.Spectacle.Spectacle;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,21 +18,21 @@ public class ActorService {
     public void addActor() {
         System.out.println("\uF0B2 The theater's plays \uF0B2");
 
-        int i, spectacleId, playId = 0;
-        List<Spectacle> spectacles = theaterService.getSpectacles();
+        int spectacleId, playId = 0;
+        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (i = 0; i < spectacles.size(); i++)
-            if (spectacles.get(i) instanceof Play)
+        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+            if (spectacle.getValue() instanceof Play)
             {
                 playId++;
-                System.out.println(playId + ". " + '"' + spectacles.get(i).getName() + '"');
+                System.out.println(playId + ". " + '"' + spectacle.getValue().getName() + '"');
             }
 
         if (playId == 0)
             System.out.println("There are no plays as of yet." + '\n');
         else
         {
-            List<Actor> actors = theaterService.getActors();
+            Map<Integer, Actor> actors = theaterService.getActors();
 
             System.out.println();
             while (true)
@@ -50,25 +51,27 @@ public class ActorService {
             actor.toRead();
 
             playId = 0;
-            for (i = 0; i < spectacles.size(); i++)
-                if (spectacles.get(i) instanceof Play)
+            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+                if (spectacle.getValue() instanceof Play)
                 {
                     playId++;
                     if (playId == spectacleId)
                     {
-                        if (add(actor, ((Play) spectacles.get(i)).getActors()))
+                        if (add(actor, ((Play) spectacle.getValue()).getActors()))
                         {
-                            List<Actor> sActors = ((Play) spectacles.get(i)).getActors();
+                            List<Actor> sActors = ((Play) spectacle.getValue()).getActors();
                             sActors.add(actor);
+                            actor.getSpectacles().add(spectacle.getValue());
 
-                            System.out.println("\uF0B2 A new actor was added to " + '"' + spectacles.get(i).getName() + '"' + "'s actors list!");
+                            System.out.println("\uF0B2 A new actor was added to " + '"' + spectacle.getValue().getName() + '"' + "'s actors list!");
                         }
                         else System.out.println("\uF04A The actor you entered already exists in " + '"' +
-                                spectacles.get(i).getName() + '"' + "'s actors list!");
+                                spectacle.getValue().getName() + '"' + "'s actors list!");
 
                         if (add(actor, actors))
                         {
-                            actors.add(actor);
+                            theaterService.setActorId(theaterService.getActorId() + 1);
+                            actors.put(theaterService.getActorId(), actor);
                             System.out.println("\uF0B2 A new actor was added to theater's actors list!");
                         }
                         else System.out.println("\uF04A The actor you entered already exists in theater's actors list!");
@@ -83,14 +86,14 @@ public class ActorService {
     public void removeActor() {
         System.out.println("\uF0B2 The theater's plays \uF0B2");
 
-        int i, spectacleId, playId = 0;
-        List<Spectacle> spectacles = theaterService.getSpectacles();
+        int spectacleId, playId = 0;
+        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (i = 0; i < spectacles.size(); i++)
-            if (spectacles.get(i) instanceof Play)
+        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+            if (spectacle.getValue() instanceof Play)
             {
                 playId++;
-                System.out.println(playId + ". " + '"' + spectacles.get(i).getName() + '"');
+                System.out.println(playId + ". " + '"' + spectacle.getValue().getName() + '"');
             }
 
         if (playId == 0)
@@ -111,19 +114,20 @@ public class ActorService {
             }
 
             playId = 0;
-            for (i = 0; i < spectacles.size(); i++)
-                if (spectacles.get(i) instanceof Play)
+            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+                if (spectacle.getValue() instanceof Play)
                 {
                     playId++;
                     if (playId == spectacleId)
                     {
                         int j, actorId;
-                        List<Actor> sActors = ((Play) spectacles.get(i)).getActors();
 
-                        System.out.println("\n\uF0B2 The " + '"' + spectacles.get(i).getName() + '"' +
+                        List<Actor> sActors = ((Play) spectacle.getValue()).getActors();
+
+                        System.out.println("\n\uF0B2 The " + '"' + spectacle.getValue().getName() + '"' +
                                 "'s actors list \uF0B2");
 
-                        if (sActors.size() == 0) System.out.println("There are no actors as of yet.\n");
+                        if (sActors.isEmpty()) System.out.println("There are no actors as of yet.\n");
                         else
                         {
                             for (j = 0; j < sActors.size(); j++)
@@ -134,7 +138,7 @@ public class ActorService {
                             {
                                 Scanner in = new Scanner(System.in);
 
-                                System.out.print("Enter the number of the actor you want to remove: ");
+                                System.out.print("Enter the number of the actor that you want to remove: ");
                                 actorId = Integer.parseInt(in.nextLine().trim());
 
                                 if (actorId >= 1 && actorId <= sActors.size())
@@ -142,9 +146,11 @@ public class ActorService {
                                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
                             }
 
-                            System.out.println("\uF0B2 The actor " + '"' + sActors.get(actorId - 1).getName() + '"' +
-                                    " was removed from " + '"' + spectacles.get(i).getName() + '"'
+                            System.out.println("\n\uF04A The actor " + sActors.get(actorId - 1).getName() +
+                                    " was removed from " + '"' + spectacle.getValue().getName() + '"'
                                     + "'s actors list! \n");
+
+                            sActors.get(actorId - 1).getSpectacles().remove(spectacle.getValue());
                             sActors.remove(actorId - 1);
                             break;
                         }
@@ -156,14 +162,14 @@ public class ActorService {
     public void listActors() {
         System.out.println("\uF0B2 The theater's plays \uF0B2");
 
-        int i, spectacleId, playId = 0;
-        List<Spectacle> spectacles = theaterService.getSpectacles();
+        int spectacleId, playId = 0;
+        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (i = 0; i < spectacles.size(); i++)
-            if (spectacles.get(i) instanceof Play)
+        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+            if (spectacle.getValue() instanceof Play)
             {
                 playId++;
-                System.out.println(playId + ". " + '"' + spectacles.get(i).getName() + '"');
+                System.out.println(playId + ". " + '"' + spectacle.getValue().getName() + '"');
             }
 
         if (playId == 0)
@@ -184,18 +190,18 @@ public class ActorService {
             }
 
             playId = 0;
-            for (i = 0; i < spectacles.size(); i++)
-                if (spectacles.get(i) instanceof Play)
+            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
+                if (spectacle.getValue() instanceof Play)
                 {
                     playId++;
                     if (playId == spectacleId)
                     {
-                        List<Actor> sActors = ((Play) spectacles.get(i)).getActors();
+                        List<Actor> sActors = ((Play) spectacle.getValue()).getActors();
 
-                        System.out.println("\n\uF0B2 The " + '"' + spectacles.get(i).getName() + '"' +
+                        System.out.println("\n\uF0B2 The " + '"' + spectacle.getValue().getName() + '"' +
                                 "'s actors list \uF0B2");
 
-                        if (sActors.size() == 0) System.out.println("There are no actors as of yet.\n");
+                        if (sActors.isEmpty()) System.out.println("There are no actors as of yet.\n");
                         else
                         {
                             for (Actor actor : sActors)
@@ -207,9 +213,54 @@ public class ActorService {
         }
     }
 
+    public void searchActor() {
+        System.out.println("\uF0B2 The theater's actors \uF0B2");
+
+        Map<Integer, Actor> actors = theaterService.getActors();
+
+        if (actors.isEmpty())
+            System.out.println("There are no actors as of yet.\n");
+        else
+        {
+            for (Map.Entry<Integer, Actor> actor : actors.entrySet())
+                System.out.println(actor.getKey() + ". " + actor.getValue().getName());
+            System.out.println();
+
+            int actorId;
+            while (true)
+            {
+                Scanner in = new Scanner(System.in);
+
+                System.out.print("Enter the number of the actor that you want to search the spectacles for: ");
+                actorId = Integer.parseInt(in.nextLine().trim());
+
+                if (actorId >= 1 && actorId <= actors.size())
+                    break;
+                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+            }
+
+            System.out.println("\n\uF0B2 " + actors.get(actorId).getName() + "'s spectacles \uF0B2");
+
+            if (actors.get(actorId).getSpectacles().isEmpty())
+                System.out.println("The actor has not starred in any spectacles from the theater's spectacles as of yet.\n");
+            else
+            {
+                for (Spectacle spectacle : actors.get(actorId).getSpectacles())
+                    System.out.println("\uF09F " + '"' + spectacle.getName() + '"' + " by " + spectacle.getDirector().getName());
+                System.out.println();
+            }
+        }
+    }
+
     public boolean add(Actor actor, List<Actor> actors) {
         for (Actor a : actors)
             if (a.getName().equalsIgnoreCase(actor.getName()))
+                return false;
+        return true;
+    }
+    public boolean add(Actor actor, Map<Integer, Actor> actors) {
+        for (Map.Entry<Integer, Actor> a : actors.entrySet())
+            if (a.getValue().getName().equalsIgnoreCase(actor.getName()))
                 return false;
         return true;
     }

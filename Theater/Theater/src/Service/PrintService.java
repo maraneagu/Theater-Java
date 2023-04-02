@@ -9,10 +9,10 @@ import java.util.*;
 
 public class PrintService {
     public PrintService() {}
-    public void printStages(List<Stage> stages) {
-        for (Stage stage : stages)
-            System.out.println("\uF09F " + stage.getName() + " stage" +
-                    " with the capacity of " + stage.getNumberOfRows() * stage.getNumberOfSeatsPerRow() +
+    public void printStages(Map<Integer, Stage> stages) {
+        for (Map.Entry<Integer, Stage> stage : stages.entrySet())
+            System.out.println("\uF09F " + stage.getValue().getName() + " stage" +
+                    " with the capacity of " + stage.getValue().getNumberOfRows() * stage.getValue().getNumberOfSeatsPerRow() +
                     " seats");
         System.out.println();
     }
@@ -66,7 +66,7 @@ public class PrintService {
                     printSeats.append((j + 1) + ", ");
                 }
 
-            if (seatsAvailable == false) printSeats.append("There are no seats available on this row.\n");
+            if (!seatsAvailable) printSeats.append("There are no seats available on this row.\n");
             else
             {
                 printSeats.delete(printSeats.length() - 2, printSeats.length());

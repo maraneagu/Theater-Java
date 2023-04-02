@@ -1,10 +1,18 @@
 package Theater.Artist;
 
+import Theater.Spectacle.Spectacle;
+
+import java.util.ArrayList;
+import java.util.List;
+
 abstract public class Artist {
     protected int id;
     protected String name;
+    protected List<Spectacle> spectacles;
 
-    public Artist() {}
+    public Artist() {
+        spectacles = new ArrayList<>();
+    }
     public Artist(String name) {
         this.name = name;
     }
@@ -18,5 +26,11 @@ abstract public class Artist {
     }
     public void setName(String name) {
         this.name = name;
+    }
+    public List<Spectacle> getSpectacles() {
+        return spectacles;
+    }
+    public void setSpectacles(List<Spectacle> spectacles) {
+        this.spectacles = spectacles;
     }
 }

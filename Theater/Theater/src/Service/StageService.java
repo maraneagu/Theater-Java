@@ -2,8 +2,8 @@ package Service;
 
 import Theater.Stage;
 
+import java.util.Map;
 import java.util.Scanner;
-import java.util.List;
 
 public class StageService {
     private final TheaterService theaterService;
@@ -15,7 +15,7 @@ public class StageService {
     public void listStages() {
         System.out.println("\uF0B2 The theater's stages \uF0B2");
 
-        List<Stage> stages = theaterService.getStages();
+        Map<Integer, Stage> stages = theaterService.getStages();
 
         PrintService printService = new PrintService();
         printService.printStages(stages);
@@ -23,12 +23,12 @@ public class StageService {
     public void listStageDetails() {
         System.out.println("\uF0B2 The theater's stages \uF0B2");
 
-        int i, stageId;
-        List<Stage> stages = theaterService.getStages();
+        int stageId;
+        Map<Integer, Stage> stages = theaterService.getStages();
 
-        for (i = 0; i < stages.size(); i++)
-            System.out.println(i + 1 + ". " +
-                    stages.get(i).getName());
+        for (Map.Entry<Integer, Stage> stage : stages.entrySet())
+            System.out.println(stage.getKey() + ". " +
+                    stage.getValue().getName());
         System.out.println();
 
         while (true)
@@ -44,6 +44,6 @@ public class StageService {
         }
 
         System.out.println();
-        System.out.println(stages.get(stageId - 1));
+        System.out.println(stages.get(stageId));
     }
 }

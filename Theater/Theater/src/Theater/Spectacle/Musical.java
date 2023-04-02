@@ -4,10 +4,10 @@ import Service.PrintService;
 import Theater.Director;
 import Theater.Artist.Singer;
 import Theater.Artist.Dancer;
+import Exception.TheaterException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.text.*;
+import java.util.*;
 
 public class Musical extends Spectacle {
     private List<Singer> singers;
@@ -34,21 +34,33 @@ public class Musical extends Spectacle {
 
         this.director.toRead();
 
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
         while (true)
         {
-            System.out.println("The duration of the musical! It should be between 1 hour and 4 hours with the format: 0h:mm!");
-            System.out.print("Enter the duration of the musical: ");
-            String duration = in.nextLine().trim();
+            System.out.println("\nThe duration of the play! It should be between 1 hour and 4 hours with the format: hh:mm!");
+            System.out.print("Enter the duration of the play: ");
+            this.duration = in.nextLine().trim();
 
-            String[] splitTime = duration.split(":");
-            int hour = Integer.parseInt(splitTime[0]);
-            int minutes = Integer.parseInt(splitTime[1]);
+            try
+            {
+                timeFormat.parse(duration);
 
-            if (hour > 4 || minutes > 59)
-                System.out.println("\uF0FB The duration you introduced is not valid! Please try again! \uF0FB\n");
-            else {
-                this.duration = duration;
+                String[] splitTime = duration.split(":");
+                int hour = Integer.parseInt(splitTime[0]);
+                int minutes = Integer.parseInt(splitTime[1]);
+
+                if (hour > 4 || minutes > 59)
+                    throw new TheaterException("\uF0FB The duration you introduced is not valid! Please try again! \uF0FB");
                 break;
+            }
+            catch(ParseException parseException)
+            {
+                System.out.println("\uF0FB The duration format you introduced is not valid! Please try again! \uF0FB");
+            }
+            catch(TheaterException durationException)
+            {
+                System.out.println(durationException.getMessage());
             }
         }
 
@@ -60,7 +72,7 @@ public class Musical extends Spectacle {
         outputToString = "\uF0B2 Musical \uF0B2" + '\n' +
                 "The name of the musical: " + '"' + name + '"' + '\n' +
                 "The director of the musical: " + director.getName() + '\n' +
-                "The duration of the musical: " + duration + '\n' +
+                "The duration of the musical: " + duration + " hours\n" +
                 "The musical singers: ";
 
         if (singers.size() == 0)
