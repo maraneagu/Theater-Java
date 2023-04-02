@@ -158,7 +158,7 @@ public class EventService {
         System.out.print("Enter the price of the event: ");
         Double price = Double.parseDouble(in.nextLine().trim());
 
-        Event event = new Event(spectacle, stages.get(stageId), date, beginTime, endTime);
+        Event event = new Event(spectacle, stages.get(stageId), date, beginTime, endTime, price);
         return event;
     }
 

@@ -3,7 +3,6 @@ package Theater;
 import Service.EventService;
 import Theater.Spectacle.Spectacle;
 import Service.TheaterService;
-import Exception.TheaterException;
 
 import java.text.*;
 import java.util.*;
@@ -11,20 +10,19 @@ import java.util.*;
 public class Event implements Comparable<Event>{
     private int id;
     private Spectacle spectacle;
+    private Stage stage;
+    private String date;
     private String beginTime;
     private String endTime;
-    private String date;
-    private Stage stage;
-    private List<List<Boolean>> seats;
     private double price;
+    private List<List<Boolean>> seats;
     private TheaterService theaterService;
 
     public Event() {
         this.stage = new Stage();
         this.seats = new ArrayList<>();
-        theaterService = TheaterService.getInstance();
     }
-    public Event(Spectacle spectacle, Stage stage, String date, String beginTime, String endTime) {
+    public Event(Spectacle spectacle, Stage stage, String date, String beginTime, String endTime, Double price) {
         this.spectacle = spectacle;
         this.stage = stage;
         this.seats = new ArrayList<>();
@@ -37,6 +35,7 @@ public class Event implements Comparable<Event>{
         this.date = date;
         this.beginTime = beginTime;
         this.endTime = endTime;
+        this.price = price;
     }
 
     @Override
@@ -96,31 +95,16 @@ public class Event implements Comparable<Event>{
     public String getBeginTime() {
         return beginTime;
     }
-    public void setBeginTime(String beginTime) {
-        this.beginTime = beginTime;
-    }
     public String getEndTime() {
         return endTime;
-    }
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
     public String getDate() {
         return date;
     }
-    public void setDate(String date) {
-        this.date = date;
-    }
     public Stage getStage() {
         return stage;
     }
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
     public List<List<Boolean>> getSeats() {
         return seats;
-    }
-    public void setPrice(double price) {
-        this.price = price;
     }
 }

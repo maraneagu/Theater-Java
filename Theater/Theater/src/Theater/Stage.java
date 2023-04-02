@@ -27,13 +27,7 @@ public class Stage {
         return name;
     }
     public int getNumberOfRows() { return numberOfRows; }
-    public void setNumberOfRows(int numberOfRows) {
-        this.numberOfRows = numberOfRows;
-    }
     public int getNumberOfSeatsPerRow() {
         return numberOfSeatsPerRow;
-    }
-    public void setNumberOfSeatsPerRow(int numberOfSeatsPerRow) {
-        this.numberOfSeatsPerRow = numberOfSeatsPerRow;
     }
 }
