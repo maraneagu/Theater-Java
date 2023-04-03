@@ -328,10 +328,9 @@ public class SpectacleService {
         if (spectacle instanceof Play)
         {
             for (Map.Entry<Integer, Spectacle> s : spectacles.entrySet())
-                if (s.getValue() instanceof Play) {
+                if (s.getValue() instanceof Play) 
                     if (s.getValue().getName().equalsIgnoreCase(spectacle.getName()))
                         return false;
-                }
             return true;
         }
         else if (spectacle instanceof Opera)
@@ -359,6 +358,7 @@ public class SpectacleService {
             return true;
         }
     }
+    
     public boolean add(Director director, Map<Integer, Director> directors) {
         for (Map.Entry<Integer, Director> d : directors.entrySet())
             if (d.getValue().getName().equalsIgnoreCase(director.getName()))
