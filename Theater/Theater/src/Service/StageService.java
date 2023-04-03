@@ -20,6 +20,7 @@ public class StageService {
         PrintService printService = new PrintService();
         printService.printStages(stages);
     }
+    
     public void listStageDetails() {
         System.out.println("\uF0B2 The theater's stages \uF0B2");
 
