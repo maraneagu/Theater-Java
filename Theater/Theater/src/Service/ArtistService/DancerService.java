@@ -21,7 +21,8 @@ public class DancerService {
     public void addDancer() {
         System.out.println("\uF0B2 The theater's musicals & ballets \uF0B2");
 
-        int i, spectacleId, playId = 0;
+        String spectacleId;
+        int playId = 0;
         Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
         for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
@@ -43,9 +44,9 @@ public class DancerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the musical or the ballet where you want to add a new dancer: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = in.nextLine().trim();
 
-                if (spectacleId >= 1 && spectacleId <= playId)
+                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
@@ -58,7 +59,7 @@ public class DancerService {
                 if (spectacle.getValue() instanceof Musical || spectacle.getValue() instanceof Ballet)
                 {
                     playId++;
-                    if (playId == spectacleId)
+                    if (playId == Integer.parseInt(spectacleId))
                     {
                         boolean noDuplicate;
                         List<Dancer> sDancers;
@@ -100,7 +101,8 @@ public class DancerService {
     public void removeDancer() {
         System.out.println("\uF0B2 The theater's musicals & ballets \uF0B2");
 
-        int spectacleId, playId = 0;
+        String spectacleId;
+        int playId = 0;
         Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
         for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
@@ -120,9 +122,9 @@ public class DancerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the musical or ballet where you want to remove a dancer: ");
-                spectacleId = Integer.parseInt(in.nextLine());
+                spectacleId = in.nextLine();
 
-                if (spectacleId >= 1 && spectacleId <= playId)
+                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
@@ -132,10 +134,8 @@ public class DancerService {
                 if (spectacle.getValue() instanceof Musical || spectacle.getValue() instanceof Ballet)
                 {
                     playId++;
-                    if (playId == spectacleId)
+                    if (playId == Integer.parseInt(spectacleId))
                     {
-                        int j, dancerId;
-
                         List<Dancer> sDancers;
                         if (spectacle.getValue() instanceof Musical)
                             sDancers = ((Musical) spectacle.getValue()).getDancers();
@@ -147,6 +147,9 @@ public class DancerService {
                         if (sDancers.isEmpty()) System.out.println("There are no dancers as of yet.\n");
                         else
                         {
+                            int j, dancerId;
+                            String sDancerId;
+
                             for (j = 0; j < sDancers.size(); j++)
                                 System.out.println(j + 1 + ". " + sDancers.get(j).getName());
 
@@ -156,13 +159,14 @@ public class DancerService {
                                 Scanner in = new Scanner(System.in);
 
                                 System.out.print("Enter the number of the dancer that you want to remove: ");
-                                dancerId = Integer.parseInt(in.nextLine());
+                                sDancerId = in.nextLine().trim();
 
-                                if (dancerId >= 1 && dancerId <= sDancers.size())
+                                if (sDancerId.compareTo("1") >= 0 && sDancerId.compareTo(Integer.toString(sDancers.size())) <= 0)
                                     break;
                                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
                             }
 
+                            dancerId = Integer.parseInt(sDancerId);
                             System.out.println("\n\uF04A The dancer " + sDancers.get(dancerId - 1).getName() +
                                     " was removed from " + '"' + spectacle.getValue().getName() + '"'
                                     + "'s dancers list! \n");
@@ -178,7 +182,8 @@ public class DancerService {
     public void listDancers() {
         System.out.println("\uF0B2 The theater's musicals & ballets \uF0B2");
 
-        int i, spectacleId, playId = 0;
+        String spectacleId;
+        int playId = 0;
         Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
         for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
@@ -198,9 +203,9 @@ public class DancerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the musical or ballets where you want to list the dancers: ");
-                spectacleId = Integer.parseInt(in.nextLine().trim());
+                spectacleId = in.nextLine().trim();
 
-                if (spectacleId >= 1 && spectacleId <= playId)
+                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
@@ -210,7 +215,7 @@ public class DancerService {
                 if (spectacle.getValue() instanceof Musical || spectacle.getValue() instanceof Ballet)
                 {
                     playId++;
-                    if (playId == spectacleId)
+                    if (playId == Integer.parseInt(spectacleId))
                     {
                         List<Dancer> sDancers;
                         if (spectacle.getValue() instanceof Musical)
@@ -241,23 +246,26 @@ public class DancerService {
             System.out.println("There are no singers as of yet.\n");
         else
         {
+            String sDancerId;
+            int dancerId;
+
             for (Map.Entry<Integer, Dancer> dancer : dancers.entrySet())
                 System.out.println(dancer.getKey() + ". " + dancer.getValue().getName());
             System.out.println();
 
-            int dancerId;
             while (true)
             {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the dancer that you want to search the spectacles for: ");
-                dancerId = Integer.parseInt(in.nextLine().trim());
+                sDancerId = in.nextLine().trim();
 
-                if (dancerId >= 1 && dancerId <= dancers.size())
+                if (sDancerId.compareTo("1") >= 0 && sDancerId.compareTo(Integer.toString(dancers.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
+            dancerId = Integer.parseInt(sDancerId);
             System.out.println("\n\uF0B2 " + dancers.get(dancerId).getName() + "'s spectacles \uF0B2");
 
             if (dancers.get(dancerId).getSpectacles().isEmpty())

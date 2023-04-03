@@ -23,7 +23,7 @@ public class StageService {
     public void listStageDetails() {
         System.out.println("\uF0B2 The theater's stages \uF0B2");
 
-        int stageId;
+        String stageId;
         Map<Integer, Stage> stages = theaterService.getStages();
 
         for (Map.Entry<Integer, Stage> stage : stages.entrySet())
@@ -36,14 +36,14 @@ public class StageService {
             Scanner in = new Scanner(System.in);
             System.out.print("Enter the number of the stage " +
                     "for which you want to list the information: ");
-            stageId = Integer.parseInt(in.nextLine().trim());
+            stageId = in.nextLine().trim();
 
-            if (stageId >= 1 && stageId <= stages.size())
+            if (stageId.compareTo("1") >= 0 && stageId.compareTo(Integer.toString(stages.size())) <= 0)
                 break;
             System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
         }
 
         System.out.println();
-        System.out.println(stages.get(stageId));
+        System.out.println(stages.get(Integer.parseInt(stageId)));
     }
 }

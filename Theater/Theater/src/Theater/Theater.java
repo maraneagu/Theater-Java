@@ -228,7 +228,7 @@ public class Theater {
                 eventService.listEventDetails();
             }
             else {
-                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB \n");
+                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB");
                 this.adminTheaterActions();
                 break;
             }
@@ -357,7 +357,7 @@ public class Theater {
                 eventService.listEventDetails();
             }
             else {
-                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB \n");
+                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB");
                 this.userTheaterActions();
                 break;
             }
@@ -407,7 +407,7 @@ public class Theater {
                 ticketShopService.listTickets();
             }
             else {
-                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB\n");
+                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB");
                 this.ticketShopActions();
                 break;
             }

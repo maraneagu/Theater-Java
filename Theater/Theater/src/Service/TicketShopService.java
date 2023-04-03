@@ -41,6 +41,7 @@ public class TicketShopService {
         else
         {
             int i, eventId, rowId, seatId;
+            String sEventId, sRowId, sSeatId;
 
             Collections.sort(events);
             System.out.println("Here are the events from the latest to the oldest:\n");
@@ -57,14 +58,15 @@ public class TicketShopService {
             {
                 System.out.print("Enter the number of the event " +
                         "that you want to buy a ticket for: ");
-                eventId = Integer.parseInt(in.nextLine().trim());
+                sEventId = in.nextLine().trim();
 
-                if (eventId >= 1 && eventId <= events.size())
+                if (sEventId.compareTo("1") >= 0 && sEventId.compareTo(Integer.toString(events.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
             System.out.println();
+            eventId = Integer.parseInt(sEventId);
             PrintService printService = new PrintService();
             System.out.println(printService.printEventSeats(events.get(eventId - 1)));
 
@@ -72,24 +74,29 @@ public class TicketShopService {
             {
                 System.out.print("Enter the row where " +
                         "you want sit: ");
-                rowId = Integer.parseInt(in.nextLine().trim());
+                sRowId = in.nextLine().trim();
 
-                if (rowId >= 1 && rowId <= events.get(eventId - 1).getSeats().size() && availableRow(events.get(eventId - 1), rowId - 1))
+                if (sRowId.compareTo("1") >= 0 && sRowId.compareTo(Integer.toString(events.get(eventId - 1).getSeats().size())) <= 0
+                        && availableRow(events.get(eventId - 1), Integer.parseInt(sRowId) - 1))
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
+
+            rowId = Integer.parseInt(sRowId);
 
             while (true)
             {
                 System.out.print("Enter the seat where " +
                         "you want sit: ");
-                seatId = Integer.parseInt(in.nextLine().trim());
+                sSeatId = in.nextLine().trim();
 
-                if (seatId >= 1 && seatId <= events.get(eventId - 1).getSeats().get(rowId - 1).size() && events.get(eventId - 1).getSeats().get(rowId - 1).get(seatId - 1))
+                if (sSeatId.compareTo("1") >= 0 && sSeatId.compareTo(Integer.toString(events.get(eventId - 1).getSeats().get(rowId - 1).size())) <= 0 &&
+                        events.get(eventId - 1).getSeats().get(rowId - 1).get(Integer.parseInt(sSeatId) - 1))
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
+            seatId = Integer.parseInt(sSeatId);
             events.get(eventId - 1).getSeats().get(rowId - 1).set(seatId - 1, false);
 
             Ticket ticket = new Ticket(profile.getUserName(), events.get(eventId - 1), rowId, seatId);
@@ -124,14 +131,14 @@ public class TicketShopService {
             }
 
             System.out.println();
-            int eventId;
+            String eventId;
 
             while (true) {
                 System.out.print("Enter the number of the ticket " +
                         "that you want to cancel: ");
-                eventId = Integer.parseInt(in.nextLine().trim());
+                eventId = in.nextLine().trim();
 
-                if (eventId >= 1 && eventId <= tickets.size())
+                if (eventId.compareTo("1") >= 0 && eventId.compareTo(Integer.toString(tickets.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
@@ -139,7 +146,7 @@ public class TicketShopService {
             ticketId = 0;
             for (Ticket ticket : tickets) {
                 ticketId++;
-                if (ticketId == eventId) {
+                if (ticketId == Integer.parseInt(eventId)) {
                     System.out.println("\n\uF04A The ticket for " + '"' + ticket.getEvent().getSpectacle().getName() + '"' +
                             " performed at " + ticket.getEvent().getStage().getName() +
                             " on " + ticket.getEvent().getDate() + " at " + ticket.getEvent().getBeginTime() +

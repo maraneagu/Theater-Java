@@ -21,7 +21,8 @@ public class SingerService {
     public void addSinger() {
         System.out.println("\uF0B2 The theater's operas & musicals \uF0B2");
 
-        int spectacleId, playId = 0;
+        String spectacleId;
+        int playId = 0;
         Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
         for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
@@ -45,9 +46,9 @@ public class SingerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the opera or the musical where you want to add a new singer: ");
-                spectacleId = Integer.parseInt(in.nextLine().trim());
+                spectacleId = in.nextLine().trim();
 
-                if (spectacleId >= 1 && spectacleId <= playId)
+                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
@@ -60,7 +61,7 @@ public class SingerService {
                 if (spectacle.getValue() instanceof Opera || spectacle.getValue() instanceof Musical)
                 {
                     playId++;
-                    if (playId == spectacleId)
+                    if (playId == Integer.parseInt(spectacleId))
                     {
                         boolean noDuplicate;
                         List<Singer> sSingers;
@@ -104,7 +105,8 @@ public class SingerService {
     public void removeSinger() {
         System.out.println("\uF0B2 The theater's operas & musicals \uF0B2");
 
-        int spectacleId, playId = 0;
+        String spectacleId;
+        int playId = 0;
         Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
         for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
@@ -124,9 +126,9 @@ public class SingerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the opera or musical where you want to remove an actor: ");
-                spectacleId = Integer.parseInt(in.nextLine().trim());
+                spectacleId = in.nextLine().trim();
 
-                if (spectacleId >= 1 && spectacleId <= playId)
+                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
@@ -136,10 +138,8 @@ public class SingerService {
                 if (spectacle.getValue() instanceof Opera || spectacle.getValue() instanceof Musical)
                 {
                     playId++;
-                    if (playId == spectacleId)
+                    if (playId == Integer.parseInt(spectacleId))
                     {
-                        int j, singerId;
-
                         List<Singer> sSingers;
                         if (spectacle.getValue() instanceof Opera)
                             sSingers = ((Opera) spectacle.getValue()).getSingers();
@@ -151,6 +151,9 @@ public class SingerService {
                         if (sSingers.isEmpty()) System.out.println("There are no singers as of yet.\n");
                         else
                         {
+                            int j, singerId;
+                            String sSingerId;
+
                             for (j = 0; j < sSingers.size(); j++)
                                 System.out.println(j + 1 + ". " + sSingers.get(j).getName());
 
@@ -160,13 +163,14 @@ public class SingerService {
                                 Scanner in = new Scanner(System.in);
 
                                 System.out.print("Enter the number of the singer that you want to remove: ");
-                                singerId = Integer.parseInt(in.nextLine().trim());
+                                sSingerId = in.nextLine().trim();
 
-                                if (singerId >= 1 && singerId <= sSingers.size())
+                                if (sSingerId.compareTo("1") >= 0 && sSingerId.compareTo(Integer.toString(sSingers.size())) <= 0)
                                     break;
                                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
                             }
 
+                            singerId = Integer.parseInt(sSingerId);
                             System.out.println("\n\uF04A The singer " + sSingers.get(singerId - 1).getName() +
                                     " was removed from " + '"' + spectacle.getValue().getName() + '"'
                                     + "'s singers list! \n");
@@ -183,7 +187,8 @@ public class SingerService {
     public void listSingers() {
         System.out.println("\uF0B2 The theater's operas & musicals \uF0B2");
 
-        int i, spectacleId, playId = 0;
+        String spectacleId;
+        int playId = 0;
         Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
         for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
@@ -203,9 +208,9 @@ public class SingerService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the opera or musical where you want to list the singers: ");
-                spectacleId = Integer.parseInt(in.nextLine().trim());
+                spectacleId = in.nextLine().trim();
 
-                if (spectacleId >= 1 && spectacleId <= playId)
+                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
@@ -215,7 +220,7 @@ public class SingerService {
                 if (spectacle.getValue() instanceof Opera || spectacle.getValue() instanceof Musical)
                 {
                     playId++;
-                    if (playId == spectacleId)
+                    if (playId == Integer.parseInt(spectacleId))
                     {
                         List<Singer> sSingers;
                         if (spectacle.getValue() instanceof Opera)
@@ -250,19 +255,21 @@ public class SingerService {
                 System.out.println(singer.getKey() + ". " + singer.getValue().getName());
             System.out.println();
 
+            String sSingerId;
             int singerId;
             while (true)
             {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the singer that you want to search the spectacles for: ");
-                singerId = Integer.parseInt(in.nextLine().trim());
+                sSingerId = in.nextLine().trim();
 
-                if (singerId >= 1 && singerId <= singers.size())
+                if (sSingerId.compareTo("1") >= 0 && sSingerId.compareTo(Integer.toString(singers.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
+            singerId = Integer.parseInt(sSingerId);
             System.out.println("\n\uF0B2 " + singers.get(singerId).getName() + "'s spectacles \uF0B2");
 
             if (singers.get(singerId).getSpectacles().isEmpty())

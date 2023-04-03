@@ -21,6 +21,7 @@ public class EventService {
     {
         Scanner in = new Scanner(System.in);
 
+        String sStageId;
         int stageId;
         Map<Integer, Stage> stages = theaterService.getStages();
 
@@ -46,12 +47,13 @@ public class EventService {
         {
             System.out.print("Enter the number of the stage " +
                     "where the event will take place: ");
-            stageId = Integer.parseInt(in.nextLine().trim());
+            sStageId = in.nextLine().trim();
 
-            if (stageId >= 1 && stageId <= stages.size())
+            if (sStageId.compareTo("1") >= 0 && sStageId.compareTo(Integer.toString(stages.size())) <= 0)
                 break;
             System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
         }
+        stageId = Integer.parseInt(sStageId);
 
         while (true)
         {
@@ -173,7 +175,7 @@ public class EventService {
             Scanner in = new Scanner(System.in);
             List<Event> events = theaterService.getEvents();
 
-            int spectacleId;
+            String spectacleId;
             for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
                 System.out.println(spectacle.getKey() + ". " + '"' + spectacle.getValue().getName() + '"');
             System.out.println();
@@ -181,15 +183,15 @@ public class EventService {
             while (true) {
                 System.out.print("Enter the number of the spectacle " +
                         "that you want to add to the event: ");
-                spectacleId = Integer.parseInt(in.nextLine().trim());
+                spectacleId = in.nextLine().trim();
 
-                if (spectacleId >= 1 && spectacleId <= spectacles.size())
+                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(spectacles.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
             Event event = new Event();
-            event = readEvent(spectacles.get(spectacleId));
+            event = readEvent(spectacles.get(Integer.parseInt(spectacleId)));
             events.add(event);
 
             System.out.println("\n\uF0B2 A new event was added to theater's events list! \n");
@@ -205,6 +207,8 @@ public class EventService {
             System.out.println("There are no events as of yet.\n");
         else {
             int i = 0, eventId;
+            String sEventId;
+
             for (Event event : events) {
                 i++;
                 System.out.println(i + ". " + '"' + event.getSpectacle().getName() +
@@ -216,13 +220,14 @@ public class EventService {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the event " +
                         "that you want to remove: ");
-                eventId = Integer.parseInt(in.nextLine().trim());
+                sEventId = in.nextLine().trim();
 
-                if (eventId >= 1 && eventId <= events.size())
+                if (sEventId.compareTo("1") >= 0 && sEventId.compareTo(Integer.toString(events.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
+            eventId = Integer.parseInt(sEventId);
             TicketShopService ticketShopService = TicketShopService.getInstance();
             ticketShopService.removeTicketByEvent(events.get(eventId - 1));
 
@@ -269,8 +274,11 @@ public class EventService {
 
         if (events.isEmpty())
             System.out.println("There are no events as of yet.\n");
-        else {
-            int i, eventId;
+        else
+        {
+            int i;
+            String eventId;
+
             for (i = 0; i < events.size(); i++)
                 System.out.println(i + 1 + ". " + '"' + events.get(i).getSpectacle().getName() + '"');
             System.out.println();
@@ -279,15 +287,15 @@ public class EventService {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the event " +
                         "for which you want to list the information: ");
-                eventId = Integer.parseInt(in.nextLine().trim());
+                eventId = in.nextLine().trim();
 
-                if (eventId >= 1 && eventId <= events.size())
+                if (eventId.compareTo("1") >= 0 && eventId.compareTo(Integer.toString(events.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
             System.out.println();
-            System.out.println(events.get(eventId - 1));
+            System.out.println(events.get(Integer.parseInt(eventId) - 1));
             System.out.println();
         }
     }

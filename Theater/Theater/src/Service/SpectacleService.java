@@ -29,29 +29,29 @@ public class SpectacleService {
         System.out.println("3. Musical");
         System.out.println("4. Ballet");
 
-        int choiceOfSpectacles;
+        String choiceOfSpectacles;
         while (true)
         {
             System.out.print("Type of spectacle: ");
 
-            choiceOfSpectacles = Integer.parseInt(in.nextLine().trim());
+            choiceOfSpectacles = in.nextLine().trim();
 
-            if (choiceOfSpectacles == 1)
+            if (choiceOfSpectacles.equals("1"))
             {
                 spectacle = new Play();
                 break;
             }
-            else if (choiceOfSpectacles == 2)
+            else if (choiceOfSpectacles.equals("2"))
             {
                 spectacle = new Opera();
                 break;
             }
-            else if (choiceOfSpectacles == 3)
+            else if (choiceOfSpectacles.equals("3"))
             {
                 spectacle = new Musical();
                 break;
             }
-            else if (choiceOfSpectacles == 4)
+            else if (choiceOfSpectacles.equals("4"))
             {
                 spectacle = new Ballet();
                 break;
@@ -64,6 +64,7 @@ public class SpectacleService {
 
         if (spectacle instanceof Play)
         {
+            String sCategoryId;
             int categoryId;
 
             System.out.println("\uF0B2 The theater's categories \uF0B2");
@@ -76,14 +77,15 @@ public class SpectacleService {
             {
                 System.out.print("Enter the number of the category " +
                         "for your spectacle: ");
-                categoryId = Integer.parseInt(in.nextLine().trim());
+                sCategoryId = in.nextLine().trim();
 
-                if (categoryId >= 1 && categoryId <= categories.size())
+                if (sCategoryId.compareTo("1") >= 0 && sCategoryId.compareTo(Integer.toString(categories.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
             System.out.println();
+            categoryId = Integer.parseInt(sCategoryId);
             ((Play) spectacle).setCategory(categories.get(categoryId));
         }
 
@@ -115,6 +117,7 @@ public class SpectacleService {
             System.out.println("There are no spectacles as of yet." + '\n');
         else
         {
+            String sSpectacleId;
             int spectacleId;
 
             for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
@@ -127,13 +130,14 @@ public class SpectacleService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the spectacle you want to remove: ");
-                spectacleId = Integer.parseInt(in.nextLine().trim());
+                sSpectacleId = in.nextLine().trim();
 
-                if (spectacleId >= 1 && spectacleId <= spectacles.size())
+                if (sSpectacleId.compareTo("1") >= 0 && sSpectacleId.compareTo(Integer.toString(spectacles.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
+            spectacleId = Integer.parseInt(sSpectacleId);
             EventService eventService = new EventService();
             eventService.removeEventBySpectacle(spectacles.get(spectacleId));
 
@@ -148,6 +152,8 @@ public class SpectacleService {
                 else if (spectacle.getKey() > spectacleId)
                     newSpectacles.put(spectacle.getKey() - 1, spectacle.getValue());
             }
+
+            theaterService.setSpectacleId(theaterService.getSpectacleId() - 1);
             theaterService.setSpectacles(newSpectacles);
         }
     }
@@ -155,7 +161,7 @@ public class SpectacleService {
     public void listSpectacles() {
         Scanner in = new Scanner(System.in);
 
-        int choiceOfSpectacles;
+        String choiceOfSpectacles;
         boolean spectacleListed = false;
         Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
 
@@ -170,9 +176,9 @@ public class SpectacleService {
         {
             System.out.print("Type of spectacles: ");
 
-            choiceOfSpectacles = Integer.parseInt(in.nextLine().trim());
+            choiceOfSpectacles = in.nextLine().trim();
 
-            if (choiceOfSpectacles == 1)
+            if (choiceOfSpectacles.equals("1"))
             {
                 System.out.println("\n\uF0B2 The theater's plays \uF0B2");
 
@@ -187,7 +193,7 @@ public class SpectacleService {
                 else System.out.println("There are no plays as of yet. \n");
                 break;
             }
-            else if (choiceOfSpectacles == 2)
+            else if (choiceOfSpectacles.equals("2"))
             {
                 System.out.println("\n\uF0B2 The theater's operas \uF0B2");
 
@@ -202,7 +208,7 @@ public class SpectacleService {
                 else System.out.println("There are no operas as of yet. \n");
                 break;
             }
-            else if (choiceOfSpectacles == 3)
+            else if (choiceOfSpectacles.equals("3"))
             {
                 System.out.println("\n\uF0B2 The theater's musicals \uF0B2");
 
@@ -217,7 +223,7 @@ public class SpectacleService {
                 else System.out.println("There are no musicals as of yet. \n");
                 break;
             }
-            else if (choiceOfSpectacles == 4)
+            else if (choiceOfSpectacles.equals("4"))
             {
                 System.out.println("\n\uF0B2 The theater's ballets \uF0B2");
 
@@ -232,7 +238,7 @@ public class SpectacleService {
                 else System.out.println("There are no ballets as of yet. \n");
                 break;
             }
-            else if (choiceOfSpectacles == 5)
+            else if (choiceOfSpectacles.equals("5"))
             {
                 System.out.println("\n\uF0B2 The theater's spectacles \uF0B2");
 
@@ -259,7 +265,7 @@ public class SpectacleService {
             System.out.println("There are no spectacles as of yet." + '\n');
         else
         {
-            int spectacleId;
+            String sSpectacleId;
 
             for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
                 System.out.println(spectacle.getKey() + ". " + '"' + spectacle.getValue().getName() + '"');
@@ -270,15 +276,15 @@ public class SpectacleService {
                 Scanner in = new Scanner(System.in);
 
                 System.out.print("Enter the number of the spectacle you want to list the information for: ");
-                spectacleId = Integer.parseInt(in.nextLine().trim());
+                sSpectacleId = in.nextLine().trim();
 
-                if (spectacleId >= 1 && spectacleId <= spectacles.size())
+                if (sSpectacleId.compareTo("1") >= 0 && sSpectacleId.compareTo(Integer.toString(spectacles.size())) <= 0)
                     break;
                 System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
             }
 
             System.out.println();
-            System.out.println(spectacles.get(spectacleId));
+            System.out.println(spectacles.get(Integer.parseInt(sSpectacleId)));
         }
     }
 
@@ -287,6 +293,7 @@ public class SpectacleService {
 
         Map<Integer, Category> categories = theaterService.getCategories();
 
+        String sCategoryId;
         int categoryId;
 
         for (Map.Entry<Integer, Category> category : categories.entrySet())
@@ -298,13 +305,14 @@ public class SpectacleService {
             Scanner in = new Scanner(System.in);
 
             System.out.print("Enter the number of the category by which you want to list the spectacles: ");
-            categoryId = Integer.parseInt(in.nextLine().trim());
+            sCategoryId = in.nextLine().trim();
 
-            if (categoryId >= 1 && categoryId <= categories.size())
+            if (sCategoryId.compareTo("1") >= 0 && sCategoryId.compareTo(Integer.toString(categories.size())) <= 0)
                 break;
             System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
         }
 
+        categoryId = Integer.parseInt(sCategoryId);
         System.out.println();
         System.out.println("\uF0B2 The " + categories.get(categoryId).getName() + " spectacles \uF0B2");
 
@@ -359,6 +367,7 @@ public class SpectacleService {
             return true;
         }
     }
+
     public boolean add(Director director, Map<Integer, Director> directors) {
         for (Map.Entry<Integer, Director> d : directors.entrySet())
             if (d.getValue().getName().equalsIgnoreCase(director.getName()))
