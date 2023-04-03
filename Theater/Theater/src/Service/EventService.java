@@ -95,8 +95,10 @@ public class EventService {
         Collections.sort(events);
         Collections.reverse(events);
 
-        for (Event e : events) {
-            if (e.getStage().equals(stages.get(stageId)) && e.getDate().equals(date)) {
+        for (Event e : events) 
+        {
+            if (e.getStage().equals(stages.get(stageId)) && e.getDate().equals(date)) 
+            {
                 dateStageEvents.add(e);
                 System.out.println("\uF09F " + '"' + e.getSpectacle().getName() + '"' + " from " + e.getBeginTime() + " to " +
                         toTime(e.getBeginTime(), e.getSpectacle().getDuration()));
@@ -110,7 +112,8 @@ public class EventService {
             System.out.print("Enter the time of the event: ");
             beginTime = in.nextLine().trim();
 
-            try {
+            try 
+            {
                 timeFormat.parse(beginTime);
 
                 String[] splitTime = beginTime.split(":");
@@ -169,7 +172,8 @@ public class EventService {
 
         if (spectacles.isEmpty())
             System.out.println("There are no spectacles as of yet.");
-        else {
+        else 
+        {
             Scanner in = new Scanner(System.in);
             List<Event> events = theaterService.getEvents();
 
@@ -178,7 +182,8 @@ public class EventService {
                 System.out.println(spectacle.getKey() + ". " + '"' + spectacle.getValue().getName() + '"');
             System.out.println();
 
-            while (true) {
+            while (true) 
+            {
                 System.out.print("Enter the number of the spectacle " +
                         "that you want to add to the event: ");
                 spectacleId = Integer.parseInt(in.nextLine().trim());
@@ -203,16 +208,19 @@ public class EventService {
 
         if (events.isEmpty())
             System.out.println("There are no events as of yet.\n");
-        else {
+        else 
+        {
             int i = 0, eventId;
-            for (Event event : events) {
+            for (Event event : events) 
+            {
                 i++;
                 System.out.println(i + ". " + '"' + event.getSpectacle().getName() +
                         '"' + " performed at the " + event.getStage().getName());
             }
             System.out.println();
 
-            while (true) {
+            while (true) 
+            {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the event " +
                         "that you want to remove: ");
@@ -252,7 +260,8 @@ public class EventService {
 
         if (events.isEmpty())
             System.out.println("\nThere are no events as of yet.\n");
-        else {
+        else 
+        {
             Collections.sort(events);
             for (Event event : events)
                 System.out.println("\uF09F " + '"' + event.getSpectacle().getName() +
@@ -269,13 +278,15 @@ public class EventService {
 
         if (events.isEmpty())
             System.out.println("There are no events as of yet.\n");
-        else {
+        else 
+        {
             int i, eventId;
             for (i = 0; i < events.size(); i++)
                 System.out.println(i + 1 + ". " + '"' + events.get(i).getSpectacle().getName() + '"');
             System.out.println();
 
-            while (true) {
+            while (true) 
+            {
                 Scanner in = new Scanner(System.in);
                 System.out.print("Enter the number of the event " +
                         "for which you want to list the information: ");
