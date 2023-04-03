@@ -126,7 +126,8 @@ public class TicketShopService {
             System.out.println();
             int eventId;
 
-            while (true) {
+            while (true) 
+            {
                 System.out.print("Enter the number of the ticket " +
                         "that you want to cancel: ");
                 eventId = Integer.parseInt(in.nextLine().trim());
@@ -137,9 +138,11 @@ public class TicketShopService {
             }
 
             ticketId = 0;
-            for (Ticket ticket : tickets) {
+            for (Ticket ticket : tickets) 
+            {
                 ticketId++;
-                if (ticketId == eventId) {
+                if (ticketId == eventId) 
+                {
                     System.out.println("\n\uF04A The ticket for " + '"' + ticket.getEvent().getSpectacle().getName() + '"' +
                             " performed at " + ticket.getEvent().getStage().getName() +
                             " on " + ticket.getEvent().getDate() + " at " + ticket.getEvent().getBeginTime() +
@@ -152,6 +155,7 @@ public class TicketShopService {
             }
         }
     }
+    
     public void listTickets() {
         System.out.println("\uF0B2 " + profile.getName() + "'s tickets \uF0B2");
 
