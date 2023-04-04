@@ -18,9 +18,9 @@ public class Musical extends Spectacle {
         this.singers = new ArrayList<>();
         this.dancers = new ArrayList<>();
     }
-    public Musical(String name, Director director,
+    public Musical(String name, Director director, String duration,
                  List<Singer> singers, List<Dancer> dancers) {
-        super(name, director);
+        super(name, director, duration);
         this.singers = singers;
         this.dancers = dancers;
     }

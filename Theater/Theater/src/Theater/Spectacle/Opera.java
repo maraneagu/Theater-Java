@@ -15,9 +15,9 @@ public class Opera extends Spectacle {
         super();
         this.singers = new ArrayList<>();
     }
-    public Opera(String name, Director director,
+    public Opera(String name, Director director, String duration,
                 List<Singer> singers) {
-        super(name, director);
+        super(name, director, duration);
         this.singers = singers;
     }
 

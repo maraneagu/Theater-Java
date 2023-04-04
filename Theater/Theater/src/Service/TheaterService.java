@@ -37,6 +37,7 @@ public class TheaterService {
         this.stages = new HashMap<>();
         addStages();
         this.events = new ArrayList<>();
+        addSetup();
     }
 
     public static synchronized TheaterService getInstance() {
@@ -83,6 +84,111 @@ public class TheaterService {
         stage = new Stage("The Painting", 7, 5);
         setStageId(getStageId() + 1);
         stages.put(stageId, stage);
+    }
+
+    public void addSetup() {
+        Actor actor = new Actor ("Ileana Olteanu");
+        List<Actor> sActors = new ArrayList<>();
+        sActors.add(actor);
+        Director director = new Director("Erwin Șimșenshon");
+        Spectacle spectacle = new Play("The Mousetrap", director, "02:15", categories.get(2), sActors);
+        setSpectacleId(getSpectacleId() + 1);
+        spectacles.put(spectacleId, spectacle);
+        setDirectorId(getDirectorId() + 1);
+        directors.put(directorId, director);
+        setActorId(getActorId() + 1);
+        actors.put(getActorId(), actor);
+
+        actor = new Actor ("Oana Pellea");
+        sActors = new ArrayList<>();
+        sActors.add(actor);
+        director = new Director("Mariana Cămărășan");
+        spectacle = new Play("The Effect of Gama Rays on Man-in-the-Moon Marygolds", director, "02:20", categories.get(2), sActors);
+        setSpectacleId(getSpectacleId() + 1);
+        spectacles.put(spectacleId, spectacle);
+        setDirectorId(getDirectorId() + 1);
+        directors.put(directorId, director);
+        setActorId(getActorId() + 1);
+        actors.put(getActorId(), actor);
+
+        actor = new Actor ("Alina Șerban");
+        sActors = new ArrayList<>();
+        sActors.add(actor);
+        director = new Director("Alina Șerban");
+        spectacle = new Play("The Best Kid in the World", director, "01:30", categories.get(2), sActors);
+        setSpectacleId(getSpectacleId() + 1);
+        spectacles.put(spectacleId, spectacle);
+        setDirectorId(getDirectorId() + 1);
+        directors.put(directorId, director);
+        setActorId(getActorId() + 1);
+        actors.put(getActorId(), actor);
+
+        actor = new Actor ("Costel Constantin");
+        sActors = new ArrayList<>();
+        sActors.add(actor);
+        director = new Director("Dan Tudor");
+        spectacle = new Play("The Man who saw Death", director, "02:00", categories.get(1), sActors);
+        setSpectacleId(getSpectacleId() + 1);
+        spectacles.put(spectacleId, spectacle);
+        setDirectorId(getDirectorId() + 1);
+        directors.put(directorId, director);
+        setActorId(getActorId() + 1);
+        actors.put(getActorId(), actor);
+
+        actor = new Actor ("Marius Manole");
+        sActors = new ArrayList<>();
+        sActors.add(actor);
+        director = new Director("Radu Afrim");
+        spectacle = new Play("Reherseal for a Better World", director, "02:50", categories.get(2), sActors);
+        setSpectacleId(getSpectacleId() + 1);
+        spectacles.put(spectacleId, spectacle);
+        setDirectorId(getDirectorId() + 1);
+        directors.put(directorId, director);
+        setActorId(getActorId() + 1);
+        actors.put(getActorId(), actor);
+
+        actor = new Actor ("Oana Burcescu");
+        sActors = new ArrayList<>();
+        sActors.add(actor);
+        director = new Director("Andrei Cotarcea");
+        spectacle = new Play("A Marriage Proposal", director, "02:00", categories.get(1), sActors);
+        setSpectacleId(getSpectacleId() + 1);
+        spectacles.put(spectacleId, spectacle);
+        setDirectorId(getDirectorId() + 1);
+        directors.put(directorId, director);
+        setActorId(getActorId() + 1);
+        actors.put(getActorId(), actor);
+
+        actor = new Actor ("Dana Coza");
+        sActors = new ArrayList<>();
+        sActors.add(actor);
+        director = new Director("Edda Coza");
+        spectacle = new Play("Offending the Audience", director, "01:15", categories.get(2), sActors);
+        setSpectacleId(getSpectacleId() + 1);
+        spectacles.put(spectacleId, spectacle);
+        setDirectorId(getDirectorId() + 1);
+        directors.put(directorId, director);
+        setActorId(getActorId() + 1);
+        actors.put(getActorId(), actor);
+
+        actor = new Actor ("Horațiu Mălăele");
+        sActors = new ArrayList<>();
+        sActors.add(actor);
+        director = new Director("Ion Caramitru");
+        spectacle = new Play("The Dinner Game", director, "02:00", categories.get(1), sActors);
+        setSpectacleId(getSpectacleId() + 1);
+        spectacles.put(spectacleId, spectacle);
+        setDirectorId(getDirectorId() + 1);
+        directors.put(directorId, director);
+        setActorId(getActorId() + 1);
+        actors.put(getActorId(), actor);
+
+        Event event = new Event(spectacles.get(1), stages.get(1), "09.04.2023", "18:00", "20:15", 25.00);
+        events.add(event);
+        event = new Event(spectacles.get(2), stages.get(5), "09.04.2023", "19:00", "21:20", 20.00);
+        events.add(event);
+        event = new Event(spectacles.get(3), stages.get(3), "09.04.2023", "20:00", "21:30", 30.00);
+        events.add(event);
     }
 
     public Map<Integer, Spectacle> getSpectacles() {

@@ -18,9 +18,9 @@ public class Play extends Spectacle {
         this.category = new Category();
         this.actors = new ArrayList<>();
     }
-    public Play(String name, Director director,
+    public Play(String name, Director director, String duration,
                 Category category, List<Actor> actors) {
-        super(name, director);
+        super(name, director, duration);
         this.category = category;
         this.actors = actors;
     }

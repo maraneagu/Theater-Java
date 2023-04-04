@@ -11,9 +11,10 @@ abstract public class Spectacle {
     public Spectacle() {
         this.director = new Director();
     }
-    public Spectacle(String name, Director director) {
+    public Spectacle(String name, Director director, String duration) {
         this.name = name;
         this.director = director;
+        this.duration = duration;
     }
 
     public abstract void toRead();

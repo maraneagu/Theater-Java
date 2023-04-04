@@ -261,7 +261,7 @@ public class EventService {
             Collections.sort(events);
             for (Event event : events)
                 System.out.println("\uF09F " + '"' + event.getSpectacle().getName() +
-                        '"' + " that starts at " + event.getBeginTime() + "on " + event.getDate() +
+                        '"' + " that starts at " + event.getBeginTime() + " on " + event.getDate() +
                         " performed at the " + event.getStage().getName() + " stage");
             System.out.println();
         }

@@ -15,9 +15,9 @@ public class Ballet extends Spectacle {
         super();
         this.dancers = new ArrayList<>();
     }
-    public Ballet(String name, Director director,
+    public Ballet(String name, Director director, String duration,
                  List<Dancer> dancers) {
-        super(name, director);
+        super(name, director, duration);
         this.dancers = dancers;
     }
 
