@@ -4,7 +4,7 @@ import Service.PrintService;
 import Theater.Artist.Actor;
 import Theater.Category;
 import Theater.Director;
-import Exception.TheaterException;
+import Exception.InvalidDurationException;
 
 import java.text.*;
 import java.util.*;
@@ -18,9 +18,16 @@ public class Play extends Spectacle {
         this.category = new Category();
         this.actors = new ArrayList<>();
     }
-    public Play(String name, Director director, String duration,
+    public Play(String name, String duration, Director director,
+                Category category) {
+        super(name, duration, director);
+        this.category = category;
+        this.actors = new ArrayList<>();
+    }
+
+    public Play(String name, String duration, Director director,
                 Category category, List<Actor> actors) {
-        super(name, director, duration);
+        super(name, duration, director);
         this.category = category;
         this.actors = actors;
     }
@@ -35,7 +42,6 @@ public class Play extends Spectacle {
         this.director.toRead();
 
         DateFormat timeFormat = new SimpleDateFormat("HH:mm");
-
         while (true)
         {
             System.out.println("\nThe duration of the play! It should be between 1 hour and 4 hours with the format: hh:mm!");
@@ -51,14 +57,14 @@ public class Play extends Spectacle {
                 int minutes = Integer.parseInt(splitTime[1]);
 
                 if (hour > 4 || minutes > 59)
-                    throw new TheaterException("\uF0FB The duration you introduced is not valid! Please try again! \uF0FB");
+                    throw new InvalidDurationException();
                 break;
             }
             catch(ParseException parseException)
             {
                 System.out.println("\uF0FB The duration format you introduced is not valid! Please try again! \uF0FB");
             }
-            catch(TheaterException durationException)
+            catch(InvalidDurationException durationException)
             {
                 System.out.println(durationException.getMessage());
             }

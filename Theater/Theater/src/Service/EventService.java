@@ -1,9 +1,15 @@
 package Service;
 
+import Audit.Audit;
+import Repository.ActorRepository;
+import Repository.EventRepository;
 import Theater.Event;
+import Theater.Spectacle.Musical;
+import Theater.Spectacle.Opera;
+import Theater.Spectacle.Play;
 import Theater.Spectacle.Spectacle;
 import Theater.Stage;
-import Exception.TheaterException;
+import Exception.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -45,13 +51,20 @@ public class EventService {
 
         while (true)
         {
-            System.out.print("Enter the number of the stage " +
-                    "where the event will take place: ");
-            sStageId = in.nextLine().trim();
+            try
+            {
+                System.out.print("Enter the number of the stage " +
+                        "where the event will take place: ");
+                sStageId = in.nextLine().trim();
 
-            if (sStageId.compareTo("1") >= 0 && sStageId.compareTo(Integer.toString(stages.size())) <= 0)
-                break;
-            System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                if (sStageId.compareTo("1") >= 0 && sStageId.compareTo(Integer.toString(stages.size())) <= 0)
+                    break;
+                else throw new InvalidNumberException();
+            }
+            catch (InvalidNumberException exception)
+            {
+                System.out.println(exception.getMessage());
+            }
         }
         stageId = Integer.parseInt(sStageId);
 
@@ -71,14 +84,14 @@ public class EventService {
                 int year = Integer.parseInt(splitDate[2]);
 
                 if (year < currentYear)
-                    throw new TheaterException("\uF0FB You can not add an event in the past! Please try again! \uF0FB");
+                    throw new EventInThePastException();
                 else if (year == currentYear)
                 {
                     if (month < currentMonth)
-                        throw new TheaterException("\uF0FB You can not add an event in the past! Please try again! \uF0FB");
+                        throw new EventInThePastException();
                     else if (month == currentMonth)
                         if (day < currentDay)
-                            throw new TheaterException("\uF0FB You can not add an event in the past! Please try again! \uF0FB");
+                            throw new EventInThePastException();
                 }
                 break;
             }
@@ -86,33 +99,42 @@ public class EventService {
             {
                 System.out.println("\uF0FB The date format you introduced is not valid! Please try again! \uF0FB");
             }
-            catch (TheaterException dateException)
+            catch (EventInThePastException exception)
             {
-                System.out.println(dateException.getMessage());
+                System.out.println(exception.getMessage());
             }
         }
 
         System.out.println("\n\uF0B2 The events performed at " + stages.get(stageId).getName() + " on " + date + " \uF0B2");
 
-        Collections.sort(events);
-        Collections.reverse(events);
+        if (events.isEmpty())
+            System.out.println("There are not events as of yet.");
+        else
+        {
+            Collections.sort(events);
+            Collections.reverse(events);
 
-        for (Event e : events) {
-            if (e.getStage().equals(stages.get(stageId)) && e.getDate().equals(date)) {
-                dateStageEvents.add(e);
-                System.out.println("\uF09F " + '"' + e.getSpectacle().getName() + '"' + " from " + e.getBeginTime() + " to " +
-                        toTime(e.getBeginTime(), e.getSpectacle().getDuration()));
+            for (Event e : events)
+            {
+                if (e.getStage().equals(stages.get(stageId)) && e.getDate().equals(date))
+                {
+                    dateStageEvents.add(e);
+                    System.out.println("\uF09F " + '"' + e.getSpectacle().getName() + '"' + " from " + e.getBeginTime() + " to " +
+                            toTime(e.getBeginTime(), e.getSpectacle().getDuration()));
+                }
             }
+            if (dateStageEvents.isEmpty()) System.out.println("There are no events as of yet.");
         }
-        if (dateStageEvents.isEmpty()) System.out.println("There are not events as of yet.");
         System.out.println();
 
-        while (true) {
+        while (true)
+        {
             System.out.println("The time of the event! It should be between 11 O'Clock and 23 O'Clock, with the format: hh:mm!");
             System.out.print("Enter the time of the event: ");
             beginTime = in.nextLine().trim();
 
-            try {
+            try
+            {
                 timeFormat.parse(beginTime);
 
                 String[] splitTime = beginTime.split(":");
@@ -120,7 +142,7 @@ public class EventService {
                 int minutes = Integer.parseInt(splitTime[1]);
 
                 if (hour < 11 || hour > 22 || minutes > 59)
-                    throw new TheaterException("\uF0FB The time you introduced is not valid! Please try again! \uF0FB\n");
+                    System.out.println("\uF0FB The time you introduced is not valid! Please try again! \uF0FB\n");
 
                 endTime = toTime(beginTime, spectacle.getDuration());
                 if (!checkTime(beginTime, endTime, dateStageEvents))
@@ -142,17 +164,13 @@ public class EventService {
                         }
                         return null;
                     }
-                    else throw new TheaterException("");
+                    else System.out.println();
                 }
                 break;
             }
             catch (ParseException parseException)
             {
                 System.out.println("\uF0FB The time format you introduced is not valid! Please try again! \uF0FB\n");
-            }
-            catch (TheaterException timeException)
-            {
-                System.out.println(timeException.getMessage());
             }
         }
 
@@ -164,84 +182,137 @@ public class EventService {
         return event;
     }
 
-    public void addEvent() {
-        System.out.println("\uF0B2 The theater's spectacles \uF0B2");
+    public void addEvent()
+    {
+        List<Spectacle> spectacles = theaterService.getSpectacles();
 
-        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
+        System.out.println("\uF0B2 The theater's spectacles \uF0B2");
 
         if (spectacles.isEmpty())
             System.out.println("There are no spectacles as of yet.");
-        else {
+        else
+        {
             Scanner in = new Scanner(System.in);
             List<Event> events = theaterService.getEvents();
 
-            String spectacleId;
-            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                System.out.println(spectacle.getKey() + ". " + '"' + spectacle.getValue().getName() + '"');
-            System.out.println();
+            String sSpectacleId;
+            int spectacleId = 1;
+            String spectacleType;
 
-            while (true) {
-                System.out.print("Enter the number of the spectacle " +
-                        "that you want to add to the event: ");
-                spectacleId = in.nextLine().trim();
+            for (Spectacle spectacle : spectacles)
+            {
+                if (spectacle instanceof Play)
+                    spectacleType = "play";
+                else if (spectacle instanceof Opera)
+                    spectacleType = "opera";
+                else if (spectacle instanceof Musical)
+                    spectacleType = "musical";
+                else spectacleType = "ballet";
 
-                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(spectacles.size())) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                System.out.println(spectacleId + ". " +
+                        '"' + spectacle.getName() + '"' + " \uF09E " + spectacleType);
+                spectacleId += 1;
             }
 
-            Event event = new Event();
-            event = readEvent(spectacles.get(Integer.parseInt(spectacleId)));
+            System.out.println();
+
+            while (true)
+            {
+                try
+                {
+                    System.out.print("Enter the number of the spectacle " +
+                            "that you want to add to the event: ");
+                    sSpectacleId = in.nextLine().trim();
+
+                    if (sSpectacleId.compareTo("1") >= 0 && sSpectacleId.compareTo(Integer.toString(spectacles.size())) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
+            }
+
+            Event event;
+            event = readEvent(spectacles.get(Integer.parseInt(sSpectacleId) - 1));
             events.add(event);
 
-            System.out.println("\n\uF0B2 A new event was added to theater's events list! \n");
+            EventRepository eventRepository = EventRepository.getInstance();
+            eventRepository.insertEvent(event);
+
+            Audit audit = Audit.getInstance();
+            audit.writeToFile("A new event was added to the theater's events list: " + '"' + event.getSpectacle().getName() + '"' +
+                    " performed at " + event.getStage().getName() + " on " + event.getDate() + " ,starting at " + event.getBeginTime());
+            System.out.println("\n\uF0B2 A new event was added to the theater's events list! \n");
         }
     }
 
-    public void removeEvent() {
-        System.out.println("\uF0B2 The theater's events \uF0B2");
-
+    public void removeEvent()
+    {
         List<Event> events = theaterService.getEvents();
+
+        System.out.println("\uF0B2 The theater's events \uF0B2");
 
         if (events.isEmpty())
             System.out.println("There are no events as of yet.\n");
-        else {
-            int i = 0, eventId;
+        else
+        {
+            int eventId = 1;
             String sEventId;
 
-            for (Event event : events) {
-                i++;
-                System.out.println(i + ". " + '"' + event.getSpectacle().getName() +
-                        '"' + " performed at the " + event.getStage().getName());
+            for (Event event : events)
+            {
+                System.out.println(eventId + ". " + '"' + event.getSpectacle().getName() +
+                        '"' + " performed at the " + event.getStage().getName() + " on " + event.getDate() + " at " + event.getBeginTime());
+                eventId += 1;
             }
             System.out.println();
 
-            while (true) {
-                Scanner in = new Scanner(System.in);
-                System.out.print("Enter the number of the event " +
-                        "that you want to remove: ");
-                sEventId = in.nextLine().trim();
+            while (true)
+            {
+                try
+                {
+                    Scanner in = new Scanner(System.in);
+                    System.out.print("Enter the number of the event " +
+                            "that you want to remove: ");
+                    sEventId = in.nextLine().trim();
 
-                if (sEventId.compareTo("1") >= 0 && sEventId.compareTo(Integer.toString(events.size())) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                    if (sEventId.compareTo("1") >= 0 && sEventId.compareTo(Integer.toString(events.size())) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
             }
 
             eventId = Integer.parseInt(sEventId);
-            TicketShopService ticketShopService = TicketShopService.getInstance();
+            TicketService ticketShopService = TicketService.getInstance();
             ticketShopService.removeTicketByEvent(events.get(eventId - 1));
 
-            System.out.println("\uF0B2 The event " + '"' + events.get(eventId - 1).getSpectacle().getName() +
-                    '"' + " that starts at " + events.get(eventId - 1).getBeginTime() +
-                    " performed at the " + events.get(eventId - 1).getStage().getName() + "" +
+            System.out.println("\n\uF04A The event " + '"' + events.get(eventId - 1).getSpectacle().getName() +
+                    '"' + " performed at the " + events.get(eventId - 1).getStage().getName() + "" + " on " + events.get(eventId - 1).getDate() +
+                    " that starts at " + events.get(eventId - 1).getBeginTime() +
                     " was removed from the theater's events list! \n");
+
+            Audit audit = Audit.getInstance();
+            audit.writeToFile("The event " + '"' + events.get(eventId - 1).getSpectacle().getName() +
+            '"' + " performed at the " + events.get(eventId - 1).getStage().getName() + "" + " on " + events.get(eventId - 1).getDate() +
+                    " that starts at " + events.get(eventId - 1).getBeginTime() +
+                    " was removed from the theater's events list!");
+
+            EventRepository eventRepository = EventRepository.getInstance();
+            eventRepository.deleteEvent(events.get(eventId - 1));
             events.remove(eventId - 1);
         }
     }
 
-    public void removeEventBySpectacle(Spectacle spectacle) {
+    public void removeEventBySpectacle(Spectacle spectacle)
+    {
         List<Event> events = theaterService.getEvents();
-        TicketShopService ticketShopService = TicketShopService.getInstance();
+        TicketService ticketShopService = TicketService.getInstance();
 
         for (Event event : events)
             if (event.getSpectacle() == spectacle)
@@ -250,14 +321,16 @@ public class EventService {
         events.removeIf(event -> event.getSpectacle() == spectacle);
     }
 
-    public void listEvents() {
-        System.out.println("\uF0B2 The theater's events \uF0B2");
-
+    public void listEvents()
+    {
         List<Event> events = theaterService.getEvents();
 
+        System.out.println("\uF0B2 The theater's events \uF0B2");
+
         if (events.isEmpty())
-            System.out.println("\nThere are no events as of yet.\n");
-        else {
+            System.out.println("There are no events as of yet.\n");
+        else
+        {
             Collections.sort(events);
             for (Event event : events)
                 System.out.println("\uF09F " + '"' + event.getSpectacle().getName() +
@@ -265,42 +338,56 @@ public class EventService {
                         " performed at the " + event.getStage().getName() + " stage");
             System.out.println();
         }
+
+        Audit audit = Audit.getInstance();
+        audit.writeToFile("The theater's events were listed!");
     }
 
-    public void listEventDetails() {
-        System.out.println("\uF0B2 The theater's events \uF0B2");
-
+    public void listEventDetails()
+    {
         List<Event> events = theaterService.getEvents();
+
+        System.out.println("\uF0B2 The theater's events \uF0B2");
 
         if (events.isEmpty())
             System.out.println("There are no events as of yet.\n");
         else
         {
-            int i;
-            String eventId;
+            int eventId = 1;
+            String sEventId;
 
-            for (i = 0; i < events.size(); i++)
-                System.out.println(i + 1 + ". " + '"' + events.get(i).getSpectacle().getName() + '"');
+            for (Event event: events)
+                System.out.println(eventId + ". " + '"' + event.getSpectacle().getName() + '"' + " on " + event.getDate());
             System.out.println();
 
-            while (true) {
-                Scanner in = new Scanner(System.in);
-                System.out.print("Enter the number of the event " +
-                        "for which you want to list the information: ");
-                eventId = in.nextLine().trim();
+            while (true)
+            {
+                try
+                {
+                    Scanner in = new Scanner(System.in);
 
-                if (eventId.compareTo("1") >= 0 && eventId.compareTo(Integer.toString(events.size())) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                    System.out.print("Enter the number of the event " +
+                            "for which you want to list the information: ");
+                    sEventId = in.nextLine().trim();
+
+                    if (sEventId.compareTo("1") >= 0 && sEventId.compareTo(Integer.toString(events.size())) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
             }
 
-            System.out.println();
-            System.out.println(events.get(Integer.parseInt(eventId) - 1));
-            System.out.println();
+            Audit audit = Audit.getInstance();
+            audit.writeToFile("The details about an event were listed!");
+            System.out.println("\n" + events.get(Integer.parseInt(sEventId) - 1) + "\n");
         }
     }
 
-    public String toTime(String fromTime, String duration) {
+    public String toTime(String fromTime, String duration)
+    {
         String[] date = fromTime.split(":");
         int fromHour = Integer.parseInt(date[0]);
         int fromMinutes = Integer.parseInt(date[1]);
@@ -315,7 +402,8 @@ public class EventService {
         return toHour + ":" + toMinutes;
     }
 
-    public boolean checkTime(String beginTime, String endTime, List<Event> events) {
+    public boolean checkTime(String beginTime, String endTime, List<Event> events)
+    {
         if (events.isEmpty())
             return true;
 

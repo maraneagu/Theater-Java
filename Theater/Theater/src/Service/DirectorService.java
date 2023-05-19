@@ -1,5 +1,7 @@
 package Service;
 
+import Audit.Audit;
+import Theater.Artist.Actor;
 import Theater.Director;
 import java.util.Map;
 
@@ -10,7 +12,8 @@ public class DirectorService {
         theaterService = TheaterService.getInstance();
     }
 
-    public void listDirectors() {
+    public void listDirectors()
+    {
         System.out.println("\uF0B2 The theater's directors \uF0B2");
 
         Map<Integer, Director> directors = theaterService.getDirectors();
@@ -23,5 +26,8 @@ public class DirectorService {
                 System.out.println(director.getValue());
             System.out.println();
         }
+
+        Audit audit = Audit.getInstance();
+        audit.writeToFile("The theater's directors list was listed!");
     }
 }

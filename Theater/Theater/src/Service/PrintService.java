@@ -9,7 +9,8 @@ import java.util.*;
 
 public class PrintService {
     public PrintService() {}
-    public void printStages(Map<Integer, Stage> stages) {
+    public void printStages(Map<Integer, Stage> stages)
+    {
         for (Map.Entry<Integer, Stage> stage : stages.entrySet())
             System.out.println("\uF09F " + stage.getValue().getName() + " stage" +
                     " with the capacity of " + stage.getValue().getNumberOfRows() * stage.getValue().getNumberOfSeatsPerRow() +
@@ -17,7 +18,8 @@ public class PrintService {
         System.out.println();
     }
 
-    public StringBuilder printActorsList(Collection<Actor> actors) {
+    public StringBuilder printActorsList(Collection<Actor> actors)
+    {
         StringBuilder printActors = new StringBuilder();
 
         for (Actor actor : actors)
@@ -28,7 +30,8 @@ public class PrintService {
         return printActors.delete(printActors.length() - 2, printActors.length());
     }
 
-    public StringBuilder printSingersList(Collection<Singer> singers) {
+    public StringBuilder printSingersList(Collection<Singer> singers)
+    {
         StringBuilder printSingers = new StringBuilder();
 
         for (Singer singer : singers)
@@ -39,7 +42,8 @@ public class PrintService {
         return printSingers.delete(printSingers.length() - 2, printSingers.length());
     }
 
-    public StringBuilder printDancersList(Collection<Dancer> dancers) {
+    public StringBuilder printDancersList(Collection<Dancer> dancers)
+    {
         StringBuilder printDancers = new StringBuilder();
 
         for (Dancer dancer: dancers)
@@ -50,7 +54,8 @@ public class PrintService {
         return printDancers.delete(printDancers.length() - 2, printDancers.length());
     }
 
-    public StringBuilder printEventSeats(Event event) {
+    public StringBuilder printEventSeats(Event event)
+    {
         List<List<Boolean>> seats = event.getSeats();
         StringBuilder printSeats = new StringBuilder();
 
@@ -65,6 +70,7 @@ public class PrintService {
                     seatsAvailable = true;
                     printSeats.append((j + 1) + ", ");
                 }
+                else printSeats.append("\uF0B2" + ", ");
 
             if (!seatsAvailable) printSeats.append("There are no seats available on this row.\n");
             else

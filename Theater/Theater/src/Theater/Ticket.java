@@ -5,8 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Ticket implements Comparable<Ticket> {
-    private int id;
-    private String userName;
+    private String username;
     private Event event;
     private int row;
     private int seat;
@@ -14,8 +13,8 @@ public class Ticket implements Comparable<Ticket> {
     public Ticket() {
         this.event = new Event();
     }
-    public Ticket(String userName, Event event, int row, int seat) {
-        this.userName = userName;
+    public Ticket(String username, Event event, int row, int seat) {
+        this.username = username;
         this.event = event;
         this.row = row;
         this.seat = seat;
@@ -69,11 +68,11 @@ public class Ticket implements Comparable<Ticket> {
         return -1;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
     public Event getEvent() {
         return event;

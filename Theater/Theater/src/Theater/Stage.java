@@ -3,7 +3,6 @@ package Theater;
 import java.util.Scanner;
 
 public class Stage {
-    private int id;
     private String name;
     private int numberOfRows;
     private int numberOfSeatsPerRow;

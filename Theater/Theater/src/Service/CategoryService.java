@@ -1,5 +1,6 @@
 package Service;
 
+import Audit.Audit;
 import Theater.Category;
 
 import java.util.List;
@@ -12,7 +13,8 @@ public class CategoryService {
         theaterService = TheaterService.getInstance();
     }
 
-    public void listCategories() {
+    public void listCategories()
+    {
         System.out.println("\uF0B2 The theater's categories \uF0B2");
 
         Map<Integer, Category> categories = theaterService.getCategories();
@@ -20,5 +22,8 @@ public class CategoryService {
         for (Map.Entry<Integer, Category> category : categories.entrySet())
             System.out.println(category.getValue());
         System.out.println();
+
+        Audit audit = Audit.getInstance();
+        audit.writeToFile("The theater's categories list was listed!");
     }
 }

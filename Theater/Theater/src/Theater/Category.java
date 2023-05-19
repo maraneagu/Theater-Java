@@ -1,9 +1,6 @@
 package Theater;
 
-import java.util.Scanner;
-
 public class Category {
-    private int id;
     private String name;
 
     public Category() {}

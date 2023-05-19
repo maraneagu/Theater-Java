@@ -3,10 +3,9 @@ package Theater;
 import java.util.Scanner;
 import java.util.regex.*;
 
-import Exception.TheaterException;
+import Exception.InvalidNameException;
 
 public class Director {
-    private int id;
     private String name;
 
     public Director() {}
@@ -24,11 +23,11 @@ public class Director {
                 System.out.print("\nEnter the name of the director: ");
                 this.name = in.nextLine().trim();
 
-                if (!Pattern.matches("^[a-zA-z]*$", name))
-                    throw new TheaterException("\uF0FB The name you introduced is not valid! Please try again! \uF0FB");
+                if (!Pattern.matches("^[a-zA-z ]*$", name))
+                    throw new InvalidNameException();
                 break;
             }
-            catch(TheaterException nameException)
+            catch(InvalidNameException nameException)
             {
                 System.out.println(nameException.getMessage());
             }

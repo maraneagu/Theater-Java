@@ -1,32 +1,37 @@
 package Service.ArtistService;
 
+import Repository.ActorRepository;
 import Service.TheaterService;
 import Theater.Artist.Actor;
 import Theater.Spectacle.Play;
 import Theater.Spectacle.Spectacle;
+import Exception.InvalidNumberException;
+import Audit.Audit;
 
 import java.util.Map;
 import java.util.List;
 import java.util.Scanner;
 
-public class ActorService {
+public class ActorService
+{
     private final TheaterService theaterService;
     public ActorService() {
         theaterService = TheaterService.getInstance();
     }
 
-    public void addActor() {
-        System.out.println("\uF0B2 The theater's plays \uF0B2");
-
+    public void addActor()
+    {
         String spectacleId;
         int playId = 0;
-        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
+        List<Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-            if (spectacle.getValue() instanceof Play)
+        System.out.println("\uF0B2 The theater's plays \uF0B2");
+
+        for (Spectacle spectacle : spectacles)
+            if (spectacle instanceof Play)
             {
                 playId++;
-                System.out.println(playId + ". " + '"' + spectacle.getValue().getName() + '"');
+                System.out.println(playId + ". " + '"' + spectacle.getName() + '"');
             }
 
         if (playId == 0)
@@ -38,44 +43,58 @@ public class ActorService {
             System.out.println();
             while (true)
             {
-                Scanner in = new Scanner(System.in);
+                try
+                {
+                    Scanner in = new Scanner(System.in);
 
-                System.out.print("Enter the number of the play where you want to add a new actor: ");
-                spectacleId = in.nextLine().trim();
+                    System.out.print("Enter the number of the play where you want to add a new actor: ");
+                    spectacleId = in.nextLine().trim();
 
-                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                    if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
             }
 
             Actor actor = new Actor();
             actor.toRead();
 
             playId = 0;
-            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                if (spectacle.getValue() instanceof Play)
+            for (Spectacle spectacle : spectacles)
+                if (spectacle instanceof Play)
                 {
                     playId++;
                     if (playId == Integer.parseInt(spectacleId))
                     {
-                        if (add(actor, ((Play) spectacle.getValue()).getActors()))
-                        {
-                            List<Actor> sActors = ((Play) spectacle.getValue()).getActors();
-                            sActors.add(actor);
-                            actor.getSpectacles().add(spectacle.getValue());
-
-                            System.out.println("\uF0B2 A new actor was added to " + '"' + spectacle.getValue().getName() + '"' + "'s actors list!");
-                        }
-                        else System.out.println("\uF04A The actor you entered already exists in " + '"' +
-                                spectacle.getValue().getName() + '"' + "'s actors list!");
+                        ActorRepository actorRepository = ActorRepository.getInstance();
+                        Audit audit = Audit.getInstance();
 
                         if (add(actor, actors))
                         {
-                            theaterService.setActorId(theaterService.getActorId() + 1);
-                            actors.put(theaterService.getActorId(), actor);
+                            actorRepository.insertActor(actor);
+                            actors.put(theaterService.getActors().size() + 1, actor);
+
+                            audit.writeToFile("A new actor was added to theater's actors list: " + actor.getName());
                             System.out.println("\uF0B2 A new actor was added to theater's actors list!");
                         }
                         else System.out.println("\uF04A The actor you entered already exists in theater's actors list!");
+
+                        if (add(actor, ((Play) spectacle).getActors()))
+                        {
+                            actorRepository.insertPlayActor((Play) spectacle, actor);
+                            List<Actor> sActors = ((Play) spectacle).getActors();
+                            sActors.add(actor);
+                            actor.getSpectacles().add(spectacle);
+
+                            audit.writeToFile("A new actor was added to " + '"' + spectacle.getName() + '"' + "'s actors list: " + actor.getName());
+                            System.out.println("\uF0B2 A new actor was added to " + '"' + spectacle.getName() + '"' + "'s actors list!");
+                        }
+                        else System.out.println("\uF04A The actor you entered already exists in " + '"' +
+                                spectacle.getName() + '"' + "'s actors list!");
 
                         System.out.println();
                         break;
@@ -84,18 +103,19 @@ public class ActorService {
         }
     }
 
-    public void removeActor() {
-        System.out.println("\uF0B2 The theater's plays \uF0B2");
-
+    public void removeActor()
+    {
         String spectacleId;
         int playId = 0;
-        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
+        List<Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-            if (spectacle.getValue() instanceof Play)
+        System.out.println("\uF0B2 The theater's plays \uF0B2");
+
+        for (Spectacle spectacle : spectacles)
+            if (spectacle instanceof Play)
             {
                 playId++;
-                System.out.println(playId + ". " + '"' + spectacle.getValue().getName() + '"');
+                System.out.println(playId + ". " + '"' + spectacle.getName() + '"');
             }
 
         if (playId == 0)
@@ -105,26 +125,33 @@ public class ActorService {
             System.out.println();
             while (true)
             {
-                Scanner in = new Scanner(System.in);
+                try
+                {
+                    Scanner in = new Scanner(System.in);
 
-                System.out.print("Enter the number of the play where you want to remove an actor: ");
-                spectacleId = in.nextLine().trim();
+                    System.out.print("Enter the number of the play where you want to remove an actor: ");
+                    spectacleId = in.nextLine().trim();
 
-                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                    if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
             }
 
             playId = 0;
-            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                if (spectacle.getValue() instanceof Play)
+            for (Spectacle spectacle : spectacles)
+                if (spectacle instanceof Play)
                 {
                     playId++;
                     if (playId == Integer.parseInt(spectacleId))
                     {
-                        List<Actor> sActors = ((Play) spectacle.getValue()).getActors();
+                        List<Actor> sActors = ((Play) spectacle).getActors();
 
-                        System.out.println("\n\uF0B2 The " + '"' + spectacle.getValue().getName() + '"' +
+                        System.out.println("\n\uF0B2 The " + '"' + spectacle.getName() + '"' +
                                 "'s actors list \uF0B2");
 
                         if (sActors.isEmpty()) System.out.println("There are no actors as of yet.\n");
@@ -139,22 +166,36 @@ public class ActorService {
                             System.out.println();
                             while (true)
                             {
-                                Scanner in = new Scanner(System.in);
+                                try
+                                {
+                                    Scanner in = new Scanner(System.in);
 
-                                System.out.print("Enter the number of the actor that you want to remove: ");
-                                sActorId = in.nextLine().trim();
+                                    System.out.print("Enter the number of the actor that you want to remove: ");
+                                    sActorId = in.nextLine().trim();
 
-                                if (sActorId.compareTo("1") >= 0 && sActorId.compareTo(Integer.toString(sActors.size())) <= 0)
-                                    break;
-                                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                                    if (sActorId.compareTo("1") >= 0 && sActorId.compareTo(Integer.toString(sActors.size())) <= 0)
+                                        break;
+                                    else throw new InvalidNumberException();
+                                }
+                                catch (InvalidNumberException exception)
+                                {
+                                    System.out.println(exception.getMessage());
+                                }
                             }
 
+                            Audit audit = Audit.getInstance();
+                            ActorRepository actorRepository = ActorRepository.getInstance();
                             actorId = Integer.parseInt(sActorId);
+
                             System.out.println("\n\uF04A The actor " + sActors.get(actorId - 1).getName() +
-                                    " was removed from " + '"' + spectacle.getValue().getName() + '"'
+                                    " was removed from " + '"' + spectacle.getName() + '"'
                                     + "'s actors list! \n");
 
-                            sActors.get(actorId - 1).getSpectacles().remove(spectacle.getValue());
+                            audit.writeToFile("The actor "+ sActors.get(actorId - 1).getName() + " was removed from " + '"' + spectacle.getName() + '"'
+                                    + "'s actors list!");
+
+                            actorRepository.deletePlayActor((Play) spectacle, sActors.get(actorId - 1));
+                            sActors.get(actorId - 1).getSpectacles().remove(spectacle);
                             sActors.remove(actorId - 1);
                             break;
                         }
@@ -163,18 +204,19 @@ public class ActorService {
         }
     }
 
-    public void listActors() {
-        System.out.println("\uF0B2 The theater's plays \uF0B2");
-
+    public void listActors()
+    {
         String spectacleId;
         int playId = 0;
-        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
+        List<Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-            if (spectacle.getValue() instanceof Play)
+        System.out.println("\uF0B2 The theater's plays \uF0B2");
+
+        for (Spectacle spectacle : spectacles)
+            if (spectacle instanceof Play)
             {
                 playId++;
-                System.out.println(playId + ". " + '"' + spectacle.getValue().getName() + '"');
+                System.out.println(playId + ". " + '"' + spectacle.getName() + '"');
             }
 
         if (playId == 0)
@@ -184,26 +226,33 @@ public class ActorService {
             System.out.println();
             while (true)
             {
-                Scanner in = new Scanner(System.in);
+                try
+                {
+                    Scanner in = new Scanner(System.in);
 
-                System.out.print("Enter the number of the play where you want to list the actors: ");
-                spectacleId = in.nextLine().trim();
+                    System.out.print("Enter the number of the play where you want to list the actors: ");
+                    spectacleId = in.nextLine().trim();
 
-                if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                    if (spectacleId.compareTo("1") >= 0 && spectacleId.compareTo(Integer.toString(playId)) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
             }
 
             playId = 0;
-            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                if (spectacle.getValue() instanceof Play)
+            for (Spectacle spectacle : spectacles)
+                if (spectacle instanceof Play)
                 {
                     playId++;
                     if (playId == Integer.parseInt(spectacleId))
                     {
-                        List<Actor> sActors = ((Play) spectacle.getValue()).getActors();
+                        List<Actor> sActors = ((Play) spectacle).getActors();
 
-                        System.out.println("\n\uF0B2 The " + '"' + spectacle.getValue().getName() + '"' +
+                        System.out.println("\n\uF0B2 The " + '"' + spectacle.getName() + '"' +
                                 "'s actors list \uF0B2");
 
                         if (sActors.isEmpty()) System.out.println("There are no actors as of yet.\n");
@@ -213,15 +262,20 @@ public class ActorService {
                                 System.out.println(actor);
                             System.out.println();
                         }
+
+                        Audit audit = Audit.getInstance();
+                        audit.writeToFile("The " + '"' + spectacle.getName() + '"' + "'s actors list was listed!");
+                        break;
                     }
                 }
         }
     }
 
-    public void searchActor() {
-        System.out.println("\uF0B2 The theater's actors \uF0B2");
-
+    public void searchActor()
+    {
         Map<Integer, Actor> actors = theaterService.getActors();
+
+        System.out.println("\uF0B2 The theater's actors \uF0B2");
 
         if (actors.isEmpty())
             System.out.println("There are no actors as of yet.\n");
@@ -236,14 +290,21 @@ public class ActorService {
 
             while (true)
             {
-                Scanner in = new Scanner(System.in);
+                try
+                {
+                    Scanner in = new Scanner(System.in);
 
-                System.out.print("Enter the number of the actor that you want to search the spectacles for: ");
-                sActorId = in.nextLine().trim();
+                    System.out.print("Enter the number of the actor that you want to search the spectacles for: ");
+                    sActorId = in.nextLine().trim();
 
-                if (sActorId.compareTo("1") >= 0 && sActorId.compareTo(Integer.toString(actors.size())) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                    if (sActorId.compareTo("1") >= 0 && sActorId.compareTo(Integer.toString(actors.size())) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
             }
 
             actorId = Integer.parseInt(sActorId);
@@ -257,16 +318,21 @@ public class ActorService {
                     System.out.println("\uF09F " + '"' + spectacle.getName() + '"' + " by " + spectacle.getDirector().getName());
                 System.out.println();
             }
+
+            Audit audit = Audit.getInstance();
+            audit.writeToFile("The spectacles that have the actor " + actors.get(actorId).getName() + " in their distribution were listed!");
         }
     }
 
-    public boolean add(Actor actor, List<Actor> actors) {
+    public boolean add(Actor actor, List<Actor> actors)
+    {
         for (Actor a : actors)
             if (a.getName().equalsIgnoreCase(actor.getName()))
                 return false;
         return true;
     }
-    public boolean add(Actor actor, Map<Integer, Actor> actors) {
+    public boolean add(Actor actor, Map<Integer, Actor> actors)
+    {
         for (Map.Entry<Integer, Actor> a : actors.entrySet())
             if (a.getValue().getName().equalsIgnoreCase(actor.getName()))
                 return false;

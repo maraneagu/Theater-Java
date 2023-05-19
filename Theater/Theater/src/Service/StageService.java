@@ -1,6 +1,9 @@
 package Service;
 
+import Audit.Audit;
+import Theater.Artist.Actor;
 import Theater.Stage;
+import Exception.InvalidNumberException;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -12,19 +15,25 @@ public class StageService {
         theaterService = TheaterService.getInstance();
     }
 
-    public void listStages() {
-        System.out.println("\uF0B2 The theater's stages \uF0B2");
-
+    public void listStages()
+    {
         Map<Integer, Stage> stages = theaterService.getStages();
+
+        System.out.println("\uF0B2 The theater's stages \uF0B2");
 
         PrintService printService = new PrintService();
         printService.printStages(stages);
-    }
-    public void listStageDetails() {
-        System.out.println("\uF0B2 The theater's stages \uF0B2");
 
+        Audit audit = Audit.getInstance();
+        audit.writeToFile("The theater's stages were listed!");
+    }
+
+    public void listStageDetails()
+    {
         String stageId;
         Map<Integer, Stage> stages = theaterService.getStages();
+
+        System.out.println("\uF0B2 The theater's stages \uF0B2");
 
         for (Map.Entry<Integer, Stage> stage : stages.entrySet())
             System.out.println(stage.getKey() + ". " +
@@ -33,17 +42,26 @@ public class StageService {
 
         while (true)
         {
-            Scanner in = new Scanner(System.in);
-            System.out.print("Enter the number of the stage " +
-                    "for which you want to list the information: ");
-            stageId = in.nextLine().trim();
+            try
+            {
+                Scanner in = new Scanner(System.in);
+                System.out.print("Enter the number of the stage " +
+                        "for which you want to list the information: ");
+                stageId = in.nextLine().trim();
 
-            if (stageId.compareTo("1") >= 0 && stageId.compareTo(Integer.toString(stages.size())) <= 0)
-                break;
-            System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                if (stageId.compareTo("1") >= 0 && stageId.compareTo(Integer.toString(stages.size())) <= 0)
+                    break;
+                else throw new InvalidNumberException();
+            }
+            catch (InvalidNumberException exception)
+            {
+                System.out.println(exception.getMessage());
+            }
         }
 
-        System.out.println();
-        System.out.println(stages.get(Integer.parseInt(stageId)));
+        System.out.println("\n" + stages.get(Integer.parseInt(stageId)));
+
+        Audit audit = Audit.getInstance();
+        audit.writeToFile("The details about a stage were listed!");
     }
 }

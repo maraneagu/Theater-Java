@@ -1,10 +1,14 @@
 package Service;
 
+import Audit.Audit;
+import Repository.*;
+import Repository.SpectacleRepository;
 import Theater.Spectacle.*;
 import Theater.Category;
 import Theater.Director;
+import Exception.InvalidNumberException;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -15,11 +19,12 @@ public class SpectacleService {
         theaterService = TheaterService.getInstance();
     }
 
-    public void addSpectacle() {
+    public void addSpectacle()
+    {
         Scanner in = new Scanner(System.in);
 
         Spectacle spectacle;
-        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
+        List<Spectacle> spectacles = theaterService.getSpectacles();
         Map<Integer, Category> categories = theaterService.getCategories();
         Map<Integer, Director> directors = theaterService.getDirectors();
 
@@ -32,31 +37,38 @@ public class SpectacleService {
         String choiceOfSpectacles;
         while (true)
         {
-            System.out.print("Type of spectacle: ");
+            try
+            {
+                System.out.print("Type of spectacle: ");
 
-            choiceOfSpectacles = in.nextLine().trim();
+                choiceOfSpectacles = in.nextLine().trim();
 
-            if (choiceOfSpectacles.equals("1"))
-            {
-                spectacle = new Play();
-                break;
+                if (choiceOfSpectacles.equals("1"))
+                {
+                    spectacle = new Play();
+                    break;
+                }
+                else if (choiceOfSpectacles.equals("2"))
+                {
+                    spectacle = new Opera();
+                    break;
+                }
+                else if (choiceOfSpectacles.equals("3"))
+                {
+                    spectacle = new Musical();
+                    break;
+                }
+                else if (choiceOfSpectacles.equals("4"))
+                {
+                    spectacle = new Ballet();
+                    break;
+                }
+                else throw new InvalidNumberException();
             }
-            else if (choiceOfSpectacles.equals("2"))
+            catch (InvalidNumberException exception)
             {
-                spectacle = new Opera();
-                break;
+                System.out.println(exception.getMessage());
             }
-            else if (choiceOfSpectacles.equals("3"))
-            {
-                spectacle = new Musical();
-                break;
-            }
-            else if (choiceOfSpectacles.equals("4"))
-            {
-                spectacle = new Ballet();
-                break;
-            }
-            System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
         }
 
         System.out.println();
@@ -75,13 +87,20 @@ public class SpectacleService {
 
             while (true)
             {
-                System.out.print("Enter the number of the category " +
-                        "for your spectacle: ");
-                sCategoryId = in.nextLine().trim();
+                try
+                {
+                    System.out.print("Enter the number of the category " +
+                            "for your spectacle: ");
+                    sCategoryId = in.nextLine().trim();
 
-                if (sCategoryId.compareTo("1") >= 0 && sCategoryId.compareTo(Integer.toString(categories.size())) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                    if (sCategoryId.compareTo("1") >= 0 && sCategoryId.compareTo(Integer.toString(categories.size())) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
             }
 
             System.out.println();
@@ -91,79 +110,124 @@ public class SpectacleService {
 
         if (add(spectacle, spectacles))
         {
-            theaterService.setSpectacleId(theaterService.getSpectacleId() + 1);
-            spectacles.put(theaterService.getSpectacleId(), spectacle);
-            System.out.println("\uF0B2 A new spectacle was added to the theater's spectacles list!");
-
             if (add(spectacle.getDirector(), directors))
             {
-                theaterService.setDirectorId(theaterService.getDirectorId() + 1);
-                directors.put(theaterService.getSpectacleId(), spectacle.getDirector());
+                DirectorRepository directorRepository = DirectorRepository.getInstance();
+                directorRepository.insertDirector(spectacle.getDirector());
+                directors.put(theaterService.getDirectors().size() + 1, spectacle.getDirector());
+
+                Audit audit = Audit.getInstance();
+                audit.writeToFile("A new director was added to the theater's directors list: " + spectacle.getDirector().getName());
+
                 System.out.println("\uF0B2 A new director was added to the theater's directors list!");
             }
             else System.out.println("\uF04A The director you entered already exists in the theater's directors list!");
-        }
-        else System.out.println("\uF04A The spectacle you entered already exists in the theater's spectacles list!");
 
-        System.out.println();
+            SpectacleRepository spectacleRepository = SpectacleRepository.getInstance();
+            spectacleRepository.insertSpectacle(spectacle);
+
+            Audit audit = Audit.getInstance();
+
+            if (spectacle instanceof Play)
+            {
+                audit.writeToFile("A new play was added to the theater's spectacles list: " + spectacle.getName());
+                System.out.println("\uF0B2 A new play was added to the theater's spectacles list!\n");
+            }
+            else if (spectacle instanceof Opera)
+            {
+                audit.writeToFile("A new opera was added to the theater's spectacles list: " + spectacle.getName());
+                System.out.println("\uF0B2 A new opera was added to the theater's spectacles list!\n");
+            }
+            else if (spectacle instanceof Musical)
+            {
+                audit.writeToFile("A new musical was added to the theater's spectacles list: " + spectacle.getName());
+                System.out.println("\uF0B2 A new musical was added to the theater's spectacles list!\n");
+            }
+            else
+            {
+                audit.writeToFile("A new ballet was added to the theater's spectacles list: " + spectacle.getName());
+                System.out.println("\uF0B2 A new ballet was added to the theater's spectacles list!\n");
+            }
+            spectacles.add(spectacle);
+        }
+        else System.out.println("\uF04A The spectacle you entered already exists in the theater's spectacles list!\n");
     }
 
-    public void removeSpectacle() {
-        System.out.println("\uF0B2 The theater's spectacles \uF0B2");
+    public void removeSpectacle()
+    {
+        List<Spectacle> spectacles = theaterService.getSpectacles();
 
-        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
+        System.out.println("\uF0B2 The theater's spectacles \uF0B2");
 
         if (spectacles.isEmpty())
             System.out.println("There are no spectacles as of yet." + '\n');
         else
         {
             String sSpectacleId;
-            int spectacleId;
+            int spectacleId = 1;
+            String spectacleType = "";
 
-            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                System.out.println(spectacle.getKey() + ". " +
-                        '"' + spectacle.getValue().getName() + '"');
+            for (Spectacle spectacle : spectacles)
+            {
+                if (spectacle instanceof Play)
+                    spectacleType = "play";
+                else if (spectacle instanceof Opera)
+                    spectacleType = "opera";
+                else if (spectacle instanceof Musical)
+                    spectacleType = "musical";
+                else spectacleType = "ballet";
+
+                System.out.println(spectacleId + ". " +
+                        '"' + spectacle.getName() + '"' + " \uF09E " + spectacleType);
+                spectacleId += 1;
+            }
             System.out.println();
 
             while (true)
             {
-                Scanner in = new Scanner(System.in);
+                try
+                {
+                    Scanner in = new Scanner(System.in);
 
-                System.out.print("Enter the number of the spectacle you want to remove: ");
-                sSpectacleId = in.nextLine().trim();
+                    System.out.print("Enter the number of the spectacle you want to remove: ");
+                    sSpectacleId = in.nextLine().trim();
 
-                if (sSpectacleId.compareTo("1") >= 0 && sSpectacleId.compareTo(Integer.toString(spectacles.size())) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                    if (sSpectacleId.compareTo("1") >= 0 && sSpectacleId.compareTo(Integer.toString(spectacles.size())) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
             }
 
             spectacleId = Integer.parseInt(sSpectacleId);
             EventService eventService = new EventService();
-            eventService.removeEventBySpectacle(spectacles.get(spectacleId));
+            eventService.removeEventBySpectacle(spectacles.get(spectacleId - 1));
 
-            System.out.println("\n\uF04A The spectacle " + '"' + spectacles.get(spectacleId).getName() + '"' + " was removed from the theater's spectacles list!" + '\n');
-            spectacles.remove(spectacleId);
+            System.out.println("\n\uF04A The " + spectacleType + " "
+                    + '"' + spectacles.get(spectacleId - 1).getName() + '"' + " was removed from the theater's spectacles list!" + '\n');
 
-            Map<Integer, Spectacle> newSpectacles = new HashMap<>();
-            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-            {
-                if (spectacle.getKey() < spectacleId)
-                    newSpectacles.put(spectacle.getKey(), spectacle.getValue());
-                else if (spectacle.getKey() > spectacleId)
-                    newSpectacles.put(spectacle.getKey() - 1, spectacle.getValue());
-            }
+            Audit audit = Audit.getInstance();
+            audit.writeToFile("The " + spectacleType + " "
+                            + '"' + spectacles.get(spectacleId - 1).getName() + '"' + " was removed from the theater's spectacles list!");
 
-            theaterService.setSpectacleId(theaterService.getSpectacleId() - 1);
-            theaterService.setSpectacles(newSpectacles);
+            SpectacleRepository spectacleRepository = SpectacleRepository.getInstance();
+            spectacleRepository.deleteSpectacle(spectacles.get(spectacleId - 1));
+
+            spectacles.remove(spectacleId - 1);
         }
     }
 
-    public void listSpectacles() {
+    public void listSpectacles()
+    {
         Scanner in = new Scanner(System.in);
 
         String choiceOfSpectacles;
         boolean spectacleListed = false;
-        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
+        List<Spectacle> spectacles = theaterService.getSpectacles();
+        Audit audit = Audit.getInstance();
 
         System.out.println("Which type of spectacles do you want to list? ");
         System.out.println("1. Plays");
@@ -174,124 +238,156 @@ public class SpectacleService {
 
         while (true)
         {
-            System.out.print("Type of spectacles: ");
-
-            choiceOfSpectacles = in.nextLine().trim();
-
-            if (choiceOfSpectacles.equals("1"))
+            try
             {
-                System.out.println("\n\uF0B2 The theater's plays \uF0B2");
+                System.out.print("Type of spectacles: ");
 
-                for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                    if (spectacle.getValue() instanceof Play)
-                    {
-                        spectacleListed = true;
-                        System.out.println("\uF09F " + '"' + spectacle.getValue().getName() + '"' + " by " + spectacle.getValue().getDirector().getName());
-                    }
+                choiceOfSpectacles = in.nextLine().trim();
 
-                if (spectacleListed) System.out.println();
-                else System.out.println("There are no plays as of yet. \n");
-                break;
-            }
-            else if (choiceOfSpectacles.equals("2"))
-            {
-                System.out.println("\n\uF0B2 The theater's operas \uF0B2");
-
-                for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                    if (spectacle.getValue() instanceof Opera)
-                    {
-                        spectacleListed = true;
-                        System.out.println("\uF09F " + '"' + spectacle.getValue().getName() + '"' + " by " + spectacle.getValue().getDirector().getName());
-                    }
-
-                if (spectacleListed) System.out.println();
-                else System.out.println("There are no operas as of yet. \n");
-                break;
-            }
-            else if (choiceOfSpectacles.equals("3"))
-            {
-                System.out.println("\n\uF0B2 The theater's musicals \uF0B2");
-
-                for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                    if (spectacle.getValue() instanceof Musical)
-                    {
-                        spectacleListed = true;
-                        System.out.println("\uF09F " + '"' + spectacle.getValue().getName() + '"' + " by " + spectacle.getValue().getDirector().getName());
-                    }
-
-                if (spectacleListed) System.out.println();
-                else System.out.println("There are no musicals as of yet. \n");
-                break;
-            }
-            else if (choiceOfSpectacles.equals("4"))
-            {
-                System.out.println("\n\uF0B2 The theater's ballets \uF0B2");
-
-                for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                    if (spectacle.getValue() instanceof Ballet)
-                    {
-                        spectacleListed = true;
-                        System.out.println("\uF09F " + '"' + spectacle.getValue().getName() + '"' + " by " + spectacle.getValue().getDirector().getName());
-                    }
-
-                if (spectacleListed) System.out.println();
-                else System.out.println("There are no ballets as of yet. \n");
-                break;
-            }
-            else if (choiceOfSpectacles.equals("5"))
-            {
-                System.out.println("\n\uF0B2 The theater's spectacles \uF0B2");
-
-                if (spectacles.isEmpty())
-                    System.out.println("There are no spectacles as of yet. \n");
-                else
+                if (choiceOfSpectacles.equals("1"))
                 {
-                    for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                        System.out.println("\uF09F " + '"' + spectacle.getValue().getName() + '"' + " by " + spectacle.getValue().getDirector().getName());
-                    System.out.println();
+                    System.out.println("\n\uF0B2 The theater's plays \uF0B2");
+
+                    for (Spectacle spectacle : spectacles)
+                        if (spectacle instanceof Play)
+                        {
+                            spectacleListed = true;
+                            System.out.println("\uF09F " + '"' + spectacle.getName() + '"' + " by " + spectacle.getDirector().getName());
+                        }
+
+                    if (spectacleListed) System.out.println();
+                    else System.out.println("There are no plays as of yet. \n");
+                    audit.writeToFile("The theater's plays were listed!");
+
+                    break;
                 }
-                break;
+                else if (choiceOfSpectacles.equals("2"))
+                {
+                    System.out.println("\n\uF0B2 The theater's operas \uF0B2");
+
+                    for (Spectacle spectacle : spectacles)
+                        if (spectacle instanceof Opera)
+                        {
+                            spectacleListed = true;
+                            System.out.println("\uF09F " + '"' + spectacle.getName() + '"' + " by " + spectacle.getDirector().getName());
+                        }
+
+                    if (spectacleListed) System.out.println();
+                    else System.out.println("There are no operas as of yet. \n");
+                    audit.writeToFile("The theater's operas were listed!");
+
+                    break;
+                }
+                else if (choiceOfSpectacles.equals("3"))
+                {
+                    System.out.println("\n\uF0B2 The theater's musicals \uF0B2");
+
+                    for (Spectacle spectacle : spectacles)
+                        if (spectacle instanceof Musical)
+                        {
+                            spectacleListed = true;
+                            System.out.println("\uF09F " + '"' + spectacle.getName() + '"' + " by " + spectacle.getDirector().getName());
+                        }
+
+                    if (spectacleListed) System.out.println();
+                    else System.out.println("There are no musicals as of yet. \n");
+                    audit.writeToFile("The theater's musicals were listed!");
+
+                    break;
+                }
+                else if (choiceOfSpectacles.equals("4"))
+                {
+                    System.out.println("\n\uF0B2 The theater's ballets \uF0B2");
+
+                    for (Spectacle spectacle : spectacles)
+                        if (spectacle instanceof Ballet)
+                        {
+                            spectacleListed = true;
+                            System.out.println("\uF09F " + '"' + spectacle.getName() + '"' + " by " + spectacle.getDirector().getName());
+                        }
+
+                    if (spectacleListed) System.out.println();
+                    else System.out.println("There are no ballets as of yet. \n");
+                    audit.writeToFile("The theater's ballets were listed!");
+
+                    break;
+                }
+                else if (choiceOfSpectacles.equals("5"))
+                {
+                    System.out.println("\n\uF0B2 The theater's spectacles \uF0B2");
+
+                    if (spectacles.isEmpty())
+                        System.out.println("There are no spectacles as of yet. \n");
+                    else
+                    {
+                        for (Spectacle spectacle : spectacles)
+                            System.out.println("\uF09F " + '"' + spectacle.getName() + '"' + " by " + spectacle.getDirector().getName());
+                        System.out.println();
+                    }
+                    audit.writeToFile("The theater's spectacles were listed!");
+
+                    break;
+                }
+                else throw new InvalidNumberException();
             }
-            System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+            catch (InvalidNumberException exception)
+            {
+                System.out.println(exception.getMessage());
+            }
         }
     }
 
-    public void listSpectacleDetails() {
-        System.out.println("\uF0B2 The theater's spectacles \uF0B2");
+    public void listSpectacleDetails()
+    {
+        List<Spectacle> spectacles = theaterService.getSpectacles();
 
-        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
+        System.out.println("\uF0B2 The theater's spectacles \uF0B2");
 
         if (spectacles.isEmpty())
             System.out.println("There are no spectacles as of yet." + '\n');
         else
         {
             String sSpectacleId;
+            int spectacleId = 1;
 
-            for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-                System.out.println(spectacle.getKey() + ". " + '"' + spectacle.getValue().getName() + '"');
+            for (Spectacle spectacle : spectacles)
+            {
+                System.out.println(spectacleId + ". " + '"' + spectacle.getName() + '"');
+                spectacleId += 1;
+            }
             System.out.println();
 
             while (true)
             {
-                Scanner in = new Scanner(System.in);
+                try
+                {
+                    Scanner in = new Scanner(System.in);
 
-                System.out.print("Enter the number of the spectacle you want to list the information for: ");
-                sSpectacleId = in.nextLine().trim();
+                    System.out.print("Enter the number of the spectacle you want to list the information for: ");
+                    sSpectacleId = in.nextLine().trim();
 
-                if (sSpectacleId.compareTo("1") >= 0 && sSpectacleId.compareTo(Integer.toString(spectacles.size())) <= 0)
-                    break;
-                System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                    if (sSpectacleId.compareTo("1") >= 0 && sSpectacleId.compareTo(Integer.toString(spectacles.size())) <= 0)
+                        break;
+                    else throw new InvalidNumberException();
+                }
+                catch (InvalidNumberException exception)
+                {
+                    System.out.println(exception.getMessage());
+                }
             }
 
-            System.out.println();
-            System.out.println(spectacles.get(Integer.parseInt(sSpectacleId)));
+            System.out.println("\n" + spectacles.get(Integer.parseInt(sSpectacleId) - 1));
+
+            Audit audit = Audit.getInstance();
+            audit.writeToFile("The details about a spectacle were listed!");
         }
     }
 
-    public void listSpectacleByCategory() {
-        System.out.println("\uF0B2 The theater's categories \uF0B2");
-
+    public void listSpectacleByCategory()
+    {
         Map<Integer, Category> categories = theaterService.getCategories();
+
+        System.out.println("\uF0B2 The theater's categories \uF0B2");
 
         String sCategoryId;
         int categoryId;
@@ -302,73 +398,84 @@ public class SpectacleService {
 
         while (true)
         {
-            Scanner in = new Scanner(System.in);
+            try
+            {
+                Scanner in = new Scanner(System.in);
 
-            System.out.print("Enter the number of the category by which you want to list the spectacles: ");
-            sCategoryId = in.nextLine().trim();
+                System.out.print("Enter the number of the category by which you want to list the spectacles: ");
+                sCategoryId = in.nextLine().trim();
 
-            if (sCategoryId.compareTo("1") >= 0 && sCategoryId.compareTo(Integer.toString(categories.size())) <= 0)
-                break;
-            System.out.println("\uF0FB The number you introduced is not valid! Please try again! \uF0FB \n");
+                if (sCategoryId.compareTo("1") >= 0 && sCategoryId.compareTo(Integer.toString(categories.size())) <= 0)
+                    break;
+                else throw new InvalidNumberException();
+            }
+            catch (InvalidNumberException exception)
+            {
+                System.out.println(exception.getMessage());
+            }
         }
 
         categoryId = Integer.parseInt(sCategoryId);
-        System.out.println();
-        System.out.println("\uF0B2 The " + categories.get(categoryId).getName() + " spectacles \uF0B2");
+        System.out.println("\n\uF0B2 The " + categories.get(categoryId).getName() + " spectacles \uF0B2");
 
         boolean spectacleExists = false;
-        Map<Integer, Spectacle> spectacles = theaterService.getSpectacles();
+        List<Spectacle> spectacles = theaterService.getSpectacles();
 
-        for (Map.Entry<Integer, Spectacle> spectacle : spectacles.entrySet())
-            if (spectacle.getValue() instanceof Play)
-                if (((Play) spectacle.getValue()).getCategory().getName().equalsIgnoreCase(categories.get(categoryId).getName()))
+        for (Spectacle spectacle : spectacles)
+            if (spectacle instanceof Play)
+                if (((Play) spectacle).getCategory().getName().equalsIgnoreCase(categories.get(categoryId).getName()))
                 {
                     spectacleExists = true;
-                    System.out.println("\uF09F " + '"' + spectacle.getValue().getName() + '"' + " by " + spectacle.getValue().getDirector().getName());
+                    System.out.println("\uF09F " + '"' + spectacle.getName() + '"' + " by " + spectacle.getDirector().getName());
                 }
 
         if (!spectacleExists) System.out.println("There are no spectacles in the " + '"' +
                  categories.get(categoryId).getName() + '"' + " category as of yet.");
         System.out.println();
+
+        Audit audit = Audit.getInstance();
+        audit.writeToFile("The " + categories.get(categoryId).getName() + " spectacles were listed");
     }
 
-    public boolean add(Spectacle spectacle, Map<Integer, Spectacle> spectacles) {
+    public boolean add(Spectacle spectacle, List<Spectacle> spectacles)
+    {
         if (spectacle instanceof Play)
         {
-            for (Map.Entry<Integer, Spectacle> s : spectacles.entrySet())
-                if (s.getValue() instanceof Play) {
-                    if (s.getValue().getName().equalsIgnoreCase(spectacle.getName()))
+            for (Spectacle s : spectacles)
+                if (s instanceof Play) {
+                    if (s.getName().equalsIgnoreCase(spectacle.getName()))
                         return false;
                 }
             return true;
         }
         else if (spectacle instanceof Opera)
         {
-            for (Map.Entry<Integer, Spectacle> s : spectacles.entrySet())
-                if (s.getValue() instanceof Opera)
-                    if (s.getValue().getName().equalsIgnoreCase(spectacle.getName()))
+            for (Spectacle s : spectacles)
+                if (s instanceof Opera)
+                    if (s.getName().equalsIgnoreCase(spectacle.getName()))
                         return false;
             return true;
         }
         else if (spectacle instanceof Musical)
         {
-            for (Map.Entry<Integer, Spectacle> s : spectacles.entrySet())
-                if (s.getValue() instanceof Musical)
-                    if (s.getValue().getName().equalsIgnoreCase(spectacle.getName()))
+            for (Spectacle s : spectacles)
+                if (s instanceof Musical)
+                    if (s.getName().equalsIgnoreCase(spectacle.getName()))
                         return false;
             return true;
         }
         else
         {
-            for (Map.Entry<Integer, Spectacle> s : spectacles.entrySet())
-                if (s.getValue() instanceof Ballet)
-                    if (s.getValue().getName().equalsIgnoreCase(spectacle.getName()))
+            for (Spectacle s : spectacles)
+                if (s instanceof Ballet)
+                    if (s.getName().equalsIgnoreCase(spectacle.getName()))
                         return false;
             return true;
         }
     }
 
-    public boolean add(Director director, Map<Integer, Director> directors) {
+    public boolean add(Director director, Map<Integer, Director> directors)
+    {
         for (Map.Entry<Integer, Director> d : directors.entrySet())
             if (d.getValue().getName().equalsIgnoreCase(director.getName()))
                 return false;

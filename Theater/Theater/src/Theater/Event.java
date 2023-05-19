@@ -8,7 +8,6 @@ import java.text.*;
 import java.util.*;
 
 public class Event implements Comparable<Event>{
-    private int id;
     private Spectacle spectacle;
     private Stage stage;
     private String date;
@@ -43,8 +42,8 @@ public class Event implements Comparable<Event>{
         return "\uF0B2 Event \uF0B2" + '\n' +
                 "The name of the spectacle: " + '"' + spectacle.getName() + '"' + '\n' +
                 "The date of the event: " + date + '\n' +
-                "The time the event starts: " + beginTime + '\n' + " to " + endTime + '\n' +
-                "The stage the spectacle is performed at: " + stage.getName() + '\n' +
+                "The timeframe: " + beginTime + " to " + endTime + '\n' +
+                "The stage the spectacle is performed at: " + stage.getName() + " stage\n" +
                 "The price of the event: " + price + " lei";
     }
 
@@ -104,6 +103,7 @@ public class Event implements Comparable<Event>{
     public Stage getStage() {
         return stage;
     }
+    public Double getPrice() {return price;}
     public List<List<Boolean>> getSeats() {
         return seats;
     }

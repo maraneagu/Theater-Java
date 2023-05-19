@@ -1,71 +1,93 @@
 package Theater;
 
+import Repository.UserRepository;
 import Service.*;
-import Service.ArtistService.ActorService;
-import Service.ArtistService.DancerService;
-import Service.ArtistService.SingerService;
+import Service.ArtistService.*;
 
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Theater {
     private static Theater singleInstance = null;
-    private Profile profile;
+    private User user;
+    private List<User> users;
 
-    private Theater() {
-        profile = Profile.getInstance();
-        profile.toRead();
+    private Theater()
+    {
+        user = new User();
+        users = new ArrayList<>();
     }
 
-    public static synchronized Theater getInstance() {
+    public static synchronized Theater getInstance()
+    {
         if (singleInstance == null)
             singleInstance = new Theater();
         return singleInstance;
     }
 
-    private void listGeneralTheaterActions() {
+    private void listGeneralTheaterActions()
+    {
         System.out.println("\nYour actions: ");
         System.out.println("\uF0B2");
 
         System.out.println("1). Visit the theater.");
         System.out.println("2). Visit the theater's ticket shop.");
+        System.out.println("3). Log off.");
 
         System.out.print("\nWhich action do you choose? Action: ");
     }
-    private void generalTheaterActions() {
+
+    private void generalTheaterActions()
+    {
         Scanner in = new Scanner(System.in);
 
-        while (true) {
+        while (true)
+        {
             this.listGeneralTheaterActions();
+
             String choiceOfAction = in.nextLine().trim();
 
-            if (choiceOfAction.equals("1")) {
+            if (choiceOfAction.equals("1"))
+            {
                 System.out.println("\uF046 The action you chose: visit the theater.");
 
-                if (profile.getUserName().equals("admin")) this.adminTheaterActions();
-                else this.userTheaterActions();
+                if (user.getUsername().equals("admin")) adminTheaterActions();
+                else userTheaterActions();
             }
-            else if (choiceOfAction.equals("2")) {
+            else if (choiceOfAction.equals("2"))
+            {
                 System.out.println("\uF046 The action you chose: visit the theater's ticket shop.");
-                this.ticketShopActions();
+
+                if (user.getUsername().equals("admin")) adminTicketShopActions();
+                else userTicketShopActions();
             }
-            else {
+            else if (choiceOfAction.equals("3"))
+            {
+                System.out.println("\uF046 The action you chose: log off.\n");
+                UserService userService = new UserService();
+                userService.logOff();
+            }
+            else
+            {
                 System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB");
-                this.generalTheaterActions();
+                generalTheaterActions();
                 break;
             }
 
             System.out.println("Do you want to visit another part of the theater? " + "yes / no");
             String choiceToContinue = in.nextLine().trim();
 
-            if (!choiceToContinue.equalsIgnoreCase("yes")) {
+            if (!choiceToContinue.equalsIgnoreCase("yes"))
+            {
                 System.out.println("\uF0AB Thank you for paying us a visit! " +
                         "We hope to see you soon! \uF0AB");
                 break;
             }
         }
     }
-    private void listAdminTheaterActions() {
+    private void listAdminTheaterActions()
+    {
         System.out.println("\nYour actions: ");
         System.out.println("\uF0B2");
         System.out.println("1). Add a new spectacle to the theater's spectacles list.");
@@ -108,10 +130,13 @@ public class Theater {
         System.out.println("24). List the events from the theater's events list.");
         System.out.println("25). List the information about an event from the theater's events list.");
 
+        System.out.println("\n\uF0B2");
+        System.out.println("26). Log off.");
         System.out.print("\nWhich action do you choose? Action: ");
     }
 
-    private void adminTheaterActions() {
+    private void adminTheaterActions()
+    {
         Scanner in = new Scanner(System.in);
 
         SpectacleService spectacleService = new SpectacleService();
@@ -122,100 +147,125 @@ public class Theater {
         DancerService dancerService = new DancerService();
         StageService stageService = new StageService();
         EventService eventService = new EventService();
+        UserService userService = new UserService();
 
-        while (true) {
-            this.listAdminTheaterActions();
+        while (true)
+        {
+            listAdminTheaterActions();
             String choiceOfAction = in.nextLine().trim();
 
-            if (choiceOfAction.equals("1")) {
+            if (choiceOfAction.equals("1"))
+            {
                 System.out.println("\uF046 The action you chose: add a spectacle to the theater's spectacles list. \n");
                 spectacleService.addSpectacle();
             }
-            else if (choiceOfAction.equals("2")) {
+            else if (choiceOfAction.equals("2"))
+            {
                 System.out.println("\uF046 The action you chose: remove a spectacle from the theater's spectacles list. \n");
                 spectacleService.removeSpectacle();
             }
-            else if (choiceOfAction.equals("3")) {
+            else if (choiceOfAction.equals("3"))
+            {
                 System.out.println("\uF046 The action you chose: list the spectacles from the theater's spectacles list. \n");
                 spectacleService.listSpectacles();
             }
-            else if (choiceOfAction.equals("4")) {
+            else if (choiceOfAction.equals("4"))
+            {
                 System.out.println("\uF046 The action you chose: list the information about a spectacle from the theater's spectacles list. \n");
                 spectacleService.listSpectacleDetails();
             }
-            else if (choiceOfAction.equals("5")) {
+            else if (choiceOfAction.equals("5"))
+            {
                 System.out.println("\uF046 The action you chose: list the the spectacles from the theater's spectacles list by their category. \n");
                 spectacleService.listSpectacleByCategory();
             }
-            else if (choiceOfAction.equals("6")) {
+            else if (choiceOfAction.equals("6"))
+            {
                 System.out.println("\uF046 The action you chose: list the categories from the theater's categories list. \n");
                 categoryService.listCategories();
             }
-            else if (choiceOfAction.equals("7")) {
+            else if (choiceOfAction.equals("7"))
+            {
                 System.out.println("\uF046 The action you chose: list the directors from the theater's directors list. \n");
                 directorService.listDirectors();
             }
-            else if (choiceOfAction.equals("8")) {
+            else if (choiceOfAction.equals("8"))
+            {
                 System.out.println("\uF046 The action you chose: add an actor to a play from the theater's spectacles list. \n");
                 actorService.addActor();
             }
-            else if (choiceOfAction.equals("9")) {
+            else if (choiceOfAction.equals("9"))
+            {
                 System.out.println("\uF046 The action you chose: remove an actor from a play from the theater's spectacles list. \n");
                 actorService.removeActor();
             }
-            else if (choiceOfAction.equals("10")) {
+            else if (choiceOfAction.equals("10"))
+            {
                 System.out.println("\uF046 The action you chose: list the actors from a play from the theater's spectacles list. \n");
                 actorService.listActors();
             }
-            else if (choiceOfAction.equals("11")) {
+            else if (choiceOfAction.equals("11"))
+            {
                 System.out.println("\uF046 The action you chose: search for the spectacles that have a specific actor in their distribution. \n");
                 actorService.searchActor();
             }
-            else if (choiceOfAction.equals("12")) {
+            else if (choiceOfAction.equals("12"))
+            {
                 System.out.println("\uF046 The action you chose: add a new singer to an opera or musical from the theater's spectacles list. \n");
                 singerService.addSinger();
             }
-            else if (choiceOfAction.equals("13")) {
+            else if (choiceOfAction.equals("13"))
+            {
                 System.out.println("\uF046 The action you chose: remove a singer from an opera or musical from the theater's spectacles list. \n");
                 singerService.removeSinger();
             }
-            else if (choiceOfAction.equals("14")) {
+            else if (choiceOfAction.equals("14"))
+            {
                 System.out.println("\uF046 The action you chose: list the singers from an opera or musical from the theater's spectacles list. \n");
                 singerService.listSingers();
             }
-            else if (choiceOfAction.equals("15")) {
+            else if (choiceOfAction.equals("15"))
+            {
                 System.out.println("\uF046 The action you chose: search for the spectacles that have a specific singer in their distribution. \n");
                 singerService.searchSinger();
             }
-            else if (choiceOfAction.equals("16")) {
+            else if (choiceOfAction.equals("16"))
+            {
                 System.out.println("\uF046 The action you chose: add a new dancer to a musical or ballet from the theater's spectacles list. \n");
                 dancerService.addDancer();
             }
-            else if (choiceOfAction.equals("17")) {
+            else if (choiceOfAction.equals("17"))
+            {
                 System.out.println("\uF046 The action you chose: remove a dancer from a musical or ballet the theater's spectacles list. \n");
                 dancerService.removeDancer();
             }
-            else if (choiceOfAction.equals("18")) {
+            else if (choiceOfAction.equals("18"))
+            {
                 System.out.println("\uF046 The action you chose: list the dancers from a musical or ballet from the theater's spectacles list. \n");
                 dancerService.listDancers();
             }
-            else if (choiceOfAction.equals("19")) {
+            else if (choiceOfAction.equals("19"))
+            {
                 System.out.println("\uF046 The action you chose: search for the spectacles that have a specific dancer in their distribution. \n");
                 dancerService.searchDancer();
             }
-            else if (choiceOfAction.equals("20")) {
+            else if (choiceOfAction.equals("20"))
+            {
                 System.out.println("\uF046 The action you chose: list the stages from the theater's stages list. \n");
                 stageService.listStages();
             }
-            else if (choiceOfAction.equals("21")) {
+            else if (choiceOfAction.equals("21"))
+            {
                 System.out.println("\uF046 The action you chose: list the information about a stage from the theater's stages list. \n");
                 stageService.listStageDetails();
             }
-            else if (choiceOfAction.equals("22")) {
+            else if (choiceOfAction.equals("22"))
+            {
                 System.out.println("\uF046 The action you chose: add an event to the theater's events list. \n");
                 eventService.addEvent();
             }
-            else if (choiceOfAction.equals("23")) {
+            else if (choiceOfAction.equals("23"))
+            {
                 System.out.println("\uF046 The action you chose: remove an event from the theater's events list. \n");
                 eventService.removeEvent();
             }
@@ -223,13 +273,20 @@ public class Theater {
                 System.out.println("\uF046 The action you chose: list the events from the theater's events list. \n");
                 eventService.listEvents();
             }
-            else if (choiceOfAction.equals("25")) {
+            else if (choiceOfAction.equals("25"))
+            {
                 System.out.println("\uF046 The action you chose: list the information about an event from the theater's events list. \n");
                 eventService.listEventDetails();
             }
-            else {
+            else if (choiceOfAction.equals("26"))
+            {
+                System.out.println("\uF046 The action you chose: log off.");
+                userService.logOff();
+            }
+            else
+            {
                 System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB");
-                this.adminTheaterActions();
+                adminTheaterActions();
                 break;
             }
 
@@ -237,7 +294,8 @@ public class Theater {
                     "yes / no");
             String choiceToContinue = in.nextLine().trim();
 
-            if (!choiceToContinue.equalsIgnoreCase("yes")) {
+            if (!choiceToContinue.equalsIgnoreCase("yes"))
+            {
                 System.out.println("\uF0AB Thank you for paying the theater a visit! " +
                         "We hope to see you soon! \uF0AB \n");
                 break;
@@ -245,7 +303,8 @@ public class Theater {
         }
     }
 
-    private void listUserTheaterActions() {
+    private void listUserTheaterActions()
+    {
         System.out.println("\nYour actions: ");
         System.out.println("\uF0B2");
         System.out.println("1). List the spectacles from the theater's spectacles list.");
@@ -278,9 +337,15 @@ public class Theater {
         System.out.println("14). List the events from the theater's events list.");
         System.out.println("15). List the information about an event from the theater's events list.");
 
+        System.out.println("\n\uF0B2");
+        System.out.println("16). Edit your profile.");
+        System.out.println("17). Log off.");
+
         System.out.print("\nWhich action do you choose? Action: ");
     }
-    private void userTheaterActions() {
+
+    private void userTheaterActions()
+    {
         Scanner in = new Scanner(System.in);
 
         SpectacleService spectacleService = new SpectacleService();
@@ -291,74 +356,102 @@ public class Theater {
         DancerService dancerService = new DancerService();
         StageService stageService = new StageService();
         EventService eventService = new EventService();
+        UserService userService = new UserService();
 
-        while (true) {
-            this.listUserTheaterActions();
+        while (true)
+        {
+            listUserTheaterActions();
             String choiceOfAction = in.nextLine().trim();
 
-            if (choiceOfAction.equals("1")) {
+            if (choiceOfAction.equals("1"))
+            {
                 System.out.println("\uF046 The action you chose: list the spectacles from the theater's spectacles list. \n");
                 spectacleService.listSpectacles();
             }
-            else if (choiceOfAction.equals("2")) {
+            else if (choiceOfAction.equals("2"))
+            {
                 System.out.println("\uF046 The action you chose: list the information about a spectacle from the theater's spectacles list. \n");
                 spectacleService.listSpectacleDetails();
             }
-            else if (choiceOfAction.equals("3")) {
+            else if (choiceOfAction.equals("3"))
+            {
                 System.out.println("\uF046 The action you chose: list the the spectacles from the theater's spectacles list by their category. \n");
                 spectacleService.listSpectacleByCategory();
             }
-            else if (choiceOfAction.equals("4")) {
+            else if (choiceOfAction.equals("4"))
+            {
                 System.out.println("\uF046 The action you chose: list the categories from the theater's categories list. \n");
                 categoryService.listCategories();
             }
-            else if (choiceOfAction.equals("5")) {
+            else if (choiceOfAction.equals("5"))
+            {
                 System.out.println("\uF046 The action you chose: list the directors from the theater's directors list. \n");
                 directorService.listDirectors();
             }
-            else if (choiceOfAction.equals("6")) {
+            else if (choiceOfAction.equals("6"))
+            {
                 System.out.println("\uF046 The action you chose: list the actors from a play from the theater's spectacles list. \n");
                 actorService.listActors();
             }
-            else if (choiceOfAction.equals("7")) {
+            else if (choiceOfAction.equals("7"))
+            {
                 System.out.println("\uF046 The action you chose: search for the spectacles that have a specific actor in their distribution. \n");
                 actorService.searchActor();
             }
-            else if (choiceOfAction.equals("8")) {
+            else if (choiceOfAction.equals("8"))
+            {
                 System.out.println("\uF046 The action you chose: list the singers from an opera or musical from the theater's spectacles list. \n");
                 singerService.listSingers();
             }
-            else if (choiceOfAction.equals("9")) {
+            else if (choiceOfAction.equals("9"))
+            {
                 System.out.println("\uF046 The action you chose: search for the spectacles that have a specific singer in their distribution. \n");
                 singerService.searchSinger();
             }
-            else if (choiceOfAction.equals("10")) {
+            else if (choiceOfAction.equals("10"))
+            {
                 System.out.println("\uF046 The action you chose: list the dancers from a musical or ballet from the theater's spectacles list. \n");
                 dancerService.listDancers();
             }
-            else if (choiceOfAction.equals("11")) {
+            else if (choiceOfAction.equals("11"))
+            {
                 System.out.println("\uF046 The action you chose: search for the spectacles that have a specific dancer in their distribution. \n");
                 dancerService.searchDancer();
             }
-            else if (choiceOfAction.equals("12")) {
+            else if (choiceOfAction.equals("12"))
+            {
                 System.out.println("\uF046 The action you chose: list the stages from the theater's stages list. \n");
                 stageService.listStages();
             }
-            else if (choiceOfAction.equals("13")) {
+            else if (choiceOfAction.equals("13"))
+            {
                 System.out.println("\uF046 The action you chose: list the information about a stage from the theater's stages list. \n");
                 stageService.listStageDetails();
             }
-            else if (choiceOfAction.equals("14")) {
+            else if (choiceOfAction.equals("14"))
+            {
                 System.out.println("\uF046 The action you chose: list the events from the theater's events list. \n");
                 eventService.listEvents();
             }
-            else if (choiceOfAction.equals("15")) {
+            else if (choiceOfAction.equals("15"))
+            {
                 System.out.println("\uF046 The action you chose: list the information about an event from the theater's events list. \n");
                 eventService.listEventDetails();
             }
-            else {
+            else if (choiceOfAction.equals("16"))
+            {
+                System.out.println("\uF046 The action you chose: edit your profile. \n");
+                userService.updateUser();
+            }
+            else if (choiceOfAction.equals("17"))
+            {
+                System.out.println("\uF046 The action you chose: log off. \n");
+                userService.logOff();
+            }
+            else
+            {
                 System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB");
-                this.userTheaterActions();
+                userTheaterActions();
                 break;
             }
 
@@ -366,7 +459,8 @@ public class Theater {
                     "yes / no");
             String choiceToContinue = in.nextLine().trim();
 
-            if (!choiceToContinue.equalsIgnoreCase("yes")) {
+            if (!choiceToContinue.equalsIgnoreCase("yes"))
+            {
                 System.out.println("\uF0AB Thank you for paying the theater a visit! " +
                         "We hope to see you soon! \uF0AB \n");
                 break;
@@ -374,7 +468,8 @@ public class Theater {
         }
     }
 
-    private void listTicketShopActions() {
+    private void listAdminTicketShopActions()
+    {
         System.out.println("\nYour actions: ");
         System.out.println("\uF0B2");
 
@@ -382,33 +477,47 @@ public class Theater {
         System.out.println("2). Cancel a ticket that you bought from the theater's ticket shop.");
         System.out.println("3). List the tickets that you bought from the theater's ticket shop.");
 
+        System.out.println("\n\uF0B2");
+        System.out.println("4). Log off.");
+
         System.out.print("\nWhich action do you choose? Action: ");
     }
 
-    private void ticketShopActions() {
+    private void adminTicketShopActions()
+    {
         Scanner in = new Scanner(System.in);
+        TicketService ticketService = TicketService.getInstance();
+        UserService userService = new UserService();
 
-        while (true) {
-            this.listTicketShopActions();
+        while (true)
+        {
+            listAdminTicketShopActions();
             String choiceOfAction = in.nextLine().trim();
 
-            TicketShopService ticketShopService = TicketShopService.getInstance();
-
-            if (choiceOfAction.equals("1")) {
+            if (choiceOfAction.equals("1"))
+            {
                 System.out.println("\uF046 The action you chose: buy a ticket from the theater's ticket shop. \n");
-                ticketShopService.buyTicket();
+                ticketService.buyTicket();
             }
-            else if (choiceOfAction.equals("2")) {
+            else if (choiceOfAction.equals("2"))
+            {
                 System.out.println("\uF046 The action you chose: cancel a ticket that you bought from the theater's ticket shop. \n");
-                ticketShopService.cancelTicket();
+                ticketService.cancelTicket();
             }
-            else if (choiceOfAction.equals("3")) {
+            else if (choiceOfAction.equals("3"))
+            {
                 System.out.println("\uF046 The action you chose: list the tickets that you bought from the theater's ticket shop. \n");
-                ticketShopService.listTickets();
+                ticketService.listTickets();
             }
-            else {
+            else if (choiceOfAction.equals("4"))
+            {
+                System.out.println("\uF046 The action you chose: log off. \n");
+                userService.logOff();
+            }
+            else
+            {
                 System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB");
-                this.ticketShopActions();
+                adminTicketShopActions();
                 break;
             }
 
@@ -416,14 +525,104 @@ public class Theater {
                     "yes / no");
             String choiceToContinue = in.nextLine().trim();
 
-            if (!choiceToContinue.equalsIgnoreCase("yes")) {
+            if (!choiceToContinue.equalsIgnoreCase("yes"))
+            {
                 System.out.println("\uF0AB Thank you for paying the ticket shop a visit! " +
                         "We hope to see you soon! \uF0AB \n");
                 break;
             }
         }
     }
+
+    private void listUserTicketShopActions()
+    {
+        System.out.println("\nYour actions: ");
+        System.out.println("\uF0B2");
+
+        System.out.println("1). Buy a ticket from the theater's ticket shop.");
+        System.out.println("2). Cancel a ticket that you bought from the theater's ticket shop.");
+        System.out.println("3). List the tickets that you bought from the theater's ticket shop.");
+
+        System.out.println("\n\uF0B2");
+        System.out.println("4). Edit your profile.");
+        System.out.println("5). Log off.");
+
+        System.out.print("\nWhich action do you choose? Action: ");
+    }
+
+    private void userTicketShopActions()
+    {
+        Scanner in = new Scanner(System.in);
+        TicketService ticketService = TicketService.getInstance();
+        UserService userService = new UserService();
+
+        while (true)
+        {
+            listUserTicketShopActions();
+            String choiceOfAction = in.nextLine().trim();
+
+            if (choiceOfAction.equals("1"))
+            {
+                System.out.println("\uF046 The action you chose: buy a ticket from the theater's ticket shop. \n");
+                ticketService.buyTicket();
+            }
+            else if (choiceOfAction.equals("2"))
+            {
+                System.out.println("\uF046 The action you chose: cancel a ticket that you bought from the theater's ticket shop. \n");
+                ticketService.cancelTicket();
+            }
+            else if (choiceOfAction.equals("3"))
+            {
+                System.out.println("\uF046 The action you chose: list the tickets that you bought from the theater's ticket shop. \n");
+                ticketService.listTickets();
+            }
+            else if (choiceOfAction.equals("4"))
+            {
+                System.out.println("\uF046 The action you chose: edit your profile. \n");
+                userService.updateUser();
+            }
+            else if (choiceOfAction.equals("5"))
+            {
+                System.out.println("\uF046 The action you chose: log off. \n");
+                userService.logOff();
+            }
+            else
+            {
+                System.out.println("\n\uF0FB The action you introduced is not valid! Please try again! \uF0FB");
+                userTicketShopActions();
+                break;
+            }
+
+            System.out.println("Do you want to make another action to the theater's ticket shop? " +
+                    "yes / no");
+            String choiceToContinue = in.nextLine().trim();
+
+            if (!choiceToContinue.equalsIgnoreCase("yes"))
+            {
+                System.out.println("\uF0AB Thank you for paying the ticket shop a visit! " +
+                        "We hope to see you soon! \uF0AB \n");
+                break;
+            }
+        }
+    }
+
     public void start() {
+        UserRepository userRepository = UserRepository.getInstance();
+        users = userRepository.getUsers();
+
+        UserService userService = new UserService();
+        userService.signUpOrLogIn(users, user);
+
         generalTheaterActions();
+    }
+
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public List<User> getUsers() {
+        return users;
     }
 }

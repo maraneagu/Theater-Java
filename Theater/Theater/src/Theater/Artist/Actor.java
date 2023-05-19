@@ -2,7 +2,7 @@ package Theater.Artist;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import Exception.TheaterException;
+import Exception.InvalidNameException;
 
 public class Actor extends Artist {
     public Actor() {}
@@ -21,11 +21,11 @@ public class Actor extends Artist {
                 System.out.print("\nEnter the name of the actor: ");
                 this.name = in.nextLine().trim();
 
-                if (!Pattern.matches("^[a-zA-z]*$", name))
-                    throw new TheaterException("\uF0FB The name you introduced is not valid! Please try again! \uF0FB");
+                if (!Pattern.matches("^[a-zA-z ]*$", name))
+                    throw new InvalidNameException();
                 break;
             }
-            catch(TheaterException nameException)
+            catch(InvalidNameException nameException)
             {
                 System.out.println(nameException.getMessage());
             }

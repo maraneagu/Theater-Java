@@ -5,13 +5,13 @@ import Theater.Director;
 abstract public class Spectacle {
     protected int id;
     protected String name;
-    protected Director director;
     protected String duration;
+    protected Director director;
 
     public Spectacle() {
         this.director = new Director();
     }
-    public Spectacle(String name, Director director, String duration) {
+    public Spectacle(String name, String duration, Director director) {
         this.name = name;
         this.director = director;
         this.duration = duration;

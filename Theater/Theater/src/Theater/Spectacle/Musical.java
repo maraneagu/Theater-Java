@@ -4,7 +4,7 @@ import Service.PrintService;
 import Theater.Director;
 import Theater.Artist.Singer;
 import Theater.Artist.Dancer;
-import Exception.TheaterException;
+import Exception.InvalidDurationException;
 
 import java.text.*;
 import java.util.*;
@@ -18,11 +18,10 @@ public class Musical extends Spectacle {
         this.singers = new ArrayList<>();
         this.dancers = new ArrayList<>();
     }
-    public Musical(String name, Director director, String duration,
-                 List<Singer> singers, List<Dancer> dancers) {
-        super(name, director, duration);
-        this.singers = singers;
-        this.dancers = dancers;
+    public Musical(String name, String duration, Director director) {
+        super(name, duration, director);
+        this.singers = new ArrayList<>();
+        this.dancers = new ArrayList<>();
     }
 
     @Override
@@ -51,14 +50,14 @@ public class Musical extends Spectacle {
                 int minutes = Integer.parseInt(splitTime[1]);
 
                 if (hour > 4 || minutes > 59)
-                    throw new TheaterException("\uF0FB The duration you introduced is not valid! Please try again! \uF0FB");
+                    throw new InvalidDurationException();
                 break;
             }
             catch(ParseException parseException)
             {
                 System.out.println("\uF0FB The duration format you introduced is not valid! Please try again! \uF0FB");
             }
-            catch(TheaterException durationException)
+            catch(InvalidDurationException durationException)
             {
                 System.out.println(durationException.getMessage());
             }

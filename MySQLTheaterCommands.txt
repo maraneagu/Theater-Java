@@ -1,0 +1,183 @@
+CREATE TABLE `Category` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+INSERT INTO `Category`(`name`) VALUES (
+	'Comedy'
+);
+
+INSERT INTO `Category`(`name`) VALUES (
+	'Tragedy'
+);
+
+INSERT INTO `Category`(`name`) VALUES (
+	'Historical'
+);
+
+INSERT INTO `Category`(`name`) VALUES (
+	'Theater of the Absurd'
+);
+
+CREATE TABLE `Stage` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    `numberOfRows` int(4) NOT NULL,
+    `numberOfSeatsPerRow` int(4) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+INSERT INTO `Stage`(`name`, `numberOfRows`, `numberOfSeatsPerRow`) VALUES (
+	'The Little', 10, 5
+);
+
+INSERT INTO `Stage`(`name`, `numberOfRows`, `numberOfSeatsPerRow`) VALUES (
+	'The Big', 15, 10
+);
+
+INSERT INTO `Stage`(`name`, `numberOfRows`, `numberOfSeatsPerRow`) VALUES (
+	'The Studio', 5, 15
+);
+
+INSERT INTO `Stage`(`name`, `numberOfRows`, `numberOfSeatsPerRow`) VALUES (
+	'The Workshop', 10, 8
+);
+
+INSERT INTO `Stage`(`name`, `numberOfRows`, `numberOfSeatsPerRow`) VALUES (
+	'The Painting', 7, 5
+);
+
+CREATE TABLE `Director` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `Actor` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `Dancer` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `Singer` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `Spectacle` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `type` VARCHAR(100) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `duration` VARCHAR(10) NOT NULL,
+    `directorId` int(11),
+    FOREIGN KEY (`directorId`) REFERENCES `Director`(`id`),
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `Play` (
+	`id` int(11), 
+    `categoryId` int(11),
+    FOREIGN KEY (`id`) REFERENCES `Spectacle`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`categoryId`) REFERENCES `Category`(`id`),
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `Opera` (
+	`id` int(11),
+    FOREIGN KEY (`id`) REFERENCES `Spectacle`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `Musical` (
+	`id` int(11),
+    FOREIGN KEY (`id`) REFERENCES `Spectacle`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `Ballet` (
+	`id` int(11),
+    FOREIGN KEY (`id`) REFERENCES `Spectacle`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `PlayActor` (
+	`playId` int(11), 
+	`actorId` int(11), 
+    FOREIGN KEY (`playId`) REFERENCES `Play`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`actorId`) REFERENCES `Actor`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`playId`, `actorId`)
+);
+
+CREATE TABLE `OperaSinger` (
+	`operaId` int(11), 
+	`singerId` int(11), 
+    FOREIGN KEY (`operaId`) REFERENCES `Opera`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`singerId`) REFERENCES `Singer`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`operaId`, `singerId`)
+);
+
+CREATE TABLE `MusicalSinger` (
+	`musicalId` int(11), 
+	`singerId` int(11), 
+    FOREIGN KEY (`musicalId`) REFERENCES `Musical`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`singerId`) REFERENCES `Singer`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`musicalId`, `singerId`)
+);
+
+CREATE TABLE `MusicalDancer` (
+	`musicalId` int(11), 
+	`dancerId` int(11), 
+    FOREIGN KEY (`musicalId`) REFERENCES `Musical`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`dancerId`) REFERENCES `Dancer`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`musicalId`, `dancerId`)
+);
+
+CREATE TABLE `BalletDancer` (
+	`balletId` int(11), 
+	`dancerId` int(11), 
+    FOREIGN KEY (`balletId`) REFERENCES `Ballet`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`dancerId`) REFERENCES `Dancer`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`balletId`, `dancerId`)
+);
+
+CREATE TABLE `Event` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `spectacleId` int(11),
+    `stageId` int(11),
+    `date` VARCHAR(100) NOT NULL,
+    `beginTime` VARCHAR(100) NOT NULL,
+    `endTime` VARCHAR(100) NOT NULL,
+    `price` DOUBLE NOT NULL,
+    FOREIGN KEY (`spectacleId`) REFERENCES `Spectacle`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`stageId`) REFERENCES `Stage`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `User` (
+    `username` VARCHAR(100) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
+    `password` VARCHAR(100) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`username`)
+);
+
+CREATE TABLE `Ticket` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(100),
+    `eventId` int(11),
+    `row` int(11) NOT NULL,
+    `seat` int(11) NOT NULL,
+    FOREIGN KEY (`username`) REFERENCES `User`(`username`),
+    FOREIGN KEY (`eventId`) REFERENCES `Event`(`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+);
+
+

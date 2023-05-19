@@ -3,7 +3,7 @@ package Theater.Spectacle;
 import Service.PrintService;
 import Theater.Artist.Dancer;
 import Theater.Director;
-import Exception.TheaterException;
+import Exception.InvalidDurationException;
 
 import java.text.*;
 import java.util.*;
@@ -15,10 +15,9 @@ public class Ballet extends Spectacle {
         super();
         this.dancers = new ArrayList<>();
     }
-    public Ballet(String name, Director director, String duration,
-                 List<Dancer> dancers) {
-        super(name, director, duration);
-        this.dancers = dancers;
+    public Ballet(String name, String duration, Director director) {
+        super(name, duration, director);
+        this.dancers = new ArrayList<>();
     }
 
     @Override
@@ -47,14 +46,14 @@ public class Ballet extends Spectacle {
                 int minutes = Integer.parseInt(splitTime[1]);
 
                 if (hour > 4 || minutes > 59)
-                    throw new TheaterException("\uF0FB The duration you introduced is not valid! Please try again! \uF0FB");
+                    throw new InvalidDurationException();
                 break;
             }
             catch(ParseException parseException)
             {
                 System.out.println("\uF0FB The duration format you introduced is not valid! Please try again! \uF0FB");
             }
-            catch(TheaterException durationException)
+            catch(InvalidDurationException durationException)
             {
                 System.out.println(durationException.getMessage());
             }

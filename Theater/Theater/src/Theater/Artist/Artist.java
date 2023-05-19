@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract public class Artist {
-    protected int id;
     protected String name;
     protected List<Spectacle> spectacles;
 
