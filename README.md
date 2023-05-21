@@ -4,7 +4,7 @@ Project implemented in the Advanced Oriented Programming course of my fourth sem
 
 ### Database / Workbench
 
-To stock the data of this application, I've used MySQL, writing the SQL code in MySQL Workbench. Here are the SQL commands for creating the actual tables: [SQL Theater Commands.](https://github.com/maraneagu/Theater-Java/blob/main/MySQLTheaterCommands.txt)
+To stock the data of this application, I've used MySQL, writing the SQL code in MySQL Workbench. Here are the SQL commands for creating the actual tables: [MySQL Theater Commands.](https://github.com/maraneagu/Theater-Java/blob/main/MySQLTheaterCommands.txt)
 
 ### Sign up / Log in
 
@@ -37,6 +37,8 @@ The theater's ticket shop is the same for both @admin and regular users: you can
 
 :performing_arts:
 ![2023-05-21 (11)](https://github.com/maraneagu/Theater-Java/assets/93272424/3c3966fd-d047-4708-943c-55a7e5e08ef6)
+
+
 
 
 
