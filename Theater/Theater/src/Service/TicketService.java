@@ -90,10 +90,10 @@ public class TicketService {
                 {
                     System.out.print("Enter the row where " +
                             "you want sit: ");
-                    sRowId = in.nextLine().trim();
+                    rowId = Integer.parseInt(in.nextLine().trim());
 
-                    if (sRowId.compareTo("1") >= 0 && sRowId.compareTo(Integer.toString(events.get(eventId - 1).getSeats().size())) <= 0
-                            && availableRow(events.get(eventId - 1), Integer.parseInt(sRowId) - 1))
+                    if (rowId >= 1 && rowId <= events.get(eventId - 1).getStage().getNumberOfRows()
+                            && availableRow(events.get(eventId - 1), rowId - 1))
                         break;
                     else throw new InvalidNumberException();
                 }
@@ -102,8 +102,6 @@ public class TicketService {
                     System.out.println(exception.getMessage());
                 }
             }
-
-            rowId = Integer.parseInt(sRowId);
 
             while (true)
             {
@@ -111,10 +109,10 @@ public class TicketService {
                 {
                     System.out.print("Enter the seat where " +
                             "you want sit: ");
-                    sSeatId = in.nextLine().trim();
+                    seatId = Integer.parseInt(in.nextLine().trim());
 
-                    if (sSeatId.compareTo("1") >= 0 && sSeatId.compareTo(Integer.toString(events.get(eventId - 1).getSeats().get(rowId - 1).size())) >= 0 &&
-                            events.get(eventId - 1).getSeats().get(rowId - 1).get(Integer.parseInt(sSeatId) - 1))
+                    if (seatId >= 1 && seatId <= events.get(eventId - 1).getStage().getNumberOfSeatsPerRow() &&
+                            events.get(eventId - 1).getSeats().get(rowId - 1).get(seatId - 1))
                         break;
                     else throw new InvalidNumberException();
                 }
@@ -124,7 +122,6 @@ public class TicketService {
                 }
             }
 
-            seatId = Integer.parseInt(sSeatId);
             events.get(eventId - 1).getSeats().get(rowId - 1).set(seatId - 1, false);
             Ticket ticket = new Ticket(user.getUsername(), events.get(eventId - 1), rowId, seatId);
 
