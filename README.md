@@ -53,13 +53,13 @@ The theater's ticket shop is the same for both @admin and regular users: you can
 ### Audit
 
 This application has an audit section, that writes a message, with the current date and hour in its specific audit file. There exists an audit file for the theater's:
-- users
-- spectacles
-- categories
-- directors
-- artists
-- events
-- tickets
+- users;
+- spectacles;
+- categories;
+- directors;
+- artists;
+- events;
+- tickets.
 
 Here is an example of the theaterUsers.cvs audit file, after I logged into the application as @admin, then switched to the user @maraneagu, and finally changing the user's name from Mara to Tedora:
 
