@@ -115,7 +115,7 @@ public class EventService {
 
             for (Event e : events)
             {
-                if (e.getStage().equals(stages.get(stageId)) && e.getDate().equals(date))
+                if (e.getStage().getName().equals(stages.get(stageId).getName()) && e.getDate().equals(date))
                 {
                     dateStageEvents.add(e);
                     System.out.println("\uF09F " + '"' + e.getSpectacle().getName() + '"' + " from " + e.getBeginTime() + " to " +
@@ -144,28 +144,39 @@ public class EventService {
                     System.out.println("\uF0FB The time you introduced is not valid! Please try again! \uF0FB\n");
 
                 endTime = toTime(beginTime, spectacle.getDuration());
+
                 if (!checkTime(beginTime, endTime, dateStageEvents))
                 {
-                    String choiceToContinue;
+                    System.out.println("\n\uF0FB The event would end at " + endTime + ", thus we are not able to find an appropriate time frame for the event! \uF0FB\n");
 
-                    System.out.println("\nThe event would end at " + endTime + ", thus we are not able to find an appropriate time frame for the event!");
-                    System.out.println("Do you want to try entering another time frame? yes / no");
-                    choiceToContinue = in.nextLine().trim();
+                    System.out.println("Here are your options: ");
+                    System.out.println("1. Try entering another time frame for this event.");
+                    System.out.println("2. Change the stage or the date of this event.");
 
-                    if (!choiceToContinue.equalsIgnoreCase("yes"))
+                    while (true)
                     {
-                        System.out.println("Do you want to change the stage or the date the event is performed at? yes / no");
-                        choiceToContinue = in.nextLine().trim();
-                        if (choiceToContinue.equalsIgnoreCase("yes"))
+                        try
                         {
-                            readEvent(spectacle);
-                            return null;
+                            System.out.print("\nWhich option do you choose? Option: ");
+
+                            String optionChoice = in.nextLine().trim();
+
+                            if (optionChoice.equalsIgnoreCase("1"))
+                            {
+                                System.out.println();
+                                break;
+                            }
+                            else if (optionChoice.equalsIgnoreCase("2"))
+                                return readEvent(spectacle);
+                            else throw new InvalidOptionException();
                         }
-                        return null;
+                        catch (InvalidOptionException exception)
+                        {
+                            System.out.println(exception.getMessage());
+                        }
                     }
-                    else System.out.println();
                 }
-                break;
+                else break;
             }
             catch (ParseException parseException)
             {
@@ -356,7 +367,11 @@ public class EventService {
             String sEventId;
 
             for (Event event: events)
+            {
                 System.out.println(eventId + ". " + '"' + event.getSpectacle().getName() + '"' + " on " + event.getDate());
+                eventId += 1;
+            }
+
             System.out.println();
 
             while (true)
@@ -387,17 +402,19 @@ public class EventService {
 
     public String toTime(String fromTime, String duration)
     {
-        String[] date = fromTime.split(":");
-        int fromHour = Integer.parseInt(date[0]);
-        int fromMinutes = Integer.parseInt(date[1]);
+        String[] time = fromTime.split(":");
+        int fromHour = Integer.parseInt(time[0]);
+        int fromMinutes = Integer.parseInt(time[1]);
 
-        date = duration.split(":");
-        int durationHour = Integer.parseInt(date[0]);
-        int durationMinutes = Integer.parseInt(date[1]);
+        time = duration.split(":");
+        int durationHour = Integer.parseInt(time[0]);
+        int durationMinutes = Integer.parseInt(time[1]);
 
         int toMinutes = (fromMinutes + durationMinutes) % 60;
         int toHour = fromHour + durationHour + (fromMinutes + durationMinutes) / 60;
 
+        if (toMinutes == 0)
+            return toHour + ":" + toMinutes + '0';
         return toHour + ":" + toMinutes;
     }
 
