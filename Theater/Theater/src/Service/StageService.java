@@ -25,7 +25,7 @@ public class StageService {
         printService.printStages(stages);
 
         Audit audit = Audit.getInstance();
-        audit.writeToFile("The theater's stages were listed!");
+        audit.writeToFile("The theater's stages were listed!", "./theaterStages.cvs");
     }
 
     public void listStageDetails()
@@ -62,6 +62,6 @@ public class StageService {
         System.out.println("\n" + stages.get(Integer.parseInt(stageId)));
 
         Audit audit = Audit.getInstance();
-        audit.writeToFile("The details about a stage were listed!");
+        audit.writeToFile("The details about a stage were listed!", "./theaterStages.cvs");
     }
 }

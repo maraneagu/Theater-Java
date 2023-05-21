@@ -93,7 +93,7 @@ public class DancerService
                             dancers.put(theaterService.getDancers().size() + 1, dancer);
 
                             System.out.println("\uF0B2 A new dancer was added to theater's dancers list!");
-                            audit.writeToFile("A new dancer was added to theater's dancers list: " + dancer.getName());
+                            audit.writeToFile("A new dancer was added to theater's dancers list: " + dancer.getName(), "./theaterArtists.cvs");
                         }
                         else System.out.println("\uF04A The dancer you entered already exists in theater's dancers list!");
 
@@ -108,7 +108,7 @@ public class DancerService
 
                             System.out.println("\uF0B2 A new dancer was added to " + '"' +
                                     spectacle.getName() + '"' + "'s dancers list!");
-                            audit.writeToFile("A new dancer was added to " + '"' + spectacle.getName() + '"' + "'s dancers list: " + dancer.getName());
+                            audit.writeToFile("A new dancer was added to " + '"' + spectacle.getName() + '"' + "'s dancers list: " + dancer.getName(), "./theaterArtists.cvs");
                         }
                         else System.out.println("\uF04A The dancer you entered already exists in " + '"' +
                                 spectacle.getName() + '"' + "'s dancers list!");
@@ -208,7 +208,7 @@ public class DancerService
                                     + "'s dancers list! \n");
 
                             Audit audit = Audit.getInstance();
-                            audit.writeToFile("The dancer " + sDancers.get(dancerId - 1).getName() + " was removed from " + '"' + spectacle.getName() + '"' + "'s dancers list!");
+                            audit.writeToFile("The dancer " + sDancers.get(dancerId - 1).getName() + " was removed from " + '"' + spectacle.getName() + '"' + "'s dancers list!", "theaterArtists.cvs");
 
                             DancerRepository dancerRepository = DancerRepository.getInstance();
                             if (spectacle instanceof Musical)
@@ -287,7 +287,7 @@ public class DancerService
                         }
 
                         Audit audit = Audit.getInstance();
-                        audit.writeToFile("The " + '"' + spectacle.getName() + '"' + "'s dancers list was listed!");
+                        audit.writeToFile("The " + '"' + spectacle.getName() + '"' + "'s dancers list was listed!", "./theaterArtists.cvs");
 
                         break;
                     }
@@ -344,7 +344,7 @@ public class DancerService
             }
 
             Audit audit = Audit.getInstance();
-            audit.writeToFile("The spectacles that have the dancer " + dancers.get(dancerId).getName() + " in their distribution were listed!");
+            audit.writeToFile("The spectacles that have the dancer " + dancers.get(dancerId).getName() + " in their distribution were listed!", "./theaterArtists.cvs");
         }
     }
 

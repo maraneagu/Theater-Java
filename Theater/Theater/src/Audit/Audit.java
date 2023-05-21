@@ -10,7 +10,6 @@ import java.util.Date;
 
 public class Audit {
     private static Audit singleInstance = null;
-    private static final String CVS_FILE_PATH = "./theater.cvs";
     private Audit() {}
 
     public static synchronized Audit getInstance()
@@ -20,8 +19,8 @@ public class Audit {
         return singleInstance;
     }
 
-    public void writeToFile(String data) {
-        File file = new File(CVS_FILE_PATH);
+    public void writeToFile(String data, String filePath) {
+        File file = new File(filePath);
 
         try
         {
@@ -32,6 +31,7 @@ public class Audit {
             Date date = new Date();
 
             bufferedWriter.write(data + " \uF0B2 " + dateFormat.format(date));
+            bufferedWriter.newLine();
             bufferedWriter.newLine();
             bufferedWriter.close();
         }

@@ -28,6 +28,6 @@ public class DirectorService {
         }
 
         Audit audit = Audit.getInstance();
-        audit.writeToFile("The theater's directors list was listed!");
+        audit.writeToFile("The theater's directors list was listed!", "./theaterDirectors.cvs");
     }
 }

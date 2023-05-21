@@ -78,7 +78,7 @@ public class ActorService
                             actorRepository.insertActor(actor);
                             actors.put(theaterService.getActors().size() + 1, actor);
 
-                            audit.writeToFile("A new actor was added to theater's actors list: " + actor.getName());
+                            audit.writeToFile("A new actor was added to theater's actors list: " + actor.getName(), "./theaterArtists.cvs");
                             System.out.println("\uF0B2 A new actor was added to theater's actors list!");
                         }
                         else System.out.println("\uF04A The actor you entered already exists in theater's actors list!");
@@ -90,7 +90,7 @@ public class ActorService
                             sActors.add(actor);
                             actor.getSpectacles().add(spectacle);
 
-                            audit.writeToFile("A new actor was added to " + '"' + spectacle.getName() + '"' + "'s actors list: " + actor.getName());
+                            audit.writeToFile("A new actor was added to " + '"' + spectacle.getName() + '"' + "'s actors list: " + actor.getName(), "./theaterArtists.cvs");
                             System.out.println("\uF0B2 A new actor was added to " + '"' + spectacle.getName() + '"' + "'s actors list!");
                         }
                         else System.out.println("\uF04A The actor you entered already exists in " + '"' +
@@ -192,7 +192,7 @@ public class ActorService
                                     + "'s actors list! \n");
 
                             audit.writeToFile("The actor "+ sActors.get(actorId - 1).getName() + " was removed from " + '"' + spectacle.getName() + '"'
-                                    + "'s actors list!");
+                                    + "'s actors list!", "./theaterArtists.cvs");
 
                             actorRepository.deletePlayActor((Play) spectacle, sActors.get(actorId - 1));
                             sActors.get(actorId - 1).getSpectacles().remove(spectacle);
@@ -264,7 +264,7 @@ public class ActorService
                         }
 
                         Audit audit = Audit.getInstance();
-                        audit.writeToFile("The " + '"' + spectacle.getName() + '"' + "'s actors list was listed!");
+                        audit.writeToFile("The " + '"' + spectacle.getName() + '"' + "'s actors list was listed!", "./theaterArtists.cvs");
                         break;
                     }
                 }
@@ -320,7 +320,7 @@ public class ActorService
             }
 
             Audit audit = Audit.getInstance();
-            audit.writeToFile("The spectacles that have the actor " + actors.get(actorId).getName() + " in their distribution were listed!");
+            audit.writeToFile("The spectacles that have the actor " + actors.get(actorId).getName() + " in their distribution were listed!", "./theaterArtists.cvs");
         }
     }
 

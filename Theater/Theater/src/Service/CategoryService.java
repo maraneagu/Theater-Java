@@ -24,6 +24,6 @@ public class CategoryService {
         System.out.println();
 
         Audit audit = Audit.getInstance();
-        audit.writeToFile("The theater's categories list was listed!");
+        audit.writeToFile("The theater's categories list was listed!", "./theaterCategories.cvs");
     }
 }

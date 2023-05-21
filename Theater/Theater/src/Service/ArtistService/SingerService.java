@@ -95,7 +95,7 @@ public class SingerService {
                             singers.put(theaterService.getSingers().size() + 1, singer);
 
                             System.out.println("\uF0B2 A new singer was added to theater's singers list!");
-                            audit.writeToFile("A new singer was added to theater's singers list: " + singer.getName());
+                            audit.writeToFile("A new singer was added to theater's singers list: " + singer.getName(), "./theaterArtists.cvs");
                         }
                         else System.out.println("\uF04A The singer you entered already exists in theater's singers list!");
 
@@ -110,7 +110,7 @@ public class SingerService {
 
                             System.out.println("\uF0B2 A new singer was added to " + '"' +
                                     spectacle.getName() + '"' + "'s singers list!");
-                            audit.writeToFile("A new singer was added to " + '"' + spectacle.getName() + '"' + "'s singers list: " + singer.getName());
+                            audit.writeToFile("A new singer was added to " + '"' + spectacle.getName() + '"' + "'s singers list: " + singer.getName(), "./theaterArtists.cvs");
                         }
                         else System.out.println("\uF04A The singer you entered already exists in " + '"' +
                                 spectacle.getName() + '"' + "'s singers list!");
@@ -213,7 +213,7 @@ public class SingerService {
                             Audit audit = Audit.getInstance();
                             audit.writeToFile("The singer " + sSingers.get(singerId - 1).getName() +
                                     " was removed from " + '"' + spectacle.getName() + '"'
-                                            + "'s singers list!");
+                                            + "'s singers list!", "./theaterArtists.cvs");
 
                             SingerRepository singerRepository = SingerRepository.getInstance();
                             if (spectacle instanceof Opera)
@@ -294,7 +294,7 @@ public class SingerService {
 
                         Audit audit = Audit.getInstance();
                         audit.writeToFile("The " + '"' + spectacle.getName() + '"' +
-                                "'s singers list was listed!");
+                                "'s singers list was listed!", "./theaterArtists.cvs");
 
                         break;
                     }
@@ -350,7 +350,7 @@ public class SingerService {
             }
 
             Audit audit = Audit.getInstance();
-            audit.writeToFile("The spectacles that have the singer " + singers.get(singerId).getName() + " in their distribution were listed!");
+            audit.writeToFile("The spectacles that have the singer " + singers.get(singerId).getName() + " in their distribution were listed!", "./theaterArtists.cvs");
         }
     }
 

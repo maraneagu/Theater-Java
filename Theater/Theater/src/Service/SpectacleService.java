@@ -117,7 +117,7 @@ public class SpectacleService {
                 directors.put(theaterService.getDirectors().size() + 1, spectacle.getDirector());
 
                 Audit audit = Audit.getInstance();
-                audit.writeToFile("A new director was added to the theater's directors list: " + spectacle.getDirector().getName());
+                audit.writeToFile("A new director was added to the theater's directors list: " + spectacle.getDirector().getName(), "./theaterDirectors.cvs");
 
                 System.out.println("\uF0B2 A new director was added to the theater's directors list!");
             }
@@ -130,22 +130,22 @@ public class SpectacleService {
 
             if (spectacle instanceof Play)
             {
-                audit.writeToFile("A new play was added to the theater's spectacles list: " + spectacle.getName());
+                audit.writeToFile("A new play was added to the theater's spectacles list: " + spectacle.getName(), "./theaterSpectacles.cvs");
                 System.out.println("\uF0B2 A new play was added to the theater's spectacles list!\n");
             }
             else if (spectacle instanceof Opera)
             {
-                audit.writeToFile("A new opera was added to the theater's spectacles list: " + spectacle.getName());
+                audit.writeToFile("A new opera was added to the theater's spectacles list: " + spectacle.getName(), "./theaterSpectacles.cvs");
                 System.out.println("\uF0B2 A new opera was added to the theater's spectacles list!\n");
             }
             else if (spectacle instanceof Musical)
             {
-                audit.writeToFile("A new musical was added to the theater's spectacles list: " + spectacle.getName());
+                audit.writeToFile("A new musical was added to the theater's spectacles list: " + spectacle.getName(), "./theaterSpectacles.cvs");
                 System.out.println("\uF0B2 A new musical was added to the theater's spectacles list!\n");
             }
             else
             {
-                audit.writeToFile("A new ballet was added to the theater's spectacles list: " + spectacle.getName());
+                audit.writeToFile("A new ballet was added to the theater's spectacles list: " + spectacle.getName(), "./theaterSpectacles.cvs");
                 System.out.println("\uF0B2 A new ballet was added to the theater's spectacles list!\n");
             }
             spectacles.add(spectacle);
@@ -211,7 +211,7 @@ public class SpectacleService {
 
             Audit audit = Audit.getInstance();
             audit.writeToFile("The " + spectacleType + " "
-                            + '"' + spectacles.get(spectacleId - 1).getName() + '"' + " was removed from the theater's spectacles list!");
+                            + '"' + spectacles.get(spectacleId - 1).getName() + '"' + " was removed from the theater's spectacles list!", "./theaterSpectacles.cvs");
 
             SpectacleRepository spectacleRepository = SpectacleRepository.getInstance();
             spectacleRepository.deleteSpectacle(spectacles.get(spectacleId - 1));
@@ -257,7 +257,7 @@ public class SpectacleService {
 
                     if (spectacleListed) System.out.println();
                     else System.out.println("There are no plays as of yet. \n");
-                    audit.writeToFile("The theater's plays were listed!");
+                    audit.writeToFile("The theater's plays were listed!", "./theaterSpectacles.cvs");
 
                     break;
                 }
@@ -274,7 +274,7 @@ public class SpectacleService {
 
                     if (spectacleListed) System.out.println();
                     else System.out.println("There are no operas as of yet. \n");
-                    audit.writeToFile("The theater's operas were listed!");
+                    audit.writeToFile("The theater's operas were listed!", "./theaterSpectacles.cvs");
 
                     break;
                 }
@@ -291,7 +291,7 @@ public class SpectacleService {
 
                     if (spectacleListed) System.out.println();
                     else System.out.println("There are no musicals as of yet. \n");
-                    audit.writeToFile("The theater's musicals were listed!");
+                    audit.writeToFile("The theater's musicals were listed!", "./theaterSpectacles.cvs");
 
                     break;
                 }
@@ -308,7 +308,7 @@ public class SpectacleService {
 
                     if (spectacleListed) System.out.println();
                     else System.out.println("There are no ballets as of yet. \n");
-                    audit.writeToFile("The theater's ballets were listed!");
+                    audit.writeToFile("The theater's ballets were listed!", "./theaterSpectacles.cvs");
 
                     break;
                 }
@@ -324,7 +324,7 @@ public class SpectacleService {
                             System.out.println("\uF09F " + '"' + spectacle.getName() + '"' + " by " + spectacle.getDirector().getName());
                         System.out.println();
                     }
-                    audit.writeToFile("The theater's spectacles were listed!");
+                    audit.writeToFile("The theater's spectacles were listed!", "./theaterSpectacles.cvs");
 
                     break;
                 }
@@ -379,7 +379,7 @@ public class SpectacleService {
             System.out.println("\n" + spectacles.get(Integer.parseInt(sSpectacleId) - 1));
 
             Audit audit = Audit.getInstance();
-            audit.writeToFile("The details about a spectacle were listed!");
+            audit.writeToFile("The details about a spectacle were listed!", "./theaterSpectacles.cvs");
         }
     }
 
@@ -434,7 +434,7 @@ public class SpectacleService {
         System.out.println();
 
         Audit audit = Audit.getInstance();
-        audit.writeToFile("The " + categories.get(categoryId).getName() + " spectacles were listed");
+        audit.writeToFile("The " + categories.get(categoryId).getName() + " spectacles were listed", "./theaterCategories.cvs");
     }
 
     public boolean add(Spectacle spectacle, List<Spectacle> spectacles)

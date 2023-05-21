@@ -253,7 +253,7 @@ public class EventService {
 
             Audit audit = Audit.getInstance();
             audit.writeToFile("A new event was added to the theater's events list: " + '"' + event.getSpectacle().getName() + '"' +
-                    " performed at " + event.getStage().getName() + " on " + event.getDate() + " ,starting at " + event.getBeginTime());
+                    " performed at " + event.getStage().getName() + " on " + event.getDate() + ", starting at " + event.getBeginTime(), "./theaterEvents.cvs");
             System.out.println("\n\uF0B2 A new event was added to the theater's events list! \n");
         }
     }
@@ -311,7 +311,7 @@ public class EventService {
             audit.writeToFile("The event " + '"' + events.get(eventId - 1).getSpectacle().getName() +
             '"' + " performed at the " + events.get(eventId - 1).getStage().getName() + "" + " on " + events.get(eventId - 1).getDate() +
                     " that starts at " + events.get(eventId - 1).getBeginTime() +
-                    " was removed from the theater's events list!");
+                    " was removed from the theater's events list!", "./theaterEvents.cvs");
 
             EventRepository eventRepository = EventRepository.getInstance();
             eventRepository.deleteEvent(events.get(eventId - 1));
@@ -350,7 +350,7 @@ public class EventService {
         }
 
         Audit audit = Audit.getInstance();
-        audit.writeToFile("The theater's events were listed!");
+        audit.writeToFile("The theater's events were listed!", "./theaterEvents.cvs");
     }
 
     public void listEventDetails()
@@ -395,7 +395,7 @@ public class EventService {
             }
 
             Audit audit = Audit.getInstance();
-            audit.writeToFile("The details about an event were listed!");
+            audit.writeToFile("The details about an event were listed!", "./theaterEvents.cvs");
             System.out.println("\n" + events.get(Integer.parseInt(sEventId) - 1) + "\n");
         }
     }

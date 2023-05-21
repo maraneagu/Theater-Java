@@ -135,8 +135,8 @@ public class TicketService {
             System.out.println("\uF0B2 A new ticket was added to ticket's shop tickets list! \n");
 
             Audit audit = Audit.getInstance();
-            audit.writeToFile("A new ticket was added to " + user.getName() + "'s tickets list");
-            audit.writeToFile("A new ticket was added to ticket's shop tickets list");
+            audit.writeToFile("A new ticket was added to " + user.getName() + "'s tickets list", "./theaterTickets.cvs");
+            audit.writeToFile("A new ticket was added to ticket's shop tickets list", "./theaterTickets.cvs");
         }
     }
 
@@ -200,7 +200,7 @@ public class TicketService {
                     audit.writeToFile("The ticket for " + '"' + ticket.getEvent().getSpectacle().getName() + '"' +
                     " performed at " + ticket.getEvent().getStage().getName() +
                             " on " + ticket.getEvent().getDate() + " at " + ticket.getEvent().getBeginTime() +
-                            " was removed!");
+                            " was removed!", "./theaterTickets.cvs");
 
                     TicketRepository ticketRepository = TicketRepository.getInstance();
                     ticketRepository.deleteTicket(ticket);
@@ -233,7 +233,7 @@ public class TicketService {
         }
 
         Audit audit = Audit.getInstance();
-        audit.writeToFile("The " + user.getName() + "'s tickets were listed!");
+        audit.writeToFile("The " + user.getName() + "'s tickets were listed!", "./theaterTickets.cvs");
     }
 
     public void removeTicketByEvent(Event event) {

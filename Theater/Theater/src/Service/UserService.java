@@ -107,7 +107,7 @@ public class UserService {
         userRepository.insertUser(user);
 
         Audit audit = Audit.getInstance();
-        audit.writeToFile("A new user has signed up with the username: @" + username);
+        audit.writeToFile("A new user has signed up with the username: @" + username, "./theaterUsers.cvs");
 
         System.out.println("\n\uF0AB The sign up was done successfully! One more step before you can visit The Moonlight Theater! \uF0AB");
         logIn(users);
@@ -153,7 +153,7 @@ public class UserService {
                 if (userExists)
                 {
                     Audit audit = Audit.getInstance();
-                    audit.writeToFile("The user @" + username + " has logged in!");
+                    audit.writeToFile("The user @" + username + " has logged in!", "./theaterUsers.cvs");
 
                     System.out.println("\n\uF0AB The log in was done successfully! Let your journey through The Moonlight Theater begin! \uF0AB");
                     break;
@@ -238,7 +238,7 @@ public class UserService {
                 }
             }
 
-            audit.writeToFile("The @" + theater.getUser().getUsername() + "'s username has been changed to: @" + username);
+            audit.writeToFile("The @" + theater.getUser().getUsername() + "'s username has been changed to: @" + username, "./theaterUsers.cvs");
         }
         else if (optionChoice.equalsIgnoreCase("2"))
         {
@@ -255,7 +255,7 @@ public class UserService {
                 break;
             }
 
-            audit.writeToFile("The @" + theater.getUser().getUsername() + "'s email has been changed to: " + email);
+            audit.writeToFile("The @" + theater.getUser().getUsername() + "'s email has been changed to: " + email, "./theaterUsers.cvs");
         }
         else if (optionChoice.equalsIgnoreCase("3"))
         {
@@ -264,7 +264,7 @@ public class UserService {
             System.out.print("Enter your new password: ");
             password = in.nextLine().trim();
 
-            audit.writeToFile("The @" + theater.getUser().getUsername() + "'s password has been changed to: " + password);
+            audit.writeToFile("The @" + theater.getUser().getUsername() + "'s password has been changed to: " + password, "./theaterUsers.cvs");
         }
         else if (optionChoice.equalsIgnoreCase("4"))
         {
@@ -273,7 +273,7 @@ public class UserService {
             System.out.print("Enter the new name of your profile: ");
             name = in.nextLine().trim();
 
-            audit.writeToFile("The @" + theater.getUser().getUsername() + "'s name has been changed to: " + name);
+            audit.writeToFile("The @" + theater.getUser().getUsername() + "'s name has been changed to: " + name, "./theaterUsers.cvs");
         }
 
         UserRepository userRepository = UserRepository.getInstance();
@@ -291,7 +291,7 @@ public class UserService {
         Theater theater = Theater.getInstance();
         Audit audit = Audit.getInstance();
 
-        audit.writeToFile("The @" + theater.getUser().getUsername() + " has logged off!");
+        audit.writeToFile("The @" + theater.getUser().getUsername() + " has logged off!", "./theaterUsers.cvs");
         theater.start();
     }
 }
