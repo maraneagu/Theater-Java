@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 public class Audit {
     private static Audit singleInstance = null;
     private static final String CVS_FILE_PATH = "./theater.cvs";
