@@ -43,6 +43,12 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\maran\OneDrive\Desktop\FMI\AN 2\SEMESTRUL 2\PROGRAMARE AVANSATA OBIECT\Theater\Theater\src\Repository\ArtistRepository" />
+      <recent name="C:\Users\maran\OneDrive\Desktop\FMI\AN 2\SEMESTRUL 2\PROGRAMARE AVANSATA OBIECT\Theater\Theater\src\Repository" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main.Main" />
@@ -128,6 +134,7 @@
       <workItem from="1684494833321" duration="12491000" />
       <workItem from="1684531793919" duration="3224000" />
       <workItem from="1684535291771" duration="1307000" />
+      <workItem from="1684656233090" duration="809000" />
     </task>
     <servers />
   </component>

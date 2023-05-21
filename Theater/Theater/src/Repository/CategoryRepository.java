@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import Configuration.DatabaseConfiguration;
-import Service.TheaterService;
 import Theater.Category;
-import Theater.Director;
 
 public class CategoryRepository {
     private static CategoryRepository singleInstance = null;

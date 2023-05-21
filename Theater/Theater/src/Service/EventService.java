@@ -1,7 +1,6 @@
 package Service;
 
 import Audit.Audit;
-import Repository.ActorRepository;
 import Repository.EventRepository;
 import Theater.Event;
 import Theater.Spectacle.Musical;

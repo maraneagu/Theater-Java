@@ -22,14 +22,4 @@ public class DatabaseConfiguration {
         }
         return databaseConnection;
     }
-
-    public static void closeDatabaseConnection() {
-        try {
-            if (databaseConnection != null && !databaseConnection.isClosed()) {
-                databaseConnection.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("\n\uF0FB We weren't able to close the database! \uF0FB\n");
-        }
-    }
 }

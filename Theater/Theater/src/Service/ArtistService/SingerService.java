@@ -1,7 +1,6 @@
 package Service.ArtistService;
 
 import Audit.Audit;
-import Repository.ActorRepository;
 import Repository.SingerRepository;
 import Service.TheaterService;
 import Theater.Artist.Singer;

@@ -1,7 +1,7 @@
 package Service.ArtistService;
 
-import Repository.ActorRepository;
 import Service.TheaterService;
+import Repository.ActorRepository;
 import Theater.Artist.Actor;
 import Theater.Spectacle.Play;
 import Theater.Spectacle.Spectacle;
