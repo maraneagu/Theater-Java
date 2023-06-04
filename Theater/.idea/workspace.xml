@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="6d6b24a3-c366-44a6-ba33-02cc70231bf9" name="Changes" comment="" />
+    <list default="true" id="5dc36958-1941-4799-bb47-2e9afdac9d85" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,139 +17,34 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2N3Xv3Vl5ei7M9XLraWpkAAe5Tw" />
+  <component name="ProjectId" id="2N376YIc8cEiph73p1BMuN6LA2i" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/maran/Downloads/opencsv-5.7.1.jar",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.25287357",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Console Font",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/maran/OneDrive/Desktop/FMI/AN 2/SEMESTRUL 2/PROGRAMARE AVANSATA OBIECT/LAB3&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\maran\OneDrive\Desktop\FMI\AN 2\SEMESTRUL 2\PROGRAMARE AVANSATA OBIECT\Theater\Theater\src\Repository\ArtistRepository" />
-      <recent name="C:\Users\maran\OneDrive\Desktop\FMI\AN 2\SEMESTRUL 2\PROGRAMARE AVANSATA OBIECT\Theater\Theater\src\Repository" />
-    </key>
-  </component>
-  <component name="RunManager">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main.Main" />
-      <module name="Theater" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Main" />
-      </list>
-    </recent_temporary>
-  </component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="6d6b24a3-c366-44a6-ba33-02cc70231bf9" name="Changes" comment="" />
-      <created>1678893966888</created>
+      <changelist id="5dc36958-1941-4799-bb47-2e9afdac9d85" name="Changes" comment="" />
+      <created>1678880739307</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1678893966888</updated>
-      <workItem from="1678893968031" duration="939000" />
-      <workItem from="1679055212860" duration="10900000" />
-      <workItem from="1679078754354" duration="329000" />
-      <workItem from="1679079099406" duration="150000" />
-      <workItem from="1679079261070" duration="8352000" />
-      <workItem from="1679087706121" duration="4878000" />
-      <workItem from="1679127298505" duration="22458000" />
-      <workItem from="1679160863427" duration="3024000" />
-      <workItem from="1679182875373" duration="4277000" />
-      <workItem from="1679214137246" duration="960000" />
-      <workItem from="1679237329965" duration="20041000" />
-      <workItem from="1679301444369" duration="5822000" />
-      <workItem from="1679321086931" duration="2734000" />
-      <workItem from="1679323865629" duration="540000" />
-      <workItem from="1679333286683" duration="2755000" />
-      <workItem from="1679394626281" duration="14102000" />
-      <workItem from="1679417325652" duration="22836000" />
-      <workItem from="1679480198796" duration="9557000" />
-      <workItem from="1679494437185" duration="2759000" />
-      <workItem from="1679497761560" duration="2909000" />
-      <workItem from="1679506872755" duration="1654000" />
-      <workItem from="1679564009607" duration="17167000" />
-      <workItem from="1679582036086" duration="105000" />
-      <workItem from="1679589246391" duration="3008000" />
-      <workItem from="1679648321474" duration="20000" />
-      <workItem from="1679648790354" duration="1570000" />
-      <workItem from="1679849542519" duration="4116000" />
-      <workItem from="1679854647353" duration="182000" />
-      <workItem from="1680003270668" duration="1686000" />
-      <workItem from="1680006335322" duration="1575000" />
-      <workItem from="1680010959710" duration="18000" />
-      <workItem from="1680011195382" duration="747000" />
-      <workItem from="1680013127654" duration="655000" />
-      <workItem from="1680179996154" duration="338000" />
-      <workItem from="1680336940765" duration="2590000" />
-      <workItem from="1680339728647" duration="22069000" />
-      <workItem from="1680363275754" duration="6817000" />
-      <workItem from="1680373335774" duration="1388000" />
-      <workItem from="1680424648108" duration="2030000" />
-      <workItem from="1680439509551" duration="25107000" />
-      <workItem from="1680465687614" duration="364000" />
-      <workItem from="1680503994696" duration="9000" />
-      <workItem from="1680522714773" duration="4052000" />
-      <workItem from="1680597911362" duration="22000" />
-      <workItem from="1680605520479" duration="8000" />
-      <workItem from="1680624251789" duration="3140000" />
-      <workItem from="1680693542582" duration="397000" />
-      <workItem from="1680700068199" duration="2502000" />
-      <workItem from="1681817079082" duration="8000" />
-      <workItem from="1682343036506" duration="603000" />
-      <workItem from="1682422636616" duration="38000" />
-      <workItem from="1682422877435" duration="514000" />
-      <workItem from="1684064023911" duration="9464000" />
-      <workItem from="1684094009756" duration="10204000" />
-      <workItem from="1684144985771" duration="17132000" />
-      <workItem from="1684188134676" duration="692000" />
-      <workItem from="1684233898634" duration="15100000" />
-      <workItem from="1684260377857" duration="14093000" />
-      <workItem from="1684317920533" duration="6749000" />
-      <workItem from="1684325047077" duration="2579000" />
-      <workItem from="1684494833321" duration="12491000" />
-      <workItem from="1684531793919" duration="3224000" />
-      <workItem from="1684535291771" duration="1307000" />
-      <workItem from="1684656233090" duration="10611000" />
+      <updated>1678880739307</updated>
+      <workItem from="1678880740593" duration="4671000" />
+      <workItem from="1685890289482" duration="19000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="java.util.ConcurrentModificationException" package="java.util" />
-          <option name="timeStamp" value="1" />
-        </breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>
